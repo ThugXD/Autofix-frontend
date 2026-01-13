@@ -151,22 +151,13 @@ const handleLogin = async () => {
   loading.value = true
 
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    authStore.user = {
-      id: 1,
-      name: 'Valter Zandamela',
+    const success = await authStore.login({
       email: form.value.email,
-      tenant_id: 1
+      password: form.value.password
+    })
+    if (success) {
+      router.push('/')
     }
-
-    authStore.token = 'mock-jwt-token'
-
-    localStorage.setItem('token', authStore.token)
-    localStorage.setItem('user', JSON.stringify(authStore.user))
-    localStorage.setItem('tenant_id', '1')
-
-    router.push('/')
   } catch (error) {
     errors.value.email = 'Credenciais inválidas'
   } finally {

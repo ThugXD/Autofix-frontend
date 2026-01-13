@@ -99,21 +99,25 @@ const router = createRouter({
 
 // Navigation Guard
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('token')
-  
-  // Atualizar título da página
-  document.title = to.meta.title 
-    ? `${to.meta.title} - AutoFixApp` 
+  const token = localStorage.getItem('token')
+
+  // Título da página
+  document.title = to.meta.title
+    ? `${to.meta.title} - AutoFixApp`
     : 'AutoFixApp - Sistema de Gestão'
-  
-  // Verificar autenticação
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next({ name: 'login' })
-  } else if (to.meta.guest && isAuthenticated) {
-    next({ name: 'dashboard' })
-  } else {
-    next()
+
+  // 🔐 Rotas protegidas
+  if (to.meta.requiresAuth && !token) {
+    return next({ name: 'login' })
   }
+
+  // 🚫 Rotas guest (login / register)
+  if (to.meta.guest && token) {
+    return next({ name: 'dashboard' })
+  }
+
+  next()
 })
+
 
 export default router

@@ -8,7 +8,8 @@ const toast = useToast()
 export const useAuthStore = defineStore('auth', () => {
   // State
   const user = ref(null)
-  const token = ref(null)
+  const token = ref(localStorage.getItem('token') || null)
+  const refreshToken = ref(localStorage.getItem('refreshToken') || null)
   const loading = ref(false)
   
   // Getters
@@ -16,19 +17,22 @@ export const useAuthStore = defineStore('auth', () => {
   const currentUser = computed(() => user.value)
   
   // Actions
-  const login = async (credentials) => {
+  const login = async ({ email, password }) => {
     try {
       loading.value = true
-      const response = await api.post('/auth/login', credentials)
+      const response = await api.post('/auth/login', { email, password })
+      const {user: userData, token: authToken, refreshToken: refresh} = response.data
+
+      token.value = authToken
+      user.value = userData
+      refreshToken.value = refresh
       
-      token.value = response.data.token
-      user.value = response.data.user
+      localStorage.setItem('token', authToken)
+      localStorage.setItem('refreshToken', refresh)
+      localStorage.setItem('user', JSON.stringify(userData))
+      localStorage.setItem('tenant_id', userData.tenant_id)
       
-      localStorage.setItem('token', token.value)
-      localStorage.setItem('user', JSON.stringify(user.value))
-      localStorage.setItem('tenant_id', user.value.tenant_id)
-      
-      toast.success(`Bem-vindo, ${user.value.name}!`)
+      toast.success(`Bem-vindo, ${userData.name}!`)
       return true
     } catch (error) {
       console.error('Login error:', error)
@@ -38,18 +42,21 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
   
-  const register = async (userData) => {
+  const register = async (payload) => {
     try {
       loading.value = true
-      const response = await api.post('/auth/register', userData)
-      
-      token.value = response.data.token
-      user.value = response.data.user
-      
-      localStorage.setItem('token', token.value)
-      localStorage.setItem('user', JSON.stringify(user.value))
-      localStorage.setItem('tenant_id', user.value.tenant_id)
-      
+      const response = await api.post('/auth/register', payload)
+      const { user: userData, token: authToken, refreshToken: refresh } = response.data.data
+
+      token.value = authToken
+      user.value = userData
+      refreshToken.value = refresh
+
+      localStorage.setItem('token', authToken)
+      localStorage.setItem('refreshToken', refresh)
+      localStorage.setItem('user', JSON.stringify(userData))
+      localStorage.setItem('tenant_id', userData.tenant_id)
+
       toast.success('Conta criada com sucesso!')
       return true
     } catch (error) {
@@ -63,12 +70,17 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = () => {
     token.value = null
     user.value = null
+    refreshToken.value = null
     
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    localStorage.removeItem('tenant_id')
+    // localStorage.removeItem('token')
+    // localStorage.removeItem('refreshToken')
+    // localStorage.removeItem('user')
+    // localStorage.removeItem('tenant_id')
+    localStorage.clear()
     
-    toast.info('Sessão encerrada.')
+    toast.info('Sessão encerrada, até breve.')
+
+    window.location.hfref = '/login'
   }
   
   const checkAuth = () => {
