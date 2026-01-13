@@ -17,21 +17,20 @@ export const useAuthStore = defineStore('auth', () => {
   const currentUser = computed(() => user.value)
   
   // Actions
-  const login = async ({ email, password }) => {
+  const login = async (credentials) => {
     try {
       loading.value = true
-      const response = await api.post('/auth/login', { email, password })
-      const {user: userData, token: authToken, refreshToken: refresh} = response.data
+      const response = await api.post('/auth/login', credentials)
 
-      token.value = authToken
+      const { user: userData, token: jwtToken, refreshToken } = response.data.data
+
+      token.value = jwtToken
       user.value = userData
-      refreshToken.value = refresh
-      
-      localStorage.setItem('token', authToken)
-      localStorage.setItem('refreshToken', refresh)
+
+      localStorage.setItem('token', jwtToken)
       localStorage.setItem('user', JSON.stringify(userData))
-      localStorage.setItem('tenant_id', userData.tenant_id)
-      
+      localStorage.setItem('tenant_id', userData.tenantId)
+
       toast.success(`Bem-vindo, ${userData.name}!`)
       return true
     } catch (error) {
@@ -41,26 +40,32 @@ export const useAuthStore = defineStore('auth', () => {
       loading.value = false
     }
   }
-  
-  const register = async (payload) => {
+
+  const register = async (userData) => {
     try {
       loading.value = true
-      const response = await api.post('/auth/register', payload)
-      const { user: userData, token: authToken, refreshToken: refresh } = response.data.data
+      const response = await api.post('/auth/register', userData)
+      
+      // Ajuste: backend retorna { data: { user, token, refreshToken } }
+      const { user: userDataResponse, token: jwtToken, refreshToken } = response.data.data
 
-      token.value = authToken
-      user.value = userData
-      refreshToken.value = refresh
+      token.value = jwtToken
+      user.value = userDataResponse
 
-      localStorage.setItem('token', authToken)
-      localStorage.setItem('refreshToken', refresh)
-      localStorage.setItem('user', JSON.stringify(userData))
-      localStorage.setItem('tenant_id', userData.tenant_id)
+      localStorage.setItem('token', jwtToken)
+      localStorage.setItem('user', JSON.stringify(userDataResponse))
+      localStorage.setItem('tenant_id', userDataResponse.tenantId) // ⚡ tenantId vem do backend
 
       toast.success('Conta criada com sucesso!')
       return true
     } catch (error) {
       console.error('Register error:', error)
+
+      if (error.response?.data?.errors) {
+        // Erros de validação do backend
+        return { success: false, errors: error.response.data.errors }
+      }
+
       return false
     } finally {
       loading.value = false
@@ -84,16 +89,21 @@ export const useAuthStore = defineStore('auth', () => {
   }
   
   const checkAuth = () => {
-    const storedToken = localStorage.getItem('token')
-    const storedUser = localStorage.getItem('user')
-    
-    if (storedToken && storedUser) {
-      token.value = storedToken
-      user.value = JSON.parse(storedUser)
-      return true
+    try {
+      const storedUser = localStorage.getItem('user')
+      const storedToken = localStorage.getItem('token')
+
+      if (storedUser && storedToken) {
+        user.value = JSON.parse(storedUser)
+        token.value = storedToken
+        return true
+      }
+    } catch (err) {
+      console.warn('Erro ao restaurar sessão:', err)
     }
     return false
   }
+
   
   const updateUser = (userData) => {
     user.value = { ...user.value, ...userData }

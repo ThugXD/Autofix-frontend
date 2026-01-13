@@ -25,7 +25,7 @@
                 <div class="relative">
                   <Building2 class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
-                    v-model="form.oficina_name"
+                    v-model="form.tenantName"
                     type="text"
                     placeholder="AutoFix Maputo"
                     class="input"
@@ -33,7 +33,7 @@
                     required
                   />
                 </div>
-                <p v-if="errors.oficina_name" class="error">{{ errors.oficina_name }}</p>
+                <p v-if="errors.tenantName" class="error">{{ errors.oficina_name }}</p>
               </div>
 
               <!-- Nome -->
@@ -49,7 +49,7 @@
                     placeholder="Nome completo"
                     class="input"
                     :class="{ 'border-red-500': errors.name }"
-                    required
+                    resquired
                   />
                 </div>
                 <p v-if="errors.name" class="error">{{ errors.name }}</p>
@@ -155,7 +155,7 @@
                   v-model="form.terms"
                   type="checkbox"
                   class="mt-1"
-                  required
+                  
                 />
                 <label class="text-xs text-gray-600">
                   Concordo com os
@@ -217,7 +217,7 @@ const authStore = useAuthStore()
 const toast = useToast()
 
 const form = ref({
-  oficina_name: '',
+  tenantName: '',
   name: '',
   email: '',
   phone: '',
@@ -234,7 +234,7 @@ const showPasswordConfirm = ref(false)
 const handleRegister = async () => {
   errors.value = {}
 
-  if (!form.value.oficina_name) errors.value.oficina_name = 'Obrigatório'
+  if (!form.value.tenantName) errors.value.tenantName = 'Obrigatório'
   if (!form.value.name) errors.value.name = 'Obrigatório'
   if (!form.value.email) errors.value.email = 'Obrigatório'
   if (!form.value.phone) errors.value.phone = 'Obrigatório'
@@ -254,7 +254,7 @@ const handleRegister = async () => {
   try {
     await authStore.register(form.value)
     toast.success('Conta criada com sucesso')
-    router.push('/')
+    router.push('/definicoes')
   } catch {
     toast.error('Erro ao criar conta')
   } finally {
