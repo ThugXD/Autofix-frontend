@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/stores/auth'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -99,25 +100,36 @@ const router = createRouter({
 
 // Navigation Guard
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  const auth = useAuthStore()
 
-  // Título da página
+  // Título
   document.title = to.meta.title
-    ? `${to.meta.title} - AutoFixApp`
-    : 'AutoFixApp - Sistema de Gestão'
+    ? `${to.meta.title} - Sistema de Gestão para Oficinas`
+    : 'Sistema de Gestão para Oficinas'
 
-  // 🔐 Rotas protegidas
-  if (to.meta.requiresAuth && !token) {
+  // Não autenticado
+  if (to.meta.requiresAuth && !auth.isAuthenticated) {
     return next({ name: 'login' })
   }
 
-  // 🚫 Rotas guest (login / register)
-  if (to.meta.guest && token) {
+  // Guest não entra se já estiver logado
+  if (to.meta.guest && auth.isAuthenticated) {
     return next({ name: 'dashboard' })
+  }
+
+  // Setup obrigatório
+  if (
+    auth.isAuthenticated &&
+    auth.needsSetup &&
+    to.name !== 'definicoes'
+  ) {
+    return next({ name: 'definicoes' })
   }
 
   next()
 })
+
+
 
 
 export default router

@@ -72,6 +72,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
   
+  const needsSetup = computed(() => {
+    return user.value?.tenant?.setupCompleted === false
+  })
+
   const logout = () => {
     token.value = null
     user.value = null
@@ -110,16 +114,25 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('user', JSON.stringify(user.value))
   }
   
+  const completeSetup = async (setupData) => {
+    await api.patch('/auth/setup-complete')
+
+    user.value.tenant.setupCompleted = true
+    localStorage.setItem('user', JSON.stringify(user.value))
+  }
+
   return {
     user,
     token,
     loading,
     isAuthenticated,
     currentUser,
+    needsSetup,
+    completeSetup,
     login,
     register,
     logout,
     checkAuth,
-    updateUser
+    updateUser,
   }
 })

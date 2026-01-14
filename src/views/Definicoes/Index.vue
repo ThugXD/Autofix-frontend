@@ -1,10 +1,29 @@
-<template>
+`<template>
   <div>
+    <!-- SETUP ALERT -->
+    <div
+      v-if="needsSetup"
+      class="mb-6 p-4 border-xl rounded-lg border-l-4 border-yellow-300 bg-yellow-50"
+    >
+      <div class="flex items-start gap-3">
+        <AlertTriangle class="w-6 h-6 text-yellow-600 mt-0.5" />
+        <div>
+          <h4 class="font-semibold text-yellow-800">
+            Complete o registo da sua oficina
+          </h4>
+          <p class="text-sm text-yellow-700">
+            Para começar a usar o sistema, termine a configuração inicial.
+            Algumas funcionalidades estão bloqueadas até concluir este passo.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div class="card mb-6">
       <h2 class="text-2xl font-bold text-gray-900 mb-2">Definições</h2>
       <p class="text-gray-600">Configure as preferências da sua oficina</p>
     </div>
-
+    
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Menu Lateral -->
       <div class="lg:col-span-1">
@@ -13,11 +32,15 @@
             v-for="tab in tabs"
             :key="tab.id"
             @click="activeTab = tab.id"
+            :disabled="needsSetup && tab.id !== 'oficina'"
             :class="[
               'w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors',
               activeTab === tab.id
                 ? 'bg-blue-50 text-blue-700'
-                : 'text-gray-700 hover:bg-gray-50'
+                : 'text-gray-700 hover:bg-gray-50',
+              needsSetup && tab.id !== 'oficina' 
+                ? 'opacity-50 cursor-not-allowed' 
+                : ''   
             ]"
           >
             <component :is="tab.icon" class="w-5 h-5" />
@@ -67,8 +90,22 @@
                 placeholder="000000000"
               />
             </div>
-            <div class="pt-4">
-              <BaseButton variant="primary" @click="saveSettings">
+            <div class="pt-6 flex gap-3">
+              <!-- BOTÃO FINALIZAR SETUP -->
+              <BaseButton
+                v-if="needsSetup"
+                variant="primary"
+                @click="completeSetup"
+              >
+                Finalizar Configuração
+              </BaseButton>
+
+              <!-- Botão Salvar Alterações -->
+              <BaseButton 
+                v-if="!needsSetup" 
+                variant="primary" 
+                @click="saveSettings"
+              >
                 Salvar Alterações
               </BaseButton>
             </div>
@@ -247,37 +284,57 @@
 <script setup>
     import { ref } from 'vue'
     import {
-    Building2,
-    Clock,
-    Bell,
-    Shield,
-    Settings,
-    Download
+      Building2,
+      Clock,
+      Bell,
+      Shield,
+      Settings,
+      Download,
+      AlertTriangle
     } from 'lucide-vue-next'
     import BaseInput from '@/components/common/BaseInput.vue'
     import BaseButton from '@/components/common/BaseButton.vue'
     import { useToast } from 'vue-toastification'
+    import { computed } from 'vue'
+    import { useAuthStore } from '@/stores/auth'
+    import router from '@/router'
+
+    const authStore = useAuthStore()
+    const needsSetup = computed(() => authStore.needsSetup)
 
     const toast = useToast()
 
     const activeTab = ref('oficina')
 
-    const tabs = [
-    { id: 'oficina', label: 'Oficina', icon: Building2 },
-    { id: 'horario', label: 'Horário', icon: Clock },
-    { id: 'notificacoes', label: 'Notificações', icon: Bell },
-    { id: 'seguranca', label: 'Segurança', icon: Shield },
-    { id: 'sistema', label: 'Sistema', icon: Settings }
-    ]
+    const tabs = computed(() => [
+      { id: 'oficina', label: 'Oficina', icon: Building2, required: true },
+      { id: 'horario', label: 'Horário', icon: Clock },
+      { id: 'notificacoes', label: 'Notificações', icon: Bell },
+      { id: 'seguranca', label: 'Segurança', icon: Shield },
+      { id: 'sistema', label: 'Sistema', icon: Settings }
+    ])
+
+    const completeSetup = async () => {
+      try {
+        await authStore.completeSetup()
+
+        toast.success('Configuração concluída com sucesso!')
+        router.push('/')
+
+      } catch {
+        toast.error('Erro ao completar configuração. Tente novamente.')
+      }
+    }
+
 
     const weekDays = [
-    { id: 'monday', label: 'Segunda-feira' },
-    { id: 'tuesday', label: 'Terça-feira' },
-    { id: 'wednesday', label: 'Quarta-feira' },
-    { id: 'thursday', label: 'Quinta-feira' },
-    { id: 'friday', label: 'Sexta-feira' },
-    { id: 'saturday', label: 'Sábado' },
-    { id: 'sunday', label: 'Domingo' }
+      { id: 'monday', label: 'Segunda-feira' },
+      { id: 'tuesday', label: 'Terça-feira' },
+      { id: 'wednesday', label: 'Quarta-feira' },
+      { id: 'thursday', label: 'Quinta-feira' },
+      { id: 'friday', label: 'Sexta-feira' },
+      { id: 'saturday', label: 'Sábado' },
+      { id: 'sunday', label: 'Domingo' }
     ]
 
     const settings = ref({
@@ -306,13 +363,13 @@
     })
 
     const passwordForm = ref({
-    current: '',
-    new: '',
-    confirm: ''
+      current: '',
+      new: '',
+      confirm: ''
     })
 
     const saveSettings = () => {
-    toast.success('Configurações salvas com sucesso!')
+      toast.success('Configurações salvas com sucesso!')
     }
 
     const changePassword = () => {
@@ -327,4 +384,4 @@
     toast.success('Senha alterada com sucesso!')
     passwordForm.value = { current: '', new: '', confirm: '' }
     }
-</script>
+</script>`

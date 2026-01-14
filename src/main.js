@@ -12,11 +12,12 @@ const app = createApp(App)
 const pinia = createPinia()
 
 app.use(pinia)
-app.use(router)
-app.use(Toast)
 
 //restaurar sessão
 const auth = useAuthStore()
 auth.checkAuth()
+
+app.use(router)
+app.use(Toast)
 
 app.mount('#app')
