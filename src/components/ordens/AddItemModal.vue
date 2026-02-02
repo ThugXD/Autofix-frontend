@@ -43,10 +43,34 @@
         </div>
       </div>
 
+      <!-- Seleção de Item -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+          Selecionar {{ form.tipo === 'servico' ? 'Serviço' : 'Peça' }} <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <select
+            :value="form.tipo === 'servico' ? form.servicoId : form.pecaId"
+            @change="handleItemChange"
+            class="input pr-10"
+            :disabled="isLoadingItems"
+          >
+            <option value="">Selecione um item...</option>
+            <option v-for="item in availableItems" :key="item.id" :value="item.id">
+              {{ item.name }} {{ item.code ? `(${item.code})` : '' }} — {{ formatCurrency(item.defaultPrice || item.unitPrice || 0) }}
+            </option>
+          </select>
+          <div v-if="isLoadingItems" class="absolute right-8 top-1/2 -translate-y-1/2">
+            <LoadingSpinner size="xs" />
+          </div>
+        </div>
+        <p v-if="errors.itemId" class="mt-1 text-xs text-red-600">{{ errors.itemId }}</p>
+      </div>
+
       <!-- Descrição -->
       <BaseInput
         v-model="form.descricao"
-        label="Descrição"
+        label="Descrição customizada"
         placeholder="Ex: Troca de óleo, Filtro de ar..."
         required
         :error="errors.descricao"
@@ -65,14 +89,14 @@
         />
 
         <BaseInput
-          v-model="form.preco_unitario"
+          v-model="form.precoUnitario"
           label="Preço Unitário (MT)"
           type="number"
           step="0.01"
           min="0"
           placeholder="0,00"
           required
-          :error="errors.preco_unitario"
+          :error="errors.precoUnitario"
           @input="calculateSubtotal"
         />
       </div>
@@ -120,12 +144,15 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useOrdensServicoStore } from '@/stores/ordensServico'
+import { useServicosStore } from '@/stores/servicos'
+import { usePecasStore } from '@/stores/pecas'
 import { Wrench, Package } from 'lucide-vue-next'
 import BaseModal from '@/components/common/BaseModal.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 
 const props = defineProps({
   modelValue: {
@@ -133,7 +160,7 @@ const props = defineProps({
     default: false
   },
   ordemId: {
-    type: Number,
+    type: String,
     required: true
   }
 })
@@ -141,6 +168,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'added'])
 
 const ordensStore = useOrdensServicoStore()
+const servicosStore = useServicosStore()
+const pecasStore = usePecasStore()
 
 const isOpen = computed({
   get: () => props.modelValue,
@@ -149,11 +178,51 @@ const isOpen = computed({
 
 const form = ref({
   tipo: 'servico',
+  servicoId: '',
+  pecaId: '',
   descricao: '',
   quantidade: 1,
-  preco_unitario: 0,
+  precoUnitario: 0,
   desconto: 0
 })
+
+const availableItems = computed(() => {
+  return form.value.tipo === 'servico' ? servicosStore.servicos : pecasStore.pecas
+})
+
+const isLoadingItems = computed(() => {
+  return form.value.tipo === 'servico' ? servicosStore.loading : pecasStore.loading
+})
+
+watch(() => form.value.tipo, () => {
+  form.value.servicoId = ''
+  form.value.pecaId = ''
+  form.value.descricao = ''
+  form.value.precoUnitario = 0
+  if (form.value.tipo === 'servico') {
+    servicosStore.fetchServicos(1, { perPage: 100 })
+  } else {
+    pecasStore.fetchPecas(1, { perPage: 100 })
+  }
+})
+
+const handleItemChange = (event) => {
+  const id = event.target.value
+  const item = availableItems.value.find(i => i.id === id)
+  
+  if (item) {
+    if (form.value.tipo === 'servico') {
+      form.value.servicoId = item.id
+      form.value.pecaId = ''
+    } else {
+      form.value.pecaId = item.id
+      form.value.servicoId = ''
+    }
+    form.value.descricao = item.name
+    form.value.precoUnitario = item.defaultPrice || item.unitPrice || 0
+    calculateSubtotal()
+  }
+}
 
 const errors = ref({})
 const loading = ref(false)
@@ -170,7 +239,7 @@ const resetForm = () => {
     tipo: 'servico',
     descricao: '',
     quantidade: 1,
-    preco_unitario: 0,
+    precoUnitario: 0,
     desconto: 0
   }
   errors.value = {}
@@ -179,7 +248,7 @@ const resetForm = () => {
 
 const calculateSubtotal = () => {
   const quantidade = parseFloat(form.value.quantidade) || 0
-  const preco = parseFloat(form.value.preco_unitario) || 0
+  const preco = parseFloat(form.value.precoUnitario) || 0
   const desconto = parseFloat(form.value.desconto) || 0
   subtotal.value = Math.max(0, (quantidade * preco) - desconto)
 }
@@ -198,8 +267,8 @@ const validateForm = () => {
     isValid = false
   }
 
-  if (!form.value.preco_unitario || form.value.preco_unitario < 0) {
-    errors.value.preco_unitario = 'Preço é obrigatório'
+  if (!form.value.precoUnitario || form.value.precoUnitario < 0) {
+    errors.value.precoUnitario = 'Preço é obrigatório'
     isValid = false
   }
 
@@ -213,9 +282,11 @@ const handleSubmit = async () => {
   
   const itemData = {
     tipo: form.value.tipo,
+    servicoId: form.value.tipo === 'servico' ? form.value.servicoId : null,
+    pecaId: form.value.tipo === 'peca' ? form.value.pecaId : null,
     descricao: form.value.descricao,
     quantidade: parseInt(form.value.quantidade),
-    preco_unitario: parseFloat(form.value.preco_unitario),
+    precoUnitario: parseFloat(form.value.precoUnitario),
     desconto: parseFloat(form.value.desconto) || 0,
     subtotal: subtotal.value
   }

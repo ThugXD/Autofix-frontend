@@ -18,11 +18,11 @@ export const useVeiculosStore = defineStore('veiculos', () => {
   })
   const filters = ref({
     search: '',
-    cliente_id: null,
+    clienteId: null,
     brand: '',
     year: null,
-    orderBy: 'created_at',
-    orderDirection: 'desc'
+    orderBy: 'createdAt',
+    order: 'desc'
   })
 
   // Getters
@@ -41,23 +41,24 @@ export const useVeiculosStore = defineStore('veiculos', () => {
       loading.value = true
       const params = {
         page,
-        per_page: pagination.value.perPage,
+        perPage: pagination.value.perPage,
         search: filters.value.search,
-        cliente_id: filters.value.cliente_id,
+        clienteId: filters.value.clienteId,
         brand: filters.value.brand,
         year: filters.value.year,
-        order_by: filters.value.orderBy,
-        order_direction: filters.value.orderDirection
+        orderBy: filters.value.orderBy,
+        order: filters.value.order
       }
 
       const response = await veiculosService.getAll(params)
-      
-      veiculos.value = response.data.data
+      const { data, meta } = response.data
+
+      veiculos.value = data
       pagination.value = {
-        currentPage: response.data.current_page,
-        perPage: response.data.per_page,
-        total: response.data.total,
-        lastPage: response.data.last_page
+        currentPage: meta.current_page,
+        perPage: meta.per_page,
+        total: meta.total,
+        lastPage: meta.total_pages
       }
     } catch (error) {
       console.error('Erro ao buscar veículos:', error)
@@ -71,8 +72,9 @@ export const useVeiculosStore = defineStore('veiculos', () => {
     try {
       loading.value = true
       const response = await veiculosService.getById(id)
-      currentVeiculo.value = response.data
-      return response.data
+      const { data } = response.data
+      currentVeiculo.value = data
+      return data
     } catch (error) {
       console.error('Erro ao buscar veículo:', error)
       toast.error('Veículo não encontrado')
@@ -100,7 +102,7 @@ export const useVeiculosStore = defineStore('veiculos', () => {
     try {
       loading.value = true
       const response = await veiculosService.create(data)
-      veiculos.value.unshift(response.data)
+      veiculos.value.unshift(response.data.data)
       toast.success('Veículo cadastrado com sucesso!')
       await fetchVeiculos(pagination.value.currentPage)
       return true
@@ -116,9 +118,10 @@ export const useVeiculosStore = defineStore('veiculos', () => {
     try {
       loading.value = true
       const response = await veiculosService.update(id, data)
+      const updatedVeiculo = response.data.data
       const index = veiculos.value.findIndex(v => v.id === id)
       if (index !== -1) {
-        veiculos.value[index] = response.data
+        veiculos.value[index] = updatedVeiculo
       }
       toast.success('Veículo atualizado com sucesso!')
       return true
@@ -136,7 +139,7 @@ export const useVeiculosStore = defineStore('veiculos', () => {
       await veiculosService.delete(id)
       veiculos.value = veiculos.value.filter(v => v.id !== id)
       toast.success('Veículo removido com sucesso!')
-      
+
       if (veiculos.value.length === 0 && pagination.value.currentPage > 1) {
         await fetchVeiculos(pagination.value.currentPage - 1)
       } else {
@@ -160,11 +163,11 @@ export const useVeiculosStore = defineStore('veiculos', () => {
   const clearFilters = () => {
     filters.value = {
       search: '',
-      cliente_id: null,
+      clienteId: null,
       brand: '',
       year: null,
-      orderBy: 'created_at',
-      orderDirection: 'desc'
+      orderBy: 'createdAt',
+      order: 'desc'
     }
     fetchVeiculos(1)
   }
@@ -176,12 +179,12 @@ export const useVeiculosStore = defineStore('veiculos', () => {
     loading,
     pagination,
     filters,
-    
+
     // Getters
     totalVeiculos,
     hasVeiculos,
     availableBrands,
-    
+
     // Actions
     fetchVeiculos,
     fetchVeiculoById,

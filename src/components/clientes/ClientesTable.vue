@@ -3,7 +3,6 @@
     <table class="table">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Nome do Cliente</th>
           <th>Email</th>
           <th>Telefone</th>
@@ -14,19 +13,18 @@
       </thead>
       <tbody>
         <tr v-if="loading">
-          <td colspan="7" class="text-center py-8">
+          <td colspan="6" class="text-center py-8">
             <LoadingSpinner size="md" text="Carregando clientes..." />
           </td>
         </tr>
 
         <tr v-else-if="!clientes.length">
-          <td colspan="7" class="text-center py-8 text-gray-500">
+          <td colspan="6" class="text-center py-8 text-gray-500">
             Nenhum cliente encontrado
           </td>
         </tr>
 
         <tr v-else v-for="cliente in clientes" :key="cliente.id">
-          <td class="font-medium text-gray-900">#{{ cliente.id }}</td>
           <td>
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
@@ -34,13 +32,16 @@
               </div>
               <div>
                 <p class="font-medium text-gray-900">{{ cliente.name }}</p>
+                <p v-if="cliente._count" class="text-xs text-gray-500">
+                  {{ cliente._count.veiculos }} veículo(s)
+                </p>
               </div>
             </div>
           </td>
           <td class="text-gray-600">{{ cliente.email }}</td>
           <td class="text-gray-600">{{ cliente.phone }}</td>
           <td class="text-gray-600">{{ cliente.address || '-' }}</td>
-          <td class="text-gray-600">{{ formatDate(cliente.created_at) }}</td>
+          <td class="text-gray-600">{{ formatDate(cliente.createdAt) }}</td>
           <td>
             <div class="flex items-center justify-center gap-2">
               <button

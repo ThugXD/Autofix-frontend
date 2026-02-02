@@ -1,7 +1,7 @@
 import api from './api'
 import { mockPecasService } from './mockPecasService'
 
-const USE_MOCK = true
+const USE_MOCK = false
 
 export const pecasService = USE_MOCK ? mockPecasService : {
   getAll(params = {}) {
@@ -29,6 +29,6 @@ export const pecasService = USE_MOCK ? mockPecasService : {
   },
 
   getLowStock() {
-    return api.get('/pecas/low-stock')
+    return api.get('/pecas', { params: { lowStock: true } })
   }
 }

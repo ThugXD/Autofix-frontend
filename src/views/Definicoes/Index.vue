@@ -282,71 +282,89 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    import {
-      Building2,
-      Clock,
-      Bell,
-      Shield,
-      Settings,
-      Download,
-      AlertTriangle
-    } from 'lucide-vue-next'
-    import BaseInput from '@/components/common/BaseInput.vue'
-    import BaseButton from '@/components/common/BaseButton.vue'
-    import { useToast } from 'vue-toastification'
-    import { computed } from 'vue'
-    import { useAuthStore } from '@/stores/auth'
-    import router from '@/router'
+  import { ref, computed, onMounted } from 'vue'
+  import { useToast } from 'vue-toastification'
+  import router from '@/router'
+  import { useAuthStore } from '@/stores/auth'
 
-    const authStore = useAuthStore()
-    const needsSetup = computed(() => authStore.needsSetup)
+  import {
+    Building2,
+    Clock,
+    Bell,
+    Shield,
+    Settings,
+    Download,
+    AlertTriangle
+  } from 'lucide-vue-next'
 
-    const toast = useToast()
+  import BaseInput from '@/components/common/BaseInput.vue'
+  import BaseButton from '@/components/common/BaseButton.vue'
 
-    const activeTab = ref('oficina')
+  const authStore = useAuthStore()
+  const toast = useToast()
 
-    const tabs = computed(() => [
-      { id: 'oficina', label: 'Oficina', icon: Building2, required: true },
-      { id: 'horario', label: 'Horário', icon: Clock },
-      { id: 'notificacoes', label: 'Notificações', icon: Bell },
-      { id: 'seguranca', label: 'Segurança', icon: Shield },
-      { id: 'sistema', label: 'Sistema', icon: Settings }
-    ])
+  // Ativa a aba inicial
+  const activeTab = ref('oficina')
 
-    const completeSetup = async () => {
-      try {
-        await authStore.completeSetup()
+  // Tabs do menu lateral
+  const tabs = computed(() => [
+    { id: 'oficina', label: 'Oficina', icon: Building2, required: true },
+    { id: 'horario', label: 'Horário', icon: Clock },
+    { id: 'notificacoes', label: 'Notificações', icon: Bell },
+    { id: 'seguranca', label: 'Segurança', icon: Shield },
+    { id: 'sistema', label: 'Sistema', icon: Settings }
+  ])
 
-        toast.success('Configuração concluída com sucesso!')
-        router.push('/')
+  // Computed para verificar se o tenant ainda precisa completar setup
+  const needsSetup = computed(() => authStore.user?.tenant?.setupCompleted === false)
 
-      } catch {
-        toast.error('Erro ao completar configuração. Tente novamente.')
-      }
-    }
+  // Dias da semana
+  const weekDays = [
+    { id: 'monday', label: 'Segunda-feira' },
+    { id: 'tuesday', label: 'Terça-feira' },
+    { id: 'wednesday', label: 'Quarta-feira' },
+    { id: 'thursday', label: 'Quinta-feira' },
+    { id: 'friday', label: 'Sexta-feira' },
+    { id: 'saturday', label: 'Sábado' },
+    { id: 'sunday', label: 'Domingo' }
+  ]
 
-
-    const weekDays = [
-      { id: 'monday', label: 'Segunda-feira' },
-      { id: 'tuesday', label: 'Terça-feira' },
-      { id: 'wednesday', label: 'Quarta-feira' },
-      { id: 'thursday', label: 'Quinta-feira' },
-      { id: 'friday', label: 'Sexta-feira' },
-      { id: 'saturday', label: 'Sábado' },
-      { id: 'sunday', label: 'Domingo' }
-    ]
-
-    const settings = ref({
+  // Settings do tenant
+  const settings = ref({
     oficina: {
-        name: 'AutoFix Maputo',
-        email: 'contato@autofix.com',
-        phone: '841234567',
-        address: 'Av. Julius Nyerere, 1234',
-        city: 'Maputo',
-        nuit: '123456789'
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+      city: '',
+      nuit: ''
     },
-    horario: {
+    horario: {},
+    notificacoes: {}
+  })
+
+  // Formulário de senha
+  const passwordForm = ref({
+    current: '',
+    new: '',
+    confirm: ''
+  })
+
+  // Carrega dados do tenant quando o componente monta
+  onMounted(() => {
+    const tenant = authStore.user?.tenant
+    if (tenant) {
+      settings.value.oficina = {
+        name: tenant.name || '',
+        email: tenant.email || '',
+        phone: tenant.phone || '',
+        address: tenant.address || '',
+        city: tenant.city || '',
+        nuit: tenant.nuit || ''
+      }
+
+      // Horário e notificações podem estar dentro do JSON `settings` do tenant
+      settings.value.horario = tenant.settings?.businessHours || {
         monday: { active: true, start: '08:00', end: '18:00' },
         tuesday: { active: true, start: '08:00', end: '18:00' },
         wednesday: { active: true, start: '08:00', end: '18:00' },
@@ -354,34 +372,76 @@
         friday: { active: true, start: '08:00', end: '18:00' },
         saturday: { active: true, start: '08:00', end: '13:00' },
         sunday: { active: false, start: '', end: '' }
-    },
-    notificacoes: {
+      }
+
+      settings.value.notificacoes = tenant.settings?.notifications || {
         emailNovasOrdens: true,
         emailConclusao: true,
         alertaEstoque: true
+      }
     }
-    })
+  })
 
-    const passwordForm = ref({
-      current: '',
-      new: '',
-      confirm: ''
-    })
+  // Função para completar setup
+  const completeSetup = async () => {
+    try {
+      await authStore.completeSetup({
+        name: settings.value.oficina.name,
+        email: settings.value.oficina.email,
+        phone: settings.value.oficina.phone,
+        address: settings.value.oficina.address,
+        city: settings.value.oficina.city,
+        nuit: settings.value.oficina.nuit,
+        businessHours: settings.value.horario,
+        notifications: settings.value.notificacoes
+      })
 
-    const saveSettings = () => {
+      toast.success('Configuração concluída com sucesso!')
+      router.push('/')
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || 'Erro ao completar configuração'
+      )
+    }
+  }
+
+  // Função para salvar alterações (update de configurações)
+  const saveSettings = async () => {
+    try {
+      await authStore.updateTenantSettings({
+        businessHours: settings.value.horario,
+        notifications: settings.value.notificacoes
+      })
       toast.success('Configurações salvas com sucesso!')
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || 'Erro ao salvar configurações'
+      )
     }
+  }
 
-    const changePassword = () => {
+  // Função para alterar senha
+  const changePassword = async () => {
     if (!passwordForm.value.current || !passwordForm.value.new || !passwordForm.value.confirm) {
-        toast.error('Preencha todos os campos')
-        return
+      toast.error('Preencha todos os campos')
+      return
     }
     if (passwordForm.value.new !== passwordForm.value.confirm) {
-        toast.error('As senhas não coincidem')
-        return
+      toast.error('As senhas não coincidem')
+      return
     }
-    toast.success('Senha alterada com sucesso!')
-    passwordForm.value = { current: '', new: '', confirm: '' }
+
+    try {
+      await authStore.changePassword({
+        current: passwordForm.value.current,
+        newPassword: passwordForm.value.new
+      })
+      toast.success('Senha alterada com sucesso!')
+      passwordForm.value = { current: '', new: '', confirm: '' }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || 'Erro ao alterar senha'
+      )
     }
-</script>`
+  }
+</script>

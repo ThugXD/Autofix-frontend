@@ -9,6 +9,33 @@ const router = createRouter({
       component: () => import('@/layouts/MainLayout.vue'),
       meta: { requiresAuth: true },
       children: [
+        // Rotas de Admin (Super Admin)
+        {
+          path: 'admin',
+          name: 'admin-dashboard',
+          component: () => import('@/views/admin/Dashboard.vue'),
+          meta: { title: 'Dashboard Admin', roles: ['super_admin'] }
+        },
+        {
+          path: 'admin/tenants',
+          name: 'admin-tenants',
+          component: () => import('@/views/admin/Tenants/Index.vue'),
+          meta: { title: 'Gerir Oficinas', roles: ['super_admin'] }
+        },
+        {
+          path: 'admin/tenants/create',
+          name: 'admin-tenants-create',
+          component: () => import('@/views/admin/Tenants/Create.vue'),
+          meta: { title: 'Nova Oficina', roles: ['super_admin'] }
+        },
+        {
+          path: 'admin/audit',
+          name: 'admin-audit',
+          component: () => import('@/views/admin/Audit/Index.vue'),
+          meta: { title: 'Audit Logs', roles: ['super_admin'] }
+        },
+
+        // Rotas Normais
         {
           path: '',
           name: 'dashboard',
@@ -70,6 +97,12 @@ const router = createRouter({
           meta: { title: 'Definições' }
         },
         {
+          path: 'perfil',
+          name: 'perfil',
+          component: () => import('@/views/Perfil/Index.vue'),
+          meta: { title: 'Meu Perfil' }
+        },
+        {
           path: 'info',
           name: 'info',
           component: () => import('@/views/Info/Index.vue'),
@@ -99,13 +132,18 @@ const router = createRouter({
 })
 
 // Navigation Guard
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
 
   // Título
   document.title = to.meta.title
     ? `${to.meta.title} - Sistema de Gestão para Oficinas`
     : 'Sistema de Gestão para Oficinas'
+
+  // ✅ CORRIGIDO: Verificar autenticação ao carregar app
+  if (!auth.user && localStorage.getItem('token')) {
+    await auth.checkAuth()
+  }
 
   // Não autenticado
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
@@ -120,16 +158,20 @@ router.beforeEach((to, from, next) => {
   // Setup obrigatório
   if (
     auth.isAuthenticated &&
-    auth.needsSetup &&
+    auth.needsSetup && // ✅ Agora funciona!
     to.name !== 'definicoes'
   ) {
     return next({ name: 'definicoes' })
   }
 
+  // Verificação de Roles
+  if (to.meta.roles) {
+    if (!auth.user || !to.meta.roles.includes(auth.user.role)) {
+      return next({ name: 'dashboard' }) // ou pagina de acesso negado
+    }
+  }
+
   next()
 })
-
-
-
 
 export default router

@@ -1,37 +1,45 @@
 import api from './api'
-import { mockClientesService } from './mockClientesService'
 
-// Usar mock data enquanto backend não está pronto
-const USE_MOCK = true
-
-export const clientesService = USE_MOCK ? mockClientesService : {
-  // Listar todos os clientes (com paginação e filtros)
+export default {
+  /**
+   * Listar clientes com paginação e busca
+   */
   getAll(params = {}) {
     return api.get('/clientes', { params })
   },
 
-  // Buscar cliente por ID
+  /**
+   * Buscar cliente por ID
+   */
   getById(id) {
     return api.get(`/clientes/${id}`)
   },
 
-  // Criar novo cliente
+  /**
+   * Criar novo cliente
+   */
   create(data) {
     return api.post('/clientes', data)
   },
 
-  // Atualizar cliente existente
+  /**
+   * Atualizar cliente
+   */
   update(id, data) {
     return api.put(`/clientes/${id}`, data)
   },
 
-  // Deletar cliente
+  /**
+   * Deletar cliente
+   */
   delete(id) {
     return api.delete(`/clientes/${id}`)
   },
 
-  // Buscar clientes (autocomplete)
-  search(query) {
-    return api.get('/clientes/search', { params: { q: query } })
+  /**
+   * Buscar estatísticas do cliente
+   */
+  getStats(id) {
+    return api.get(`/clientes/${id}/stats`)
   }
 }

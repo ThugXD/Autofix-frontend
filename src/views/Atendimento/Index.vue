@@ -114,7 +114,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ordensServicoService } from '@/services/ordensServicoService'
+import ordensServicoService from '@/services/ordensServicoService'
 import { format, isToday } from 'date-fns'
 import {
   UserPlus,

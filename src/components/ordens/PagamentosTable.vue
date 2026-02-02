@@ -28,7 +28,7 @@
         <tbody class="divide-y">
           <tr v-for="pagamento in pagamentos" :key="pagamento.id" class="hover:bg-gray-50">
             <td class="px-4 py-3 text-gray-900">
-              {{ formatDate(pagamento.data_pagamento) }}
+              {{ formatDate(pagamento.dataPagamento) }}
             </td>
             <td class="px-4 py-3">
               <div class="flex items-center gap-2">

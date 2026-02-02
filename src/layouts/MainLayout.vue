@@ -1,12 +1,12 @@
 <template>
   <div class="flex h-screen bg-gray-50 overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :isOpen="sidebarOpen" @toggle="toggleSidebar" />
+    <Sidebar :isOpen="sidebarOpen" @toggle="toggleSidebar" class="no-print" />
     
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col overflow-hidden">
       <!-- Header -->
-      <Header @toggleSidebar="toggleSidebar" />
+      <Header @toggleSidebar="toggleSidebar" class="no-print" />
       
       <!-- Page Content -->
       <main class="flex-1 overflow-y-auto p-6">

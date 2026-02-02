@@ -1,51 +1,58 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { clientesService } from '@/services/clientesService'
+import clientesApi from '@/services/clientesService'
 import { useToast } from 'vue-toastification'
 
 const toast = useToast()
 
 export const useClientesStore = defineStore('clientes', () => {
-  // State
+  // ========== STATE ==========
   const clientes = ref([])
-  const currentCliente = ref(null)
   const loading = ref(false)
-  const pagination = ref({
-    currentPage: 1,
-    perPage: 10,
-    total: 0,
-    lastPage: 1
-  })
   const filters = ref({
     search: '',
-    orderBy: 'name',
-    orderDirection: 'asc'
+    orderBy: 'createdAt',
+    order: 'desc'
+  })
+  const pagination = ref({
+    currentPage: 1,
+    lastPage: 1,
+    perPage: 10,
+    total: 0
   })
 
-  // Getters
-  const totalClientes = computed(() => pagination.value.total)
+  // ========== GETTERS ==========
   const hasClientes = computed(() => clientes.value.length > 0)
+  const totalClientes = computed(() => pagination.value.total)
 
-  // Actions
+  // ========== ACTIONS ==========
+
+  /**
+   * Buscar clientes com paginação e filtros
+   */
   const fetchClientes = async (page = 1) => {
     try {
       loading.value = true
+
       const params = {
         page,
-        per_page: pagination.value.perPage,
-        search: filters.value.search,
-        order_by: filters.value.orderBy,
-        order_direction: filters.value.orderDirection
+        perPage: pagination.value.perPage,
+        ...filters.value
       }
 
-      const response = await clientesService.getAll(params)
-      
-      clientes.value = response.data.data
-      pagination.value = {
-        currentPage: response.data.current_page,
-        perPage: response.data.per_page,
-        total: response.data.total,
-        lastPage: response.data.last_page
+      const response = await clientesApi.getAll(params)
+      const { data, meta } = response.data
+
+      clientes.value = data
+
+      // Atualizar paginação
+      if (meta) {
+        pagination.value = {
+          currentPage: meta.current_page,
+          lastPage: meta.total_pages,
+          perPage: meta.per_page,
+          total: meta.total
+        }
       }
     } catch (error) {
       console.error('Erro ao buscar clientes:', error)
@@ -55,107 +62,117 @@ export const useClientesStore = defineStore('clientes', () => {
     }
   }
 
-  const fetchClienteById = async (id) => {
-    try {
-      loading.value = true
-      const response = await clientesService.getById(id)
-      currentCliente.value = response.data
-      return response.data
-    } catch (error) {
-      console.error('Erro ao buscar cliente:', error)
-      toast.error('Cliente não encontrado')
-      return null
-    } finally {
-      loading.value = false
-    }
-  }
-
+  /**
+   * Criar novo cliente
+   */
   const createCliente = async (data) => {
     try {
       loading.value = true
-      const response = await clientesService.create(data)
-      clientes.value.unshift(response.data)
+      const response = await clientesApi.create(data)
+
       toast.success('Cliente cadastrado com sucesso!')
+      
+      // Recarregar lista
       await fetchClientes(pagination.value.currentPage)
+      
       return true
     } catch (error) {
       console.error('Erro ao criar cliente:', error)
+      
+      // Erro específico do backend
+      const message = error.response?.data?.message || 'Erro ao cadastrar cliente'
+      toast.error(message)
+      
       return false
     } finally {
       loading.value = false
     }
   }
 
+  /**
+   * Atualizar cliente
+   */
   const updateCliente = async (id, data) => {
     try {
       loading.value = true
-      const response = await clientesService.update(id, data)
-      const index = clientes.value.findIndex(c => c.id === id)
-      if (index !== -1) {
-        clientes.value[index] = response.data
-      }
+      const response = await clientesApi.update(id, data)
+
       toast.success('Cliente atualizado com sucesso!')
+      
+      // Recarregar lista
+      await fetchClientes(pagination.value.currentPage)
+      
       return true
     } catch (error) {
       console.error('Erro ao atualizar cliente:', error)
+      
+      const message = error.response?.data?.message || 'Erro ao atualizar cliente'
+      toast.error(message)
+      
       return false
     } finally {
       loading.value = false
     }
   }
 
+  /**
+   * Deletar cliente
+   */
   const deleteCliente = async (id) => {
     try {
       loading.value = true
-      await clientesService.delete(id)
-      clientes.value = clientes.value.filter(c => c.id !== id)
-      toast.success('Cliente removido com sucesso!')
+      await clientesApi.delete(id)
+
+      toast.success('Cliente excluído com sucesso!')
       
-      // Se a página ficar vazia, voltar para a página anterior
-      if (clientes.value.length === 0 && pagination.value.currentPage > 1) {
-        await fetchClientes(pagination.value.currentPage - 1)
-      } else {
-        await fetchClientes(pagination.value.currentPage)
-      }
+      // Recarregar lista
+      await fetchClientes(pagination.value.currentPage)
+      
       return true
     } catch (error) {
       console.error('Erro ao deletar cliente:', error)
-      toast.error('Erro ao remover cliente')
+      
+      const message = error.response?.data?.message || 'Erro ao excluir cliente'
+      toast.error(message)
+      
       return false
     } finally {
       loading.value = false
     }
   }
 
+  /**
+   * Definir filtros de busca
+   */
   const setFilters = (newFilters) => {
     filters.value = { ...filters.value, ...newFilters }
-    fetchClientes(1) // Resetar para primeira página ao filtrar
+    fetchClientes(1) // Volta para primeira página
   }
 
+  /**
+   * Limpar filtros
+   */
   const clearFilters = () => {
     filters.value = {
       search: '',
-      orderBy: 'name',
-      orderDirection: 'asc'
+      orderBy: 'createdAt',
+      order: 'desc'
     }
     fetchClientes(1)
   }
 
+  // ========== RETURN ==========
   return {
     // State
     clientes,
-    currentCliente,
     loading,
-    pagination,
     filters,
-    
+    pagination,
     // Getters
-    totalClientes,
     hasClientes,
-    
+    totalClientes,
     // Actions
     fetchClientes,
-    fetchClienteById,
     createCliente,
     updateCliente,
     deleteCliente,

@@ -11,11 +11,11 @@
         <!-- Cliente -->
         <div class="md:col-span-2">
           <ClienteSelect
-            v-model="form.cliente_id"
+            v-model="form.clienteId"
             label="Proprietário"
             placeholder="Selecione o cliente"
             required
-            :error="errors.cliente_id"
+            :error="errors.clienteId"
             :disabled="loading"
           />
         </div>
@@ -77,7 +77,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1.5">
             Tipo de Combustível
           </label>
-          <select v-model="form.fuel_type" class="input" :disabled="loading">
+          <select v-model="form.fuelType" class="input" :disabled="loading">
             <option value="">Selecione</option>
             <option value="gasoline">Gasolina</option>
             <option value="diesel">Diesel</option>
@@ -175,13 +175,13 @@ const isOpen = computed({
 const isEdit = computed(() => !!props.veiculo)
 
 const form = ref({
-  cliente_id: '',
+  clienteId: '',
   brand: '',
   model: '',
   year: new Date().getFullYear(),
   plate: '',
   color: '',
-  fuel_type: '',
+  fuelType: '',
   vin: '',
   mileage: 0,
   notes: ''
@@ -193,13 +193,13 @@ watch(() => props.modelValue, (isOpen) => {
   if (isOpen) {
     if (props.veiculo) {
       form.value = {
-        cliente_id: props.veiculo.cliente_id || '',
+        clienteId: props.veiculo.clienteId || '',
         brand: props.veiculo.brand || '',
         model: props.veiculo.model || '',
         year: props.veiculo.year || new Date().getFullYear(),
         plate: props.veiculo.plate || '',
         color: props.veiculo.color || '',
-        fuel_type: props.veiculo.fuel_type || '',
+        fuelType: props.veiculo.fuelType || '',
         vin: props.veiculo.vin || '',
         mileage: props.veiculo.mileage || 0,
         notes: props.veiculo.notes || ''
@@ -213,13 +213,13 @@ watch(() => props.modelValue, (isOpen) => {
 
 const resetForm = () => {
   form.value = {
-    cliente_id: '',
+    clienteId: '',
     brand: '',
     model: '',
     year: new Date().getFullYear(),
     plate: '',
     color: '',
-    fuel_type: '',
+    fuelType: '',
     vin: '',
     mileage: 0,
     notes: ''
@@ -231,8 +231,8 @@ const validateForm = () => {
   errors.value = {}
   let isValid = true
 
-  if (!form.value.cliente_id) {
-    errors.value.cliente_id = 'Cliente é obrigatório'
+  if (!form.value.clienteId) {
+    errors.value.clienteId = 'Cliente é obrigatório'
     isValid = false
   }
 

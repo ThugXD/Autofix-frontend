@@ -54,11 +54,11 @@ const isOpen = computed({
 })
 
 const formData = ref({
-  cliente_id: '',
-  veiculo_id: '',
+  clienteId: '',
+  veiculoId: '',
   priority: 'media',
-  data_prevista: '',
-  problema_relatado: '',
+  dataPrevista: '',
+  problemaRelatado: '',
   observacoes: '',
   status: 'pendente'
 })
@@ -74,11 +74,11 @@ watch(() => props.modelValue, (isOpen) => {
 
 const resetForm = () => {
   formData.value = {
-    cliente_id: '',
-    veiculo_id: '',
+    clienteId: '',
+    veiculoId: '',
     priority: 'media',
-    data_prevista: '',
-    problema_relatado: '',
+    dataPrevista: '',
+    problemaRelatado: '',
     observacoes: '',
     status: 'pendente'
   }
@@ -89,18 +89,18 @@ const validateForm = () => {
   errors.value = {}
   let isValid = true
 
-  if (!formData.value.cliente_id) {
-    errors.value.cliente_id = 'Cliente é obrigatório'
+  if (!formData.value.clienteId) {
+    errors.value.clienteId = 'Cliente é obrigatório'
     isValid = false
   }
 
-  if (!formData.value.veiculo_id) {
-    errors.value.veiculo_id = 'Veículo é obrigatório'
+  if (!formData.value.veiculoId) {
+    errors.value.veiculoId = 'Veículo é obrigatório'
     isValid = false
   }
 
-  if (!formData.value.problema_relatado.trim()) {
-    errors.value.problema_relatado = 'Problema relatado é obrigatório'
+  if (!formData.value.problemaRelatado.trim()) {
+    errors.value.problemaRelatado = 'Problema relatado é obrigatório'
     isValid = false
   }
 

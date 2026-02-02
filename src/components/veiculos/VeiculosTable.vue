@@ -3,26 +3,24 @@
     <table class="table">
       <thead>
         <tr>
-          <th>ID</th>
+          <th class="w-16">ID</th>
           <th>Proprietário</th>
-          <th>Marca/Modelo</th>
+          <th>Viatura</th>
           <th>Ano</th>
           <th>Matrícula</th>
-          <th>Cor</th>
-          <th>Tipo de Combustível</th>
-          <th>Quilometragem</th>
+          <th>Combustível</th>
           <th class="text-center">Ações</th>
         </tr>
       </thead>
       <tbody>
         <tr v-if="loading">
-          <td colspan="9" class="text-center py-8">
+          <td colspan="7" class="text-center py-8">
             <LoadingSpinner size="md" text="Carregando veículos..." />
           </td>
         </tr>
 
         <tr v-else-if="!veiculos.length">
-          <td colspan="9" class="text-center py-8 text-gray-500">
+          <td colspan="7" class="text-center py-8 text-gray-500">
             Nenhum veículo encontrado
           </td>
         </tr>
@@ -31,22 +29,22 @@
           <td class="font-medium text-gray-900">#{{ veiculo.id }}</td>
           <td>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <User class="w-5 h-5 text-blue-600" />
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                <User class="w-4 h-4 text-blue-600" />
               </div>
-              <div>
-                <p class="font-medium text-gray-900">{{ veiculo.cliente_name }}</p>
+              <div class="truncate">
+                <p class="font-medium text-gray-900 truncate">{{ veiculo.cliente?.name || 'N/A' }}</p>
               </div>
             </div>
           </td>
           <td>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                <Car class="w-5 h-5 text-gray-600" />
+              <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center shrink-0">
+                <Car class="w-4 h-4 text-gray-600" />
               </div>
               <div>
-                <p class="font-medium text-gray-900">{{ veiculo.brand }}</p>
-                <p class="text-xs text-gray-500">{{ veiculo.model }}</p>
+                <p class="font-medium text-gray-900">{{ veiculo.brand }} {{ veiculo.model }}</p>
+                <p class="text-xs text-gray-500">{{ veiculo.color || '-' }}</p>
               </div>
             </div>
           </td>
@@ -56,19 +54,15 @@
               {{ veiculo.plate }}
             </span>
           </td>
-          <td class="text-gray-600">{{ veiculo.color || '-' }}</td>
           <td>
             <span
               :class="[
                 'badge',
-                fuelTypeClasses[veiculo.fuel_type] || 'badge-info'
+                fuelTypeClasses[veiculo.fuelType] || 'badge-info'
               ]"
             >
-              {{ fuelTypeLabels[veiculo.fuel_type] || veiculo.fuel_type }}
+              {{ fuelTypeLabels[veiculo.fuelType] || veiculo.fuelType || '-' }}
             </span>
-          </td>
-          <td class="text-gray-600">
-            {{ veiculo.mileage ? veiculo.mileage.toLocaleString() + ' km' : '-' }}
           </td>
           <td>
             <div class="flex items-center justify-center gap-2">

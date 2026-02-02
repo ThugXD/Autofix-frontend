@@ -138,7 +138,7 @@
               </div>
 
               <router-link
-                to="/definicoes"
+                to="/perfil"
                 class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 @click="closeUserMenu"
               >
@@ -173,10 +173,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useNotificationsStore } from '@/stores/notifications'
 import { useToast } from 'vue-toastification'
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import {
   Menu,
   Bell,
@@ -195,42 +198,30 @@ defineEmits(['toggleSidebar'])
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const notificationsStore = useNotificationsStore()
 const toast = useToast()
 
 const showUserMenu = ref(false)
 const showNotifications = ref(false)
 
-// Mock notifications - substituir por dados reais do backend
-const notifications = ref([
-  {
-    id: 1,
-    type: 'success',
-    title: 'Ordem Concluída',
-    message: 'Ordem OS-2024-001 foi concluída com sucesso',
-    time: 'Há 5 minutos',
-    read: false
-  },
-  {
-    id: 2,
-    type: 'warning',
-    title: 'Estoque Baixo',
-    message: 'Pastilha de Freio está com estoque baixo',
-    time: 'Há 1 hora',
-    read: false
-  },
-  {
-    id: 3,
-    type: 'info',
-    title: 'Nova Ordem',
-    message: 'Nova ordem de serviço criada por Maria Atendente',
-    time: 'Há 2 horas',
-    read: false
-  }
-])
-
-const notificationCount = computed(() => {
-  return notifications.value.filter(n => !n.read).length
+// Lifecycle
+onMounted(() => {
+  notificationsStore.startPolling()
 })
+
+onUnmounted(() => {
+  notificationsStore.stopPolling()
+})
+
+// Data
+const notifications = computed(() => {
+  return notificationsStore.notifications.map(n => ({
+    ...n,
+    time: formatDistanceToNow(new Date(n.createdAt), { addSuffix: true, locale: ptBR })
+  }))
+})
+
+const notificationCount = computed(() => notificationsStore.unreadCount)
 
 const user = computed(() => authStore.user)
 
@@ -279,37 +270,47 @@ const goToSettings = () => {
   router.push('/definicoes')
 }
 
-const handleNotificationClick = (notification) => {
-  notification.read = true
-  toast.info(`Abrindo: ${notification.title}`)
+const handleNotificationClick = async (notification) => {
+  if (!notification.read) {
+    await notificationsStore.markAsRead(notification.id)
+  }
+  
   showNotifications.value = false
   
-  // Redirecionar baseado no tipo de notificação
-  if (notification.title.includes('Ordem')) {
-    router.push('/ordem-servico')
-  } else if (notification.title.includes('Estoque')) {
+  // Redirecionar baseado nos dados da notificação
+  if (notification.data?.ordemId) {
+    router.push(`/ordem-servico`) // Ideal seria ir para detalhe, mas listagem serve por agora
+  } else if (notification.data?.pecaId) {
     router.push('/stock-pecas')
+  } else {
+    // Fallback based on title/type
+    if (notification.title.includes('Ordem')) {
+      router.push('/ordem-servico')
+    } else if (notification.title.includes('Estoque')) {
+      router.push('/stock-pecas')
+    }
   }
 }
 
-const removeNotification = (id) => {
-  const index = notifications.value.findIndex(n => n.id === id)
-  if (index !== -1) {
-    notifications.value.splice(index, 1)
-    toast.success('Notificação removida')
-  }
+const removeNotification = async (id) => {
+    // Logica de remover não implementada no backend ainda (soft delete?), mas podemos marcar como lida e ocultar visualmente
+    // Ou simplesmente marcar como lida. 
+    // Para simplificar, vamos marcar como lida se clicar no X, ou implementar delete real depois.
+    // O mock removia do array. Vamos assumir que "Remover" aqui é apenas "Marcar como lida" ou "Arquivar"
+    await notificationsStore.markAsRead(id)
 }
 
-const clearAllNotifications = () => {
-  notifications.value = []
-  toast.success('Todas as notificações foram limpas')
+const clearAllNotifications = async () => {
+  await notificationsStore.markAllAsRead()
+  toast.success('Todas as notificações marcadas como lidas')
 }
 
 const getNotificationIcon = (type) => {
   const icons = {
     success: CheckCircle,
     warning: AlertCircle,
-    info: Info
+    info: Info,
+    error: AlertCircle 
   }
   return icons[type] || Info
 }

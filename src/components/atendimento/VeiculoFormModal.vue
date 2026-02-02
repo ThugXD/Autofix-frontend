@@ -1,7 +1,7 @@
 <template>
   <BaseModal v-model="isOpen" title="Cadastro Rápido de Veículo" size="md">
     <div class="space-y-4">
-      <ClienteSelect v-model="form.cliente_id" label="Cliente" required :error="errors.cliente_id" />
+      <ClienteSelect v-model="form.clienteId" label="Cliente" required :error="errors.clienteId" />
       <div class="grid grid-cols-2 gap-4">
         <BaseInput v-model="form.brand" label="Marca" required :error="errors.brand" />
         <BaseInput v-model="form.model" label="Modelo" required :error="errors.model" />
@@ -39,24 +39,28 @@ const isOpen = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
-const form = ref({ cliente_id: '', brand: '', model: '', year: new Date().getFullYear(), plate: '' })
+const form = ref({ clienteId: '', brand: '', model: '', year: new Date().getFullYear(), plate: '' })
 const errors = ref({})
 const loading = ref(false)
 
 const handleSubmit = async () => {
   errors.value = {}
-  if (!form.value.cliente_id) errors.value.cliente_id = 'Obrigatório'
+  if (!form.value.clienteId) errors.value.clienteId = 'Obrigatório'
   if (!form.value.brand) errors.value.brand = 'Obrigatório'
   if (!form.value.model) errors.value.model = 'Obrigatório'
   if (!form.value.plate) errors.value.plate = 'Obrigatório'
   if (Object.keys(errors.value).length) return
 
   loading.value = true
-  const success = await veiculosStore.createVeiculo(form.value)
+  const payload = {
+    ...form.value,
+    year: parseInt(form.value.year)
+  }
+  const success = await veiculosStore.createVeiculo(payload)
   loading.value = false
 
   if (success) {
-    form.value = { cliente_id: '', brand: '', model: '', year: new Date().getFullYear(), plate: '' }
+    form.value = { clienteId: '', brand: '', model: '', year: new Date().getFullYear(), plate: '' }
     emit('created')
   }
 }

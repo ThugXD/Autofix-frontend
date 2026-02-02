@@ -35,10 +35,10 @@
               <span
                 :class="[
                   'badge',
-                  fuelTypeClasses[veiculo.fuel_type] || 'badge-info'
+                  fuelTypeClasses[veiculo.fuelType] || 'badge-info'
                 ]"
               >
-                {{ fuelTypeLabels[veiculo.fuel_type] || veiculo.fuel_type || '-' }}
+                {{ fuelTypeLabels[veiculo.fuelType] || veiculo.fuelType || '-' }}
               </span>
             </div>
           </div>
@@ -52,14 +52,18 @@
             </div>
             <div>
               <h3 class="text-lg font-bold text-gray-900">Proprietário</h3>
-              <p class="text-sm text-gray-600">{{ veiculo.cliente_name }}</p>
+              <p class="text-sm text-gray-600">{{ veiculo.cliente?.name || 'Não informado' }}</p>
             </div>
           </div>
 
-          <div class="space-y-3">
+          <div class="space-y-3 border-t pt-3">
             <div class="flex justify-between">
-              <span class="text-sm text-gray-600">Cliente ID:</span>
-              <span class="font-medium text-gray-900">#{{ veiculo.cliente_id }}</span>
+              <span class="text-sm text-gray-600">Telefone:</span>
+              <span class="font-medium text-gray-900">{{ veiculo.cliente?.phone || '-' }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">E-mail:</span>
+              <span class="font-medium text-gray-900 break-all ml-4">{{ veiculo.cliente?.email || '-' }}</span>
             </div>
           </div>
         </div>
@@ -74,7 +78,7 @@
             <div>
               <p class="text-xs text-gray-600">Quilometragem</p>
               <p class="font-semibold text-gray-900">
-                {{ veiculo.mileage ? veiculo.mileage.toLocaleString() + ' km' : 'Não informado' }}
+                {{ veiculo.mileage ? veiculo.mileage.toLocaleString() + ' km' : '0 km' }}
               </p>
             </div>
           </div>
@@ -94,16 +98,8 @@
             <div>
               <p class="text-xs text-gray-600">Data de Registro</p>
               <p class="font-semibold text-gray-900">
-                {{ formatDate(veiculo.created_at) }}
+                {{ formatDate(veiculo.createdAt) }}
               </p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-            <FileText class="w-5 h-5 text-gray-600" />
-            <div>
-              <p class="text-xs text-gray-600">ID do Veículo</p>
-              <p class="font-semibold text-gray-900">#{{ veiculo.id }}</p>
             </div>
           </div>
         </div>
@@ -113,7 +109,7 @@
       <div v-if="veiculo.notes" class="border-t pt-6">
         <h4 class="text-lg font-semibold text-gray-900 mb-3">Observações</h4>
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p class="text-sm text-gray-700">{{ veiculo.notes }}</p>
+          <p class="text-sm text-gray-700 leading-relaxed">{{ veiculo.notes }}</p>
         </div>
       </div>
     </div>

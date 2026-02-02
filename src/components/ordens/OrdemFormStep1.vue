@@ -9,11 +9,11 @@
         <!-- Cliente -->
         <div class="md:col-span-2">
           <ClienteSelect
-            v-model="localData.cliente_id"
+            v-model="localData.clienteId"
             label="Cliente"
             placeholder="Selecione o cliente"
             required
-            :error="errors.cliente_id"
+            :error="errors.clienteId"
             @update:model-value="handleClienteChange"
           />
         </div>
@@ -24,7 +24,7 @@
             Veículo <span class="text-red-500">*</span>
           </label>
           <select
-            v-model="localData.veiculo_id"
+            v-model="localData.veiculoId"
             class="input"
             required
             :disabled="!veiculos.length"
@@ -40,8 +40,8 @@
               {{ veiculo.brand }} {{ veiculo.model }} {{ veiculo.year }} ({{ veiculo.plate }})
             </option>
           </select>
-          <p v-if="errors.veiculo_id" class="mt-1.5 text-sm text-red-600">
-            {{ errors.veiculo_id }}
+          <p v-if="errors.veiculoId" class="mt-1.5 text-sm text-red-600">
+            {{ errors.veiculoId }}
           </p>
         </div>
 
@@ -60,10 +60,10 @@
 
         <!-- Data Prevista -->
         <BaseInput
-          v-model="localData.data_prevista"
+          v-model="localData.dataPrevista"
           label="Data Prevista de Conclusão"
           type="date"
-          :error="errors.data_prevista"
+          :error="errors.dataPrevista"
         />
 
         <!-- Problema Relatado -->
@@ -72,14 +72,14 @@
             Problema Relatado <span class="text-red-500">*</span>
           </label>
           <textarea
-            v-model="localData.problema_relatado"
+            v-model="localData.problemaRelatado"
             rows="3"
             placeholder="Descreva o problema relatado pelo cliente..."
             class="input resize-none"
             required
           ></textarea>
-          <p v-if="errors.problema_relatado" class="mt-1.5 text-sm text-red-600">
-            {{ errors.problema_relatado }}
+          <p v-if="errors.problemaRelatado" class="mt-1.5 text-sm text-red-600">
+            {{ errors.problemaRelatado }}
           </p>
         </div>
 
@@ -133,13 +133,13 @@ watch(() => props.modelValue, (newValue) => {
 const handleClienteChange = async (clienteId) => {
   if (!clienteId) {
     veiculos.value = []
-    localData.value.veiculo_id = ''
+    localData.value.veiculoId = ''
     return
   }
 
   try {
     const response = await veiculosService.getByCliente(clienteId)
-    veiculos.value = response.data
+    veiculos.value = response.data.data // Fixed: Accessing .data.data
   } catch (error) {
     console.error('Erro ao carregar veículos:', error)
     veiculos.value = []

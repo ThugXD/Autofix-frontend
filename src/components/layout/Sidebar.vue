@@ -19,7 +19,7 @@
     <!-- Navigation Menu -->
     <nav class="flex-1 overflow-y-auto py-4 px-3">
       <ul class="space-y-1">
-        <li v-for="item in menuItems" :key="item.name">
+        <li v-for="item in filteredMenuItems" :key="item.name">
           <router-link
             :to="item.path"
             class="sidebar-item"
@@ -68,7 +68,9 @@ import {
   UserCog,
   Settings,
   Info,
-  User
+  User,
+  Building2,
+  Shield
 } from 'lucide-vue-next'
 
 defineProps({
@@ -84,70 +86,110 @@ const user = computed(() => authStore.user)
 
 const menuItems = [
   {
+    name: 'admin-dashboard',
+    label: 'Dashboard Admin',
+    path: '/admin',
+    icon: LayoutDashboard,
+    roles: ['super_admin']
+  },
+  {
+    name: 'admin-tenants',
+    label: 'Oficinas',
+    path: '/admin/tenants',
+    icon: Building2,
+    roles: ['super_admin']
+  },
+  {
+    name: 'admin-audit',
+    label: 'Auditoria',
+    path: '/admin/audit',
+    icon: Shield,
+    roles: ['super_admin']
+  },
+  {
     name: 'dashboard',
     label: 'Dashboard',
     path: '/',
-    icon: LayoutDashboard
+    icon: LayoutDashboard,
+    roles: ['admin', 'atendente', 'mecanico']
   },
   {
     name: 'clientes',
     label: 'Clientes',
     path: '/clientes',
-    icon: Users
+    icon: Users,
+    roles: ['admin', 'atendente', 'mecanico']
   },
   {
     name: 'veiculos',
     label: 'Veículos',
     path: '/veiculos',
-    icon: Car
+    icon: Car,
+    roles: ['admin', 'atendente', 'mecanico']
   },
   {
     name: 'atendimento',
     label: 'Atendimento',
     path: '/atendimento',
-    icon: ClipboardList
+    icon: ClipboardList,
+    roles: ['admin', 'atendente']
   },
   {
     name: 'ordem-servico',
     label: 'Ordem de Serviço',
     path: '/ordem-servico',
-    icon: FileText
+    icon: FileText,
+    roles: ['admin', 'atendente', 'mecanico']
   },
   {
     name: 'servicos',
     label: 'Serviços',
     path: '/servicos',
-    icon: Wrench
+    icon: Wrench,
+    roles: ['admin', 'atendente', 'mecanico']
   },
   {
     name: 'stock-pecas',
     label: 'Stock de Peças',
     path: '/stock-pecas',
-    icon: Package
+    icon: Package,
+    roles: ['admin', 'atendente', 'mecanico']
   },
   {
     name: 'utilizadores',
     label: 'Utilizadores',
     path: '/utilizadores',
-    icon: UserCog
+    icon: UserCog,
+    roles: ['admin']
   },
   {
     name: 'definicoes',
     label: 'Definições',
     path: '/definicoes',
-    icon: Settings
+    icon: Settings,
+    roles: ['admin']
   },
   {
     name: 'info',
     label: 'Info',
     path: '/info',
-    icon: Info
+    icon: Info,
+    roles: ['admin', 'atendente', 'mecanico', 'super_admin']
   }
 ]
 
+const filteredMenuItems = computed(() => {
+  if (!user.value) return []
+  return menuItems.filter(item => {
+    // Se o item tem roles definidos, verifica se a role do usuario esta inclusa
+    if (item.roles && !item.roles.includes(user.value.role)) return false
+    return true
+  })
+})
+
 const isActive = (path) => {
-  if (path === '/') {
-    return route.path === '/'
+  if (path === '/' || path === '/admin') {
+    return route.path === path
   }
   return route.path.startsWith(path)
 }

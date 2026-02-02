@@ -6,7 +6,7 @@ const toast = useToast()
 // Criar instância do Axios
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
-  timeout: 10000,
+  timeout: 30000, // ✅ Aumentado para 30s
   headers: {
     'Content-Type': 'application/json',
   },
@@ -28,26 +28,55 @@ api.interceptors.request.use(
     
     return config
   },
-  error => {
-    return Promise.reject(error)
-  }
+  error => Promise.reject(error)
 )
 
-// Interceptor de Response - Trata erros globalmente
+// Interceptor de Response - Trata erros + REFRESH AUTOMÁTICO
 api.interceptors.response.use(
-  response => {
-    return response
-  },
-  error => {
+  response => response,
+  async error => {
+    const originalRequest = error.config
+
+    // ✅ REFRESH AUTOMÁTICO em 401
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+
+      try {
+        const refreshToken = localStorage.getItem('refreshToken')
+        if (!refreshToken) throw new Error('No refresh token')
+
+        // Tentar renovar token (SEM usar a instância api para evitar loop)
+        const { data } = await axios.post(
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/auth/refresh`,
+          { refreshToken }
+        )
+
+        const newToken = data.data.token
+        const newRefreshToken = data.data.refreshToken
+
+        // Salvar novos tokens
+        localStorage.setItem('token', newToken)
+        localStorage.setItem('refreshToken', newRefreshToken)
+
+        // Retentar requisição original com novo token
+        originalRequest.headers.Authorization = `Bearer ${newToken}`
+        return api(originalRequest)
+      } catch (refreshError) {
+        // Refresh falhou → Logout forçado
+        toast.error('Sessão expirada. Faça login novamente.')
+        localStorage.clear()
+        window.location.href = '/login'
+        return Promise.reject(refreshError)
+      }
+    }
+
+    // ✅ OUTROS ERROS
     if (error.response) {
       const { status, data } = error.response
       
       switch (status) {
         case 401:
-          toast.error('Sessão expirada. Faça login novamente.')
-          localStorage.removeItem('token')
-          localStorage.removeItem('user')
-          window.location.href = '/login'
+          // Já tratado acima (refresh)
           break
           
         case 403:
@@ -59,14 +88,8 @@ api.interceptors.response.use(
           break
           
         case 422:
-          // Erros de validação
-          if (data.errors) {
-            Object.values(data.errors).forEach(errorArray => {
-              errorArray.forEach(msg => toast.error(msg))
-            })
-          } else {
-            toast.error(data.message || 'Erro de validação.')
-          }
+        case 400:
+          // Erros de validação - NÃO mostrar toast (deixar componente tratar)
           break
           
         case 500:

@@ -1,7 +1,7 @@
 import api from './api'
 import { mockUsersService } from './mockUsersService'
 
-const USE_MOCK = true
+const USE_MOCK = false
 
 export const usersService = USE_MOCK ? mockUsersService : {
   getAll(params = {}) {

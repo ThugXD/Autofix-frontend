@@ -42,7 +42,7 @@
               {{ item.quantidade }}
             </td>
             <td class="px-4 py-3 text-right text-gray-900">
-              {{ formatCurrency(item.preco_unitario) }}
+              {{ formatCurrency(item.precoUnitario) }}
             </td>
             <td class="px-4 py-3 text-right font-semibold text-gray-900">
               {{ formatCurrency(item.subtotal) }}

@@ -79,14 +79,14 @@
                 </span>
               </td>
               <td class="font-semibold text-gray-900">
-                {{ formatCurrency(servico.default_price) }}
+                {{ formatCurrency(servico.defaultPrice) }}
               </td>
               <td class="text-gray-600">
-                {{ servico.estimated_time }} min
+                {{ servico.estimatedTime }} min
               </td>
               <td>
-                <span :class="['badge', servico.is_active ? 'badge-success' : 'badge-danger']">
-                  {{ servico.is_active ? 'Ativo' : 'Inativo' }}
+                <span :class="['badge', servico.isActive ? 'badge-success' : 'badge-danger']">
+                  {{ servico.isActive ? 'Ativo' : 'Inativo' }}
                 </span>
               </td>
               <td>

@@ -2,7 +2,8 @@ import api from './api'
 import { mockVeiculosService } from './mockVeiculosService'
 
 // Usar mock data enquanto backend não está pronto
-const USE_MOCK = true
+const USE_MOCK = false
+
 
 export const veiculosService = USE_MOCK ? mockVeiculosService : {
   // Listar todos os veículos (com paginação e filtros)

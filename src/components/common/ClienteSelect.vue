@@ -42,7 +42,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { ChevronDown } from 'lucide-vue-next'
-import { clientesService } from '@/services/clientesService'
+import clientesService from '@/services/clientesService'
 
 const props = defineProps({
   modelValue: {

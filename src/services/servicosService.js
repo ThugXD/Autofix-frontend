@@ -1,7 +1,7 @@
 import api from './api'
 import { mockServicosService } from './mockServicosService'
 
-const USE_MOCK = true
+const USE_MOCK = false
 
 export const servicosService = USE_MOCK ? mockServicosService : {
   getAll(params = {}) {
@@ -25,6 +25,6 @@ export const servicosService = USE_MOCK ? mockServicosService : {
   },
 
   getActive() {
-    return api.get('/servicos/active')
+    return api.get('/servicos', { params: { isActive: true } })
   }
 }

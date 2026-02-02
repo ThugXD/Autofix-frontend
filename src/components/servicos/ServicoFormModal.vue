@@ -44,34 +44,34 @@
 
       <div class="grid grid-cols-2 gap-4">
         <BaseInput
-          v-model="form.default_price"
+          v-model="form.defaultPrice"
           label="Preço Padrão (MT)"
           type="number"
           step="0.01"
           min="0"
           placeholder="0,00"
           required
-          :error="errors.default_price"
+          :error="errors.defaultPrice"
         />
 
         <BaseInput
-          v-model="form.estimated_time"
+          v-model="form.estimatedTime"
           label="Tempo (minutos)"
           type="number"
           min="0"
           placeholder="30"
-          :error="errors.estimated_time"
+          :error="errors.estimatedTime"
         />
       </div>
 
       <div class="flex items-center gap-2">
         <input
           type="checkbox"
-          v-model="form.is_active"
-          id="is_active"
+          v-model="form.isActive"
+          id="isActive"
           class="w-4 h-4 text-blue-600 rounded"
         />
-        <label for="is_active" class="text-sm font-medium text-gray-700">
+        <label for="isActive" class="text-sm font-medium text-gray-700">
           Serviço ativo
         </label>
       </div>
@@ -118,23 +118,23 @@ const form = ref({
   name: '',
   description: '',
   category: '',
-  default_price: 0,
-  estimated_time: 30,
-  is_active: true
+  defaultPrice: 0,
+  estimatedTime: 30,
+  isActive: true
 })
 
 const errors = ref({})
 
 watch(() => props.modelValue, (isOpen) => {
   if (isOpen) {
-    if (props.servico) {
+        if (props.servico) {
       form.value = {
         name: props.servico.name || '',
         description: props.servico.description || '',
         category: props.servico.category || '',
-        default_price: props.servico.default_price || 0,
-        estimated_time: props.servico.estimated_time || 30,
-        is_active: props.servico.is_active !== undefined ? props.servico.is_active : true
+        defaultPrice: props.servico.defaultPrice || props.servico.default_price || 0,
+        estimatedTime: props.servico.estimatedTime || props.servico.estimated_time || 30,
+        isActive: props.servico.isActive !== undefined ? props.servico.isActive : (props.servico.is_active !== undefined ? props.servico.is_active : true)
       }
     } else {
       resetForm()
@@ -169,8 +169,8 @@ const validateForm = () => {
     isValid = false
   }
 
-  if (!form.value.default_price || form.value.default_price < 0) {
-    errors.value.default_price = 'Preço é obrigatório'
+  if (!form.value.defaultPrice || form.value.defaultPrice < 0) {
+    errors.value.defaultPrice = 'Preço é obrigatório'
     isValid = false
   }
 
@@ -182,8 +182,8 @@ const handleSubmit = () => {
 
   const data = {
     ...form.value,
-    default_price: parseFloat(form.value.default_price),
-    estimated_time: parseInt(form.value.estimated_time) || 0,
+    defaultPrice: parseFloat(form.value.defaultPrice),
+    estimatedTime: parseInt(form.value.estimatedTime) || 0,
     ...(isEdit.value && { id: props.servico.id })
   }
 

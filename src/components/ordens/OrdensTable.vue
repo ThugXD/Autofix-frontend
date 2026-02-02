@@ -34,16 +34,18 @@
           </td>
           <td>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <User class="w-5 h-5 text-blue-600" />
-              </div>
-              <span class="font-medium text-gray-900">{{ ordem.cliente_name }}</span>
+
+              <span class="font-medium text-gray-900 truncate max-w-[150px]" :title="ordem.cliente?.name">
+                {{ ordem.cliente?.name || 'N/A' }}
+              </span>
             </div>
           </td>
           <td>
-            <div class="flex items-center gap-2">
-              <Car class="w-4 h-4 text-gray-400" />
-              <span class="text-sm text-gray-700">{{ ordem.veiculo_info }}</span>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5 text-sm font-medium text-gray-900">
+                {{ ordem.veiculo?.brand }} {{ ordem.veiculo?.model }}
+              </div>
+              <!-- <span class="text-xs text-cool-gray-500 ml-5">{{ ordem.veiculo?.plate }}</span> -->
             </div>
           </td>
           <td>
@@ -56,8 +58,8 @@
               {{ priorityLabels[ordem.priority] }}
             </span>
           </td>
-          <td class="text-gray-600">
-            {{ formatDate(ordem.data_abertura) }}
+          <td class="text-gray-600 whitespace-nowrap">
+            {{ formatDate(ordem.dataAbertura) }}
           </td>
           <td>
             <span class="font-semibold text-gray-900">
