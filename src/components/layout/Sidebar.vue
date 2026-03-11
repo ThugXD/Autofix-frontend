@@ -90,42 +90,6 @@ const menuItems = [
     icon: LayoutDashboard
   },
   {
-    name: 'clientes',
-    label: 'Clientes',
-    path: '/clientes',
-    icon: Users
-  },
-  {
-    name: 'veiculos',
-    label: 'Veículos',
-    path: '/veiculos',
-    icon: Car
-  },
-  {
-    name: 'atendimento',
-    label: 'Atendimento',
-    path: '/atendimento',
-    icon: ClipboardList
-  },
-  {
-    name: 'ordem-servico',
-    label: 'Ordem de Serviço',
-    path: '/ordem-servico',
-    icon: FileText
-  },
-  {
-    name: 'servicos',
-    label: 'Serviços',
-    path: '/servicos',
-    icon: Wrench
-  },
-  {
-    name: 'stock-pecas',
-    label: 'Stock de Peças',
-    path: '/stock-pecas',
-    icon: Package
-  },
-  {
     name: 'utilizadores',
     label: 'Utilizadores',
     path: '/utilizadores',

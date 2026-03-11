@@ -15,48 +15,6 @@ const router = createRouter({
           meta: { title: 'Dashboard' }
         },
         {
-          path: 'clientes',
-          name: 'clientes',
-          component: () => import('@/views/Clientes/Index.vue'),
-          meta: { title: 'Gerir Clientes' }
-        },
-        {
-          path: 'veiculos',
-          name: 'veiculos',
-          component: () => import('@/views/Veiculos/Index.vue'),
-          meta: { title: 'Gerir Veículos' }
-        },
-        {
-          path: 'atendimento',
-          name: 'atendimento',
-          component: () => import('@/views/Atendimento/Index.vue'),
-          meta: { title: 'Atendimento' }
-        },
-        {
-          path: 'ordem-servico',
-          name: 'ordem-servico',
-          component: () => import('@/views/OrdemServico/Index.vue'),
-          meta: { title: 'Ordem de Serviço' }
-        },
-        {
-          path: 'ordem-servico/:id',
-          name: 'ordem-servico-detalhes',
-          component: () => import('@/views/OrdemServico/Detalhes.vue'),
-          meta: { title: 'Detalhes da Ordem' }
-        },
-        {
-          path: 'servicos',
-          name: 'servicos',
-          component: () => import('@/views/Servicos/Index.vue'),
-          meta: { title: 'Serviços' }
-        },
-        {
-          path: 'stock-pecas',
-          name: 'stock-pecas',
-          component: () => import('@/views/StockPecas/Index.vue'),
-          meta: { title: 'Stock de Peças' }
-        },
-        {
           path: 'utilizadores',
           name: 'utilizadores',
           component: () => import('@/views/Utilizadores/Index.vue'),
@@ -100,12 +58,12 @@ const router = createRouter({
 // Navigation Guard
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('token')
-  
+
   // Atualizar título da página
-  document.title = to.meta.title 
-    ? `${to.meta.title} - AutoFixApp` 
+  document.title = to.meta.title
+    ? `${to.meta.title} - AutoFixApp`
     : 'AutoFixApp - Sistema de Gestão'
-  
+
   // Verificar autenticação
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'login' })
