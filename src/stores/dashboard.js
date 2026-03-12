@@ -6,30 +6,26 @@ import { useToast } from 'vue-toastification'
 const toast = useToast()
 
 export const useDashboardStore = defineStore('dashboard', () => {
-  // State
+  // State - Adaptado para SACCO
   const stats = ref({
-    totalClientes: 0,
-    totalVeiculos: 0,
-    servicosConcluidos: 0,
-    servicosPendentes: 0,
-    receitaMensal: 0,
-    ticketMedio: 0
+    criancasIdentificadas: 0,
+    emCadastro: 0,
+    aguardandoRevisao: 0,
+    publicadas: 0
   })
 
   const trends = ref({
-    clientes: { value: 0, isPositive: true },
-    veiculos: { value: 0, isPositive: true },
-    servicos: { value: 0, isPositive: true },
-    pendentes: { value: 0, isPositive: false },
-    receita: { value: 0, isPositive: true },
-    ticket: { value: 0, isPositive: true }
+    identificadas: { value: 0, isPositive: true },
+    emCadastro: { value: 0, isPositive: true },
+    aguardandoRevisao: { value: 0, isPositive: true },
+    publicadas: { value: 0, isPositive: true }
   })
 
-  const recentServices = ref([])
-  const servicesChart = ref({ labels: [], concluidos: [], pendentes: [] })
-  const revenueChart = ref({ labels: [], receita: [] })
-  const topServices = ref([])
-  const vehiclesByBrand = ref([])
+  const recentComunicacoes = ref([])
+  const cadastrosChart = ref({ labels: [], identificadas: [], publicadas: [] })
+  const necessidadesChart = ref({ labels: [], valores: [] })
+  const cadastrosEmAndamento = ref([])
+  const vulnerabilidadesPorRegiao = ref([])
   const loading = ref(false)
 
   // Actions
@@ -40,11 +36,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
       
       stats.value = response.data.stats
       trends.value = response.data.trends
-      recentServices.value = response.data.recentServices
-      servicesChart.value = response.data.servicesChart
-      revenueChart.value = response.data.revenueChart
-      topServices.value = response.data.topServices
-      vehiclesByBrand.value = response.data.vehiclesByBrand
+      recentComunicacoes.value = response.data.recentComunicacoes
+      cadastrosChart.value = response.data.cadastrosChart
+      necessidadesChart.value = response.data.necessidadesChart
+      cadastrosEmAndamento.value = response.data.cadastrosEmAndamento
+      vulnerabilidadesPorRegiao.value = response.data.vulnerabilidadesPorRegiao
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error)
       toast.error('Erro ao carregar dados do dashboard')
@@ -68,11 +64,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
     // State
     stats,
     trends,
-    recentServices,
-    servicesChart,
-    revenueChart,
-    topServices,
-    vehiclesByBrand,
+    recentComunicacoes,
+    cadastrosChart,
+    necessidadesChart,
+    cadastrosEmAndamento,
+    vulnerabilidadesPorRegiao,
     loading,
     
     // Actions

@@ -10,7 +10,7 @@
         <div class="h-20 flex items-center justify-center flex-shrink-0">
           <img
             :src="logo"
-            alt="FixAuto"
+            alt="SACCO"
             class="w-full h-full object-contain"
           />
         </div>
@@ -18,8 +18,32 @@
 
     <!-- Navigation Menu -->
     <nav class="flex-1 overflow-y-auto py-4 px-3">
+      <!-- Menu Principal -->
       <ul class="space-y-1">
         <li v-for="item in menuItems" :key="item.name">
+          <router-link
+            :to="item.path"
+            class="sidebar-item"
+            :class="{ 'active': isActive(item.path) }"
+          >
+            <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
+            <transition name="fade">
+              <span v-if="isOpen" class="whitespace-nowrap">{{ item.label }}</span>
+            </transition>
+          </router-link>
+        </li>
+      </ul>
+
+      <!-- Separador -->
+      <div v-if="isOpen" class="my-4 px-4">
+        <div class="border-t border-gray-200"></div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2">Ponto Focal</p>
+      </div>
+      <div v-else class="my-4 border-t border-gray-200 mx-2"></div>
+
+      <!-- Menu Ponto Focal -->
+      <ul class="space-y-1">
+        <li v-for="item in pontoFocalItems" :key="item.name">
           <router-link
             :to="item.path"
             class="sidebar-item"
@@ -42,8 +66,8 @@
         </div>
         <transition name="fade">
           <div v-if="isOpen" class="flex-1 overflow-hidden">
-            <p class="text-sm font-medium truncate">{{ user?.name || 'Usuário' }}</p>
-            <p class="text-xs text-gray-500 truncate">{{ user?.email || 'email@exemplo.com' }}</p>
+            <p class="text-sm font-medium truncate">{{ user?.name || 'Ponto Focal' }}</p>
+            <p class="text-xs text-gray-500 truncate">{{ user?.email || 'pf@sacco.org' }}</p>
           </div>
         </transition>
       </div>
@@ -59,16 +83,14 @@ import logo from '@/assets/logo.png'
 
 import {
   LayoutDashboard,
-  Users,
-  Car,
-  ClipboardList,
-  FileText,
-  Wrench,
-  Package,
   UserCog,
   Settings,
   Info,
-  User
+  User,
+  MessageSquarePlus,
+  ClipboardList,
+  FileCheck,
+  BookOpen
 } from 'lucide-vue-next'
 
 defineProps({
@@ -90,6 +112,12 @@ const menuItems = [
     icon: LayoutDashboard
   },
   {
+    name: 'catalogo',
+    label: 'Catalogo',
+    path: '/catalogo',
+    icon: BookOpen
+  },
+  {
     name: 'utilizadores',
     label: 'Utilizadores',
     path: '/utilizadores',
@@ -97,7 +125,7 @@ const menuItems = [
   },
   {
     name: 'definicoes',
-    label: 'Definições',
+    label: 'Definicoes',
     path: '/definicoes',
     icon: Settings
   },
@@ -106,6 +134,27 @@ const menuItems = [
     label: 'Info',
     path: '/info',
     icon: Info
+  }
+]
+
+const pontoFocalItems = [
+  {
+    name: 'comunicacao',
+    label: 'Comunicacao',
+    path: '/ponto-focal/comunicacao',
+    icon: MessageSquarePlus
+  },
+  {
+    name: 'cadastro',
+    label: 'Cadastro',
+    path: '/ponto-focal/cadastro',
+    icon: ClipboardList
+  },
+  {
+    name: 'revisao',
+    label: 'Revisao',
+    path: '/ponto-focal/revisao',
+    icon: FileCheck
   }
 ]
 

@@ -1,11 +1,11 @@
 <template>
   <div>
-    <!-- Cabeçalho da página -->
+    <!-- Cabecalho da pagina -->
     <div class="card mb-6">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="page-title">Dashboard</h2>
-          <p class="page-subtitle">Visão geral do desempenho da oficina</p>
+          <p class="page-subtitle">Ponto Focal Comunitario - Visao geral das criancas</p>
         </div>
         <BaseButton
           variant="secondary"
@@ -26,97 +26,73 @@
     <!-- Dashboard Content -->
     <div v-else>
       <!-- Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
-          label="Total de Clientes"
-          :value="dashboardStore.stats.totalClientes"
-          :icon="Users"
+          label="Criancas Identificadas"
+          :value="dashboardStore.stats.criancasIdentificadas"
+          :icon="Baby"
           color="blue"
-          :trend="dashboardStore.trends.clientes"
+          :trend="dashboardStore.trends.identificadas"
         />
         <StatCard
-          label="Total de Veículos"
-          :value="dashboardStore.stats.totalVeiculos"
-          :icon="Car"
+          label="Em Cadastro"
+          :value="dashboardStore.stats.emCadastro"
+          :icon="ClipboardList"
           color="orange"
-          :trend="dashboardStore.trends.veiculos"
+          :trend="dashboardStore.trends.emCadastro"
         />
         <StatCard
-          label="Serviços Concluídos"
-          :value="dashboardStore.stats.servicosConcluidos"
+          label="Aguardando Revisao"
+          :value="dashboardStore.stats.aguardandoRevisao"
+          :icon="Clock"
+          color="purple"
+          :trend="dashboardStore.trends.aguardandoRevisao"
+        />
+        <StatCard
+          label="Publicadas"
+          :value="dashboardStore.stats.publicadas"
           :icon="CheckCircle"
           color="green"
-          :trend="dashboardStore.trends.servicos"
-        />
-        <StatCard
-          label="Serviços Pendentes"
-          :value="dashboardStore.stats.servicosPendentes"
-          :icon="Clock"
-          color="red"
-          :trend="dashboardStore.trends.pendentes"
-        />
-        <StatCard
-          label="Receita Mensal"
-          :value="dashboardStore.stats.receitaMensal"
-          :icon="DollarSign"
-          color="green"
-          format="currency"
-          :trend="dashboardStore.trends.receita"
-        />
-        <StatCard
-          label="Ticket Médio"
-          :value="dashboardStore.stats.ticketMedio"
-          :icon="TrendingUp"
-          color="purple"
-          format="currency"
-          :trend="dashboardStore.trends.ticket"
+          :trend="dashboardStore.trends.publicadas"
         />
       </div>
 
-      <!-- Charts Row 1 -->
+      <!-- Charts Row -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <ServicesChart :data="dashboardStore.servicesChart" />
-        <RevenueChart :data="dashboardStore.revenueChart" />
+        <CadastrosChart :data="dashboardStore.cadastrosChart" />
+        <VulnerabilidadesPorRegiao :data="dashboardStore.vulnerabilidadesPorRegiao" />
       </div>
 
-      <!-- Charts Row 2 -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div class="lg:col-span-2">
-          <RecentServices :services="dashboardStore.recentServices" />
-        </div>
-        <TopServices :services="dashboardStore.topServices" />
+      <!-- Bottom Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <RecentComunicacoes :comunicacoes="dashboardStore.recentComunicacoes" />
+        <CadastrosEmAndamento :cadastros="dashboardStore.cadastrosEmAndamento" />
       </div>
-
-      <!-- Vehicles by Brand -->
-      <VehiclesByBrandChart :data="dashboardStore.vehiclesByBrand" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useDashboardStore } from '@/stores/dashboard'
 import {
-  Users,
-  Car,
+  Baby,
+  ClipboardList,
   CheckCircle,
   Clock,
-  DollarSign,
-  TrendingUp,
   RefreshCw
 } from 'lucide-vue-next'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import StatCard from '@/components/dashboard/StatCard.vue'
-import ServicesChart from '@/components/dashboard/ServicesChart.vue'
-import RevenueChart from '@/components/dashboard/RevenueChart.vue'
-import RecentServices from '@/components/dashboard/RecentServices.vue'
-import TopServices from '@/components/dashboard/TopServices.vue'
-import VehiclesByBrandChart from '@/components/dashboard/VehiclesByBrandChart.vue'
+import CadastrosChart from '@/components/dashboard/CadastrosChart.vue'
+import RecentComunicacoes from '@/components/dashboard/RecentComunicacoes.vue'
+import CadastrosEmAndamento from '@/components/dashboard/CadastrosEmAndamento.vue'
+import VulnerabilidadesPorRegiao from '@/components/dashboard/VulnerabilidadesPorRegiao.vue'
 
 const dashboardStore = useDashboardStore()
 
-const hasData = computed(() => dashboardStore.stats.totalClientes > 0)
+const hasData = computed(() => dashboardStore.stats.criancasIdentificadas > 0)
 
 onMounted(() => {
   loadDashboard()

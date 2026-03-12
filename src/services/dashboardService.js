@@ -1,90 +1,100 @@
 import api from './api'
 
-// Mock data para dashboard
+// Mock data para dashboard SACCO - Ponto Focal Comunitário
 const mockDashboardData = {
   stats: {
-    totalClientes: 132,
-    totalVeiculos: 193,
-    servicosConcluidos: 143,
-    servicosPendentes: 50,
-    receitaMensal: 45000,
-    ticketMedio: 850
+    criancasIdentificadas: 24,
+    emCadastro: 8,
+    aguardandoRevisao: 5,
+    publicadas: 11
   },
   
   trends: {
-    clientes: { value: 12, isPositive: true },
-    veiculos: { value: 8, isPositive: true },
-    servicos: { value: 15, isPositive: true },
-    pendentes: { value: -3, isPositive: false },
-    receita: { value: 18, isPositive: true },
-    ticket: { value: 5, isPositive: true }
+    identificadas: { value: 15, isPositive: true },
+    emCadastro: { value: 10, isPositive: true },
+    aguardandoRevisao: { value: -5, isPositive: true },
+    publicadas: { value: 20, isPositive: true }
   },
 
-  recentServices: [
+  recentComunicacoes: [
     {
-      id: 'OS-2024-001',
-      cliente: 'Luis Sitoe',
-      veiculo: 'Toyota Corolla',
-      servico: 'Troca de óleo',
-      status: 'concluido',
-      valor: 1200,
-      data: '2024-01-08'
-    },
-    {
-      id: 'OS-2024-002',
-      cliente: 'Carmen Tovela',
-      veiculo: 'Honda Civic',
-      servico: 'Revisão completa',
-      status: 'em_andamento',
-      valor: 2500,
-      data: '2024-01-08'
-    },
-    {
-      id: 'OS-2024-003',
-      cliente: 'Hollyfield Marabill',
-      veiculo: 'Volkswagen Golf',
-      servico: 'Troca de pastilhas',
+      id: 'COM-2024-001',
+      crianca: 'Esperança Mondlane',
+      bairro: 'Maxaquene A',
       status: 'pendente',
-      valor: 800,
-      data: '2024-01-07'
+      data: '2024-03-10'
     },
     {
-      id: 'OS-2024-004',
-      cliente: 'Valter Zandamela',
-      veiculo: 'Nissan Sentra',
-      servico: 'Alinhamento',
-      status: 'concluido',
-      valor: 450,
-      data: '2024-01-07'
+      id: 'COM-2024-002',
+      crianca: 'Carlos Sitoe',
+      bairro: 'Chamanculo C',
+      status: 'aprovada',
+      data: '2024-03-09'
+    },
+    {
+      id: 'COM-2024-003',
+      crianca: 'Ana Mabunda',
+      bairro: 'Polana Caniço',
+      status: 'em_cadastro',
+      data: '2024-03-08'
+    },
+    {
+      id: 'COM-2024-004',
+      crianca: 'Pedro Nhamussua',
+      bairro: 'Hulene B',
+      status: 'aprovada',
+      data: '2024-03-07'
     }
   ],
 
-  servicesChart: {
-    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    concluidos: [45, 52, 48, 61, 55, 67, 72, 68, 75, 82, 78, 85],
-    pendentes: [12, 15, 10, 18, 14, 20, 22, 16, 25, 20, 18, 15]
+  cadastrosChart: {
+    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+    identificadas: [5, 8, 12, 10, 15, 24],
+    publicadas: [2, 4, 6, 5, 8, 11]
   },
 
-  revenueChart: {
-    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    receita: [28000, 32000, 29000, 38000, 35000, 42000, 45000, 43000, 48000, 52000, 49000, 55000]
+  necessidadesChart: {
+    labels: ['SADD', 'SANC', 'SASBE', 'SAAD', 'SAEIE', 'SAPS', 'SAPE'],
+    valores: [15, 22, 18, 20, 25, 12, 16]
   },
 
-  topServices: [
-    { name: 'Troca de óleo', count: 45, revenue: 54000 },
-    { name: 'Revisão completa', count: 32, revenue: 80000 },
-    { name: 'Troca de pastilhas', count: 28, revenue: 22400 },
-    { name: 'Alinhamento', count: 25, revenue: 11250 },
-    { name: 'Balanceamento', count: 22, revenue: 8800 }
+  cadastrosEmAndamento: [
+    { 
+      id: 1,
+      nome: 'Esperança Mondlane', 
+      progresso: 3, 
+      total: 7,
+      dataInicio: '2024-03-05'
+    },
+    { 
+      id: 2,
+      nome: 'Carlos Sitoe', 
+      progresso: 7, 
+      total: 7,
+      dataInicio: '2024-02-20'
+    },
+    { 
+      id: 3,
+      nome: 'Ana Mabunda', 
+      progresso: 5, 
+      total: 7,
+      dataInicio: '2024-02-28'
+    },
+    { 
+      id: 4,
+      nome: 'Luísa Tembe', 
+      progresso: 1, 
+      total: 7,
+      dataInicio: '2024-03-08'
+    }
   ],
 
-  vehiclesByBrand: [
-    { brand: 'Toyota', count: 42 },
-    { brand: 'Honda', count: 35 },
-    { brand: 'Volkswagen', count: 28 },
-    { brand: 'Nissan', count: 24 },
-    { brand: 'Mazda', count: 20 },
-    { brand: 'Outros', count: 44 }
+  vulnerabilidadesPorRegiao: [
+    { regiao: 'Maputo Cidade', count: 12 },
+    { regiao: 'Maputo Província', count: 8 },
+    { regiao: 'Gaza', count: 5 },
+    { regiao: 'Inhambane', count: 4 },
+    { regiao: 'Sofala', count: 3 }
   ]
 }
 
@@ -101,29 +111,29 @@ export const dashboardService = {
     return { data: mockDashboardData.trends }
   },
 
-  async getRecentServices() {
+  async getRecentComunicacoes() {
     await delay()
-    return { data: mockDashboardData.recentServices }
+    return { data: mockDashboardData.recentComunicacoes }
   },
 
-  async getServicesChart() {
+  async getCadastrosChart() {
     await delay()
-    return { data: mockDashboardData.servicesChart }
+    return { data: mockDashboardData.cadastrosChart }
   },
 
-  async getRevenueChart() {
+  async getNecessidadesChart() {
     await delay()
-    return { data: mockDashboardData.revenueChart }
+    return { data: mockDashboardData.necessidadesChart }
   },
 
-  async getTopServices() {
+  async getCadastrosEmAndamento() {
     await delay()
-    return { data: mockDashboardData.topServices }
+    return { data: mockDashboardData.cadastrosEmAndamento }
   },
 
-  async getVehiclesByBrand() {
+  async getVulnerabilidadesPorRegiao() {
     await delay()
-    return { data: mockDashboardData.vehiclesByBrand }
+    return { data: mockDashboardData.vulnerabilidadesPorRegiao }
   },
 
   async getDashboardData() {

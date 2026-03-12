@@ -3,20 +3,20 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // Landing Page Pública - Catálogo de Crianças (para Padrinhos)
+    // Landing Page Publica - Catalogo de Criancas (para Padrinhos)
     {
       path: '/catalogo',
       name: 'catalogo',
       component: () => import('@/views/Catalogo/Index.vue'),
-      meta: { title: 'Catálogo de Crianças' }
+      meta: { title: 'Catalogo de Criancas' }
     },
 
-    // Perfil da Criança - Página Pública
+    // Perfil da Crianca - Pagina Publica
     {
       path: '/crianca/:id',
       name: 'crianca-perfil',
       component: () => import('@/views/Crianca/Perfil.vue'),
-      meta: { title: 'Perfil da Criança' }
+      meta: { title: 'Perfil da Crianca' }
     },
 
     // Dashboard Principal (Autenticado)
@@ -41,7 +41,7 @@ const router = createRouter({
           path: 'definicoes',
           name: 'definicoes',
           component: () => import('@/views/Definicoes/Index.vue'),
-          meta: { title: 'Definições' }
+          meta: { title: 'Definicoes' }
         },
         {
           path: 'info',
@@ -55,11 +55,51 @@ const router = createRouter({
           name: 'meu-padrinhado',
           component: () => import('@/views/MeuPadrinhado/Index.vue'),
           meta: { title: 'Meu Padrinhado' }
+        },
+
+        // =============================================
+        // PONTO FOCAL COMUNITARIO - MODULOS 1, 2, 4
+        // =============================================
+
+        // MODULO 1: Comunicacao
+        {
+          path: 'ponto-focal/comunicacao',
+          name: 'comunicacao',
+          component: () => import('@/views/PontoFocal/Comunicacao/Index.vue'),
+          meta: { title: 'Comunicacao - Ponto Focal' }
+        },
+
+        // MODULO 2: Cadastro
+        {
+          path: 'ponto-focal/cadastro',
+          name: 'cadastro',
+          component: () => import('@/views/PontoFocal/Cadastro/Index.vue'),
+          meta: { title: 'Cadastro - Ponto Focal' }
+        },
+        {
+          path: 'ponto-focal/cadastro/novo',
+          name: 'cadastro-novo',
+          component: () => import('@/views/PontoFocal/Cadastro/Novo.vue'),
+          meta: { title: 'Novo Cadastro - Ponto Focal' }
+        },
+        {
+          path: 'ponto-focal/cadastro/:id',
+          name: 'cadastro-detalhes',
+          component: () => import('@/views/PontoFocal/Cadastro/Detalhes.vue'),
+          meta: { title: 'Detalhes do Cadastro - Ponto Focal' }
+        },
+
+        // MODULO 4: Revisao
+        {
+          path: 'ponto-focal/revisao',
+          name: 'revisao',
+          component: () => import('@/views/PontoFocal/Revisao/Index.vue'),
+          meta: { title: 'Revisao - Ponto Focal' }
         }
       ]
     },
 
-    // Autenticação
+    // Autenticacao
     {
       path: '/login',
       name: 'login',
@@ -78,7 +118,7 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('@/views/NotFound.vue'),
-      meta: { title: '404 - Página não encontrada' }
+      meta: { title: '404 - Pagina nao encontrada' }
     }
   ]
 })
@@ -87,12 +127,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('token')
 
-  // Atualizar título da página
+  // Atualizar titulo da pagina
   document.title = to.meta.title
     ? `${to.meta.title} - SACCO`
-    : 'SACCO - Sistema de Gestão'
+    : 'SACCO - Sistema de Gestao'
 
-  // Verificar autenticação
+  // Verificar autenticacao
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'login' })
   } else if (to.meta.guest && isAuthenticated) {
