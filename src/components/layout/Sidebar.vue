@@ -62,6 +62,29 @@
           </router-link>
         </li>
       </ul>
+
+      <!-- Separador PF Tematico -->
+      <div v-if="isOpen" class="my-4 px-4">
+        <div class="border-t border-gray-200"></div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2">PF Tematico</p>
+      </div>
+      <div v-else class="my-4 border-t border-gray-200 mx-2"></div>
+
+      <!-- Menu PF Tematico -->
+      <ul class="space-y-1">
+        <li v-for="item in pontoFocalTematicoItems" :key="item.name">
+          <router-link
+            :to="item.path"
+            class="sidebar-item"
+            :class="{ 'active': isActive(item.path) }"
+          >
+            <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
+            <transition name="fade">
+              <span v-if="isOpen" class="whitespace-nowrap">{{ item.label }}</span>
+            </transition>
+          </router-link>
+        </li>
+      </ul>
     </nav>
 
     <!-- User Section -->
@@ -160,6 +183,15 @@ const pontoFocalItems = [
     name: 'revisao',
     label: 'Revisao',
     path: '/ponto-focal/revisao',
+    icon: FileCheck
+  }
+]
+
+const pontoFocalTematicoItems = [
+  {
+    name: 'pf-tematico-dashboard',
+    label: 'Painel PF Tematico',
+    path: '/ponto-focal-tematico',
     icon: FileCheck
   }
 ]

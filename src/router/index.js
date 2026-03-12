@@ -95,6 +95,25 @@ const router = createRouter({
           name: 'revisao',
           component: () => import('@/views/PontoFocal/Revisao/Index.vue'),
           meta: { title: 'Revisao - Ponto Focal' }
+        },
+
+        // =============================================
+        // PONTO FOCAL TEMATICO - MODULO 3
+        // =============================================
+
+        // Dashboard do PF Tematico
+        {
+          path: 'ponto-focal-tematico',
+          name: 'pf-tematico-dashboard',
+          component: () => import('@/views/PontoFocalTematico/Dashboard.vue'),
+          meta: { title: 'Dashboard - PF Tematico' }
+        },
+        // Ficha Tecnica
+        {
+          path: 'ponto-focal-tematico/ficha/:id',
+          name: 'pf-tematico-ficha',
+          component: () => import('@/views/PontoFocalTematico/Ficha.vue'),
+          meta: { title: 'Ficha Tecnica - PF Tematico' }
         }
       ]
     },
