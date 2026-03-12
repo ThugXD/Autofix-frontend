@@ -23,8 +23,11 @@
         <select v-model="roleFilter" @change="loadUsers" class="input">
           <option value="">Todas as funções</option>
           <option value="admin">Administrador</option>
-          <option value="mecanico">Mecânico</option>
-          <option value="atendente">Atendente</option>
+          <option value="gestor">Gestor da Associação</option>
+          <option value="ponto_focal">Ponto Focal Comunitário</option>
+          <option value="ponto_focal_tematico">Ponto Focal Temático</option>
+          <option value="tutor">Tutor</option>
+          <option value="padrinho">Padrinho</option>
         </select>
       </div>
     </div>
@@ -142,14 +145,20 @@ const selectedUser = ref(null)
 
 const roleLabels = {
   admin: 'Administrador',
-  mecanico: 'Mecânico',
-  atendente: 'Atendente'
+  gestor: 'Gestor da Associação',
+  ponto_focal: 'Ponto Focal Comunitário',
+  ponto_focal_tematico: 'Ponto Focal Temático',
+  tutor: 'Tutor',
+  padrinho: 'Padrinho'
 }
 
 const roleClasses = {
   admin: 'bg-purple-100 text-purple-700',
-  mecanico: 'badge-info',
-  atendente: 'badge-success'
+  gestor: 'bg-blue-100 text-blue-700',
+  ponto_focal: 'bg-green-100 text-green-700',
+  ponto_focal_tematico: 'bg-teal-100 text-teal-700',
+  tutor: 'bg-amber-100 text-amber-700',
+  padrinho: 'bg-pink-100 text-pink-700'
 }
 
 onMounted(() => {

@@ -205,24 +205,24 @@ const notifications = ref([
   {
     id: 1,
     type: 'success',
-    title: 'Ordem Concluída',
-    message: 'Ordem OS-2024-001 foi concluída com sucesso',
+    title: 'Novo Padrinho Registado',
+    message: 'João Silva completou o registo e apadrinhou uma criança',
     time: 'Há 5 minutos',
     read: false
   },
   {
     id: 2,
     type: 'warning',
-    title: 'Estoque Baixo',
-    message: 'Pastilha de Freio está com estoque baixo',
+    title: 'Contribuição Pendente',
+    message: 'A criança Ana M. ainda não tem padrinho atribuído este mês',
     time: 'Há 1 hora',
     read: false
   },
   {
     id: 3,
     type: 'info',
-    title: 'Nova Ordem',
-    message: 'Nova ordem de serviço criada por Maria Atendente',
+    title: 'Relatório Disponível',
+    message: 'O relatório mensal de apadrinhamentos de Março está pronto',
     time: 'Há 2 horas',
     read: false
   }
@@ -284,11 +284,13 @@ const handleNotificationClick = (notification) => {
   toast.info(`Abrindo: ${notification.title}`)
   showNotifications.value = false
   
-  // Redirecionar baseado no tipo de notificação
-  if (notification.title.includes('Ordem')) {
-    router.push('/ordem-servico')
-  } else if (notification.title.includes('Estoque')) {
-    router.push('/stock-pecas')
+  // Redirecionar baseado no tipo de notificação SACCO
+  if (notification.title.includes('Padrinho')) {
+    router.push('/utilizadores')
+  } else if (notification.title.includes('Criança') || notification.title.includes('Contribuição')) {
+    router.push('/catalogo')
+  } else if (notification.title.includes('Relatório')) {
+    router.push('/info')
   }
 }
 

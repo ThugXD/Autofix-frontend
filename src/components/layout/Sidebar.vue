@@ -6,14 +6,20 @@
     ]"
   >
     <!-- Logo/Brand -->
-    <div class="border-b m-2 border-gray-200">
-        <div class="h-20 flex items-center justify-center flex-shrink-0">
-          <img
-            :src="logo"
-            alt="SACCO"
-            class="w-full h-full object-contain"
-          />
-        </div>
+    <div class="border-b border-gray-200 px-3 py-4">
+      <div class="flex items-center gap-3">
+        <img
+          :src="logo"
+          alt="SACCO"
+          class="w-10 h-10 rounded-xl object-cover flex-shrink-0"
+        />
+        <transition name="fade">
+          <div v-if="isOpen">
+            <p class="text-sm font-bold text-gray-900 leading-tight">SACCO</p>
+            <p class="text-[10px] text-gray-500 leading-tight">Poupe uma Criança</p>
+          </div>
+        </transition>
+      </div>
     </div>
 
     <!-- Navigation Menu -->
@@ -79,7 +85,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import logo from '@/assets/logo.png'
+import logo from '@/assets/sacco_logo.png'
 
 import {
   LayoutDashboard,

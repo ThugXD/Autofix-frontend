@@ -35,10 +35,13 @@
           Função <span class="text-red-500">*</span>
         </label>
         <select v-model="form.role" class="input" required>
-          <option value="">Selecione</option>
-          <option value="admin">Administrador</option>
-          <option value="mecanico">Mecânico</option>
-          <option value="atendente">Atendente</option>
+          <option value="">Selecione a função</option>
+          <option value="admin">Administrador do Sistema</option>
+          <option value="gestor">Gestor da Associação</option>
+          <option value="ponto_focal">Ponto Focal Comunitário</option>
+          <option value="ponto_focal_tematico">Ponto Focal Temático</option>
+          <option value="tutor">Tutor (Responsável da Criança)</option>
+          <option value="padrinho">Padrinho (Apoiador)</option>
         </select>
         <p v-if="errors.role" class="mt-1.5 text-sm text-red-600">{{ errors.role }}</p>
       </div>

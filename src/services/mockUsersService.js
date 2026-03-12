@@ -1,62 +1,106 @@
 let mockUsers = [
   {
     id: 1,
-    name: 'Admin da Oficina',
-    email: 'admin@oficina.com',
-    phone: '841234567',
+    name: 'Carlos Administrador',
+    email: 'admin@sacco.org.mz',
+    phone: '841000001',
     role: 'admin',
     avatar: null,
     is_active: true,
-    last_login: '2024-01-09T10:30:00Z',
-    created_at: '2024-01-01T09:00:00Z'
+    last_login: '2026-03-12T09:00:00Z',
+    created_at: '2025-01-01T08:00:00Z'
   },
   {
     id: 2,
-    name: 'João Mecânico',
-    email: 'joao@oficina.com',
-    phone: '847654321',
-    role: 'mecanico',
+    name: 'Beatriz Gestora',
+    email: 'gestora@sacco.org.mz',
+    phone: '841000002',
+    role: 'gestor',
     avatar: null,
     is_active: true,
-    last_login: '2024-01-09T08:15:00Z',
-    created_at: '2024-01-02T10:00:00Z'
+    last_login: '2026-03-12T08:30:00Z',
+    created_at: '2025-01-05T09:00:00Z'
   },
   {
     id: 3,
-    name: 'Maria Atendente',
-    email: 'maria@oficina.com',
-    phone: '823456789',
-    role: 'atendente',
+    name: 'Amélia Comunitária',
+    email: 'amelia.pf@sacco.org.mz',
+    phone: '841000003',
+    role: 'ponto_focal',
     avatar: null,
     is_active: true,
-    last_login: '2024-01-09T09:00:00Z',
-    created_at: '2024-01-03T11:00:00Z'
+    last_login: '2026-03-11T14:00:00Z',
+    created_at: '2025-02-01T10:00:00Z'
   },
   {
     id: 4,
-    name: 'Pedro Mecânico',
-    email: 'pedro@oficina.com',
-    phone: '869876543',
-    role: 'mecanico',
+    name: 'Domingos SADD',
+    email: 'domingos.sadd@sacco.org.mz',
+    phone: '841000004',
+    role: 'ponto_focal_tematico',
     avatar: null,
     is_active: true,
-    last_login: '2024-01-08T16:45:00Z',
-    created_at: '2024-01-05T14:00:00Z'
+    last_login: '2026-03-10T11:00:00Z',
+    created_at: '2025-02-05T10:00:00Z'
   },
   {
     id: 5,
-    name: 'Ana Atendente',
-    email: 'ana@oficina.com',
-    phone: '845678901',
-    role: 'atendente',
+    name: 'Fátima Nutrição',
+    email: 'fatima.sanc@sacco.org.mz',
+    phone: '841000005',
+    role: 'ponto_focal_tematico',
+    avatar: null,
+    is_active: true,
+    last_login: '2026-03-09T10:00:00Z',
+    created_at: '2025-02-10T10:00:00Z'
+  },
+  {
+    id: 6,
+    name: 'Rosa Tutora',
+    email: 'rosa.tutora@gmail.com',
+    phone: '841000006',
+    role: 'tutor',
+    avatar: null,
+    is_active: true,
+    last_login: '2026-03-08T09:30:00Z',
+    created_at: '2025-03-01T12:00:00Z'
+  },
+  {
+    id: 7,
+    name: 'Manuel Tutor',
+    email: 'manuel.tutor@gmail.com',
+    phone: '841000007',
+    role: 'tutor',
     avatar: null,
     is_active: false,
-    last_login: '2024-01-05T12:00:00Z',
-    created_at: '2024-01-04T13:00:00Z'
+    last_login: '2026-02-25T08:00:00Z',
+    created_at: '2025-03-10T11:00:00Z'
+  },
+  {
+    id: 8,
+    name: 'João Padrinho',
+    email: 'joao.padrinho@gmail.com',
+    phone: '841000008',
+    role: 'padrinho',
+    avatar: null,
+    is_active: true,
+    last_login: '2026-03-11T20:00:00Z',
+    created_at: '2025-06-01T15:00:00Z'
+  },
+  {
+    id: 9,
+    name: 'Sofia Madrinha',
+    email: 'sofia.madrinha@gmail.com',
+    phone: '841000009',
+    role: 'padrinho',
+    avatar: null,
+    is_active: true,
+    last_login: '2026-03-12T07:45:00Z',
+    created_at: '2025-07-15T14:00:00Z'
   }
 ]
 
-let nextId = 6
+let nextId = 10
 
 const delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms))
 
