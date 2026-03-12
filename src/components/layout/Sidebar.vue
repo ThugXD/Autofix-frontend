@@ -16,7 +16,7 @@
         <transition name="fade">
           <div v-if="isOpen">
             <p class="text-sm font-bold text-gray-900 leading-tight">SACCO</p>
-            <p class="text-[10px] text-gray-500 leading-tight">Poupe uma Criança</p>
+            <p class="text-[10px] text-gray-500 leading-tight">Poupe uma Crianca</p>
           </div>
         </transition>
       </div>
@@ -24,79 +24,78 @@
 
     <!-- Navigation Menu -->
     <nav class="flex-1 overflow-y-auto py-4 px-3">
-      <!-- Menu Principal -->
-      <ul class="space-y-1">
-        <li v-for="item in menuItems" :key="item.name">
-          <router-link
-            :to="item.path"
-            class="sidebar-item"
-            :class="{ 'active': isActive(item.path) }"
+      <!-- Menu Dinamico por Role -->
+      <template v-for="(section, sIndex) in menuSections" :key="sIndex">
+        <!-- Separador com Titulo -->
+        <div v-if="sIndex > 0 || section.title" class="my-4">
+          <div v-if="sIndex > 0" class="border-t border-gray-200 mx-2"></div>
+          <p 
+            v-if="isOpen && section.title" 
+            class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-2"
           >
-            <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
-            <transition name="fade">
-              <span v-if="isOpen" class="whitespace-nowrap">{{ item.label }}</span>
-            </transition>
-          </router-link>
-        </li>
-      </ul>
+            {{ section.title }}
+          </p>
+        </div>
 
-      <!-- Separador -->
-      <div v-if="isOpen" class="my-4 px-4">
-        <div class="border-t border-gray-200"></div>
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2">Ponto Focal</p>
-      </div>
-      <div v-else class="my-4 border-t border-gray-200 mx-2"></div>
+        <!-- Items do Menu -->
+        <ul class="space-y-1">
+          <li v-for="item in section.items" :key="item.name">
+            <router-link
+              :to="item.path"
+              class="sidebar-item"
+              :class="{ 'active': isActive(item.path) }"
+            >
+              <component :is="getIcon(item.icon)" class="w-5 h-5 flex-shrink-0" />
+              <transition name="fade">
+                <span v-if="isOpen" class="whitespace-nowrap">{{ item.label }}</span>
+              </transition>
+            </router-link>
+          </li>
+        </ul>
+      </template>
 
-      <!-- Menu Ponto Focal -->
-      <ul class="space-y-1">
-        <li v-for="item in pontoFocalItems" :key="item.name">
-          <router-link
-            :to="item.path"
-            class="sidebar-item"
-            :class="{ 'active': isActive(item.path) }"
+      <!-- Menu Admin - Acesso Rapido a Outros Paineis -->
+      <template v-if="isAdmin">
+        <div class="my-4">
+          <div class="border-t border-gray-200 mx-2"></div>
+          <p 
+            v-if="isOpen" 
+            class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-2"
           >
-            <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
-            <transition name="fade">
-              <span v-if="isOpen" class="whitespace-nowrap">{{ item.label }}</span>
-            </transition>
-          </router-link>
-        </li>
-      </ul>
+            Explorar Paineis
+          </p>
+        </div>
 
-      <!-- Separador PF Tematico -->
-      <div v-if="isOpen" class="my-4 px-4">
-        <div class="border-t border-gray-200"></div>
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2">PF Tematico</p>
-      </div>
-      <div v-else class="my-4 border-t border-gray-200 mx-2"></div>
-
-      <!-- Menu PF Tematico -->
-      <ul class="space-y-1">
-        <li v-for="item in pontoFocalTematicoItems" :key="item.name">
-          <router-link
-            :to="item.path"
-            class="sidebar-item"
-            :class="{ 'active': isActive(item.path) }"
-          >
-            <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
-            <transition name="fade">
-              <span v-if="isOpen" class="whitespace-nowrap">{{ item.label }}</span>
-            </transition>
-          </router-link>
-        </li>
-      </ul>
+        <ul class="space-y-1">
+          <li v-for="panel in adminPanels" :key="panel.name">
+            <router-link
+              :to="panel.path"
+              class="sidebar-item"
+              :class="{ 'active': isActive(panel.path) }"
+            >
+              <component :is="getIcon(panel.icon)" class="w-5 h-5 flex-shrink-0" />
+              <transition name="fade">
+                <span v-if="isOpen" class="whitespace-nowrap">{{ panel.label }}</span>
+              </transition>
+            </router-link>
+          </li>
+        </ul>
+      </template>
     </nav>
 
     <!-- User Section -->
     <div class="p-4 border-t border-gray-200">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-          <User class="w-5 h-5 text-gray-700" />
+        <div 
+          class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+          :class="roleBadgeClass"
+        >
+          <component :is="getRoleIcon(userRole)" class="w-5 h-5" />
         </div>
         <transition name="fade">
           <div v-if="isOpen" class="flex-1 overflow-hidden">
-            <p class="text-sm font-medium truncate">{{ user?.name || 'Ponto Focal' }}</p>
-            <p class="text-xs text-gray-500 truncate">{{ user?.email || 'pf@sacco.org' }}</p>
+            <p class="text-sm font-medium truncate">{{ user?.name || 'Utilizador' }}</p>
+            <p class="text-xs text-gray-500 truncate">{{ userRoleLabel }}</p>
           </div>
         </transition>
       </div>
@@ -108,6 +107,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { ROLES, MENU_BY_ROLE, getRoleLabel } from '@/config/roles'
 import logo from '@/assets/sacco_logo.png'
 
 import {
@@ -119,7 +119,16 @@ import {
   MessageSquarePlus,
   ClipboardList,
   FileCheck,
-  BookOpen
+  BookOpen,
+  FileText,
+  Heart,
+  Users,
+  BarChart3,
+  UserPlus,
+  TrendingUp,
+  MessageCircle,
+  Baby,
+  Shield
 } from 'lucide-vue-next'
 
 defineProps({
@@ -131,70 +140,86 @@ defineProps({
 
 const route = useRoute()
 const authStore = useAuthStore()
+
 const user = computed(() => authStore.user)
+const userRole = computed(() => authStore.userRole)
+const userRoleLabel = computed(() => authStore.userRoleLabel)
+const isAdmin = computed(() => authStore.isAdmin)
 
-const menuItems = [
-  {
-    name: 'dashboard',
-    label: 'Dashboard',
-    path: '/app',
-    icon: LayoutDashboard
-  },
-  {
-    name: 'catalogo',
-    label: 'Catálogo Público',
-    path: '/',
-    icon: BookOpen
-  },
-  {
-    name: 'utilizadores',
-    label: 'Utilizadores',
-    path: '/app/utilizadores',
-    icon: UserCog
-  },
-  {
-    name: 'definicoes',
-    label: 'Definições',
-    path: '/app/definicoes',
-    icon: Settings
-  },
-  {
-    name: 'info',
-    label: 'Info',
-    path: '/app/info',
-    icon: Info
-  }
+// Icones disponiveis
+const icons = {
+  LayoutDashboard,
+  UserCog,
+  Settings,
+  Info,
+  User,
+  MessageSquarePlus,
+  ClipboardList,
+  FileCheck,
+  BookOpen,
+  FileText,
+  Heart,
+  Users,
+  BarChart3,
+  UserPlus,
+  TrendingUp,
+  MessageCircle,
+  Baby,
+  Shield
+}
+
+const getIcon = (iconName) => {
+  return icons[iconName] || LayoutDashboard
+}
+
+// Menu dinamico baseado no role
+const menuSections = computed(() => {
+  const roleMenu = MENU_BY_ROLE[userRole.value]
+  if (!roleMenu) return []
+
+  // Agrupar items por section
+  return roleMenu.sections.map(section => ({
+    title: section.title,
+    items: section.items.map(itemName => 
+      roleMenu.main.find(item => item.name === itemName)
+    ).filter(Boolean)
+  }))
+})
+
+// Paineis extras para Admin explorar
+const adminPanels = [
+  { name: 'pf-com', label: 'PF Comunitario', path: '/app/ponto-focal/comunicacao', icon: 'ClipboardList' },
+  { name: 'pf-tem', label: 'PF Tematico', path: '/app/ponto-focal-tematico', icon: 'FileText' },
+  { name: 'gestor', label: 'Gestor', path: '/app/gestor', icon: 'UserCog' },
+  { name: 'tutor', label: 'Tutor', path: '/app/tutor', icon: 'Baby' },
+  { name: 'padrinho', label: 'Padrinho', path: '/app/padrinho', icon: 'Heart' }
 ]
 
-const pontoFocalItems = [
-  {
-    name: 'comunicacao',
-    label: 'Comunicação',
-    path: '/app/ponto-focal/comunicacao',
-    icon: MessageSquarePlus
-  },
-  {
-    name: 'cadastro',
-    label: 'Cadastro',
-    path: '/app/ponto-focal/cadastro',
-    icon: ClipboardList
-  },
-  {
-    name: 'revisao',
-    label: 'Revisão',
-    path: '/app/ponto-focal/revisao',
-    icon: FileCheck
+// Role icon
+const getRoleIcon = (role) => {
+  const roleIcons = {
+    [ROLES.PF_COMUNITARIO]: ClipboardList,
+    [ROLES.PF_TEMATICO]: FileText,
+    [ROLES.GESTOR]: UserCog,
+    [ROLES.TUTOR]: Baby,
+    [ROLES.PADRINHO]: Heart,
+    [ROLES.ADMIN]: Shield
   }
-]
+  return roleIcons[role] || User
+}
 
-const pontoFocalTematicoItems = [
-  {
-    name: 'pf-tematico-dashboard',
-    label: 'Painel PF Temático',
-    path: '/app/ponto-focal-tematico',
-    icon: FileCheck
+// Role badge class
+const roleBadgeClass = computed(() => {
+  const classes = {
+    [ROLES.PF_COMUNITARIO]: 'bg-green-100 text-green-700',
+    [ROLES.PF_TEMATICO]: 'bg-purple-100 text-purple-700',
+    [ROLES.GESTOR]: 'bg-blue-100 text-blue-700',
+    [ROLES.TUTOR]: 'bg-orange-100 text-orange-700',
+    [ROLES.PADRINHO]: 'bg-pink-100 text-pink-700',
+    [ROLES.ADMIN]: 'bg-gray-900 text-white'
   }
-]
+  return classes[userRole.value] || 'bg-gray-300 text-gray-700'
+})
 
 const isActive = (path) => {
   // Exact match for root-level public pages
