@@ -137,31 +137,31 @@ const menuItems = [
   {
     name: 'dashboard',
     label: 'Dashboard',
-    path: '/',
+    path: '/app',
     icon: LayoutDashboard
   },
   {
     name: 'catalogo',
-    label: 'Catalogo',
-    path: '/catalogo',
+    label: 'Catálogo Público',
+    path: '/',
     icon: BookOpen
   },
   {
     name: 'utilizadores',
     label: 'Utilizadores',
-    path: '/utilizadores',
+    path: '/app/utilizadores',
     icon: UserCog
   },
   {
     name: 'definicoes',
-    label: 'Definicoes',
-    path: '/definicoes',
+    label: 'Definições',
+    path: '/app/definicoes',
     icon: Settings
   },
   {
     name: 'info',
     label: 'Info',
-    path: '/info',
+    path: '/app/info',
     icon: Info
   }
 ]
@@ -169,20 +169,20 @@ const menuItems = [
 const pontoFocalItems = [
   {
     name: 'comunicacao',
-    label: 'Comunicacao',
-    path: '/ponto-focal/comunicacao',
+    label: 'Comunicação',
+    path: '/app/ponto-focal/comunicacao',
     icon: MessageSquarePlus
   },
   {
     name: 'cadastro',
     label: 'Cadastro',
-    path: '/ponto-focal/cadastro',
+    path: '/app/ponto-focal/cadastro',
     icon: ClipboardList
   },
   {
     name: 'revisao',
-    label: 'Revisao',
-    path: '/ponto-focal/revisao',
+    label: 'Revisão',
+    path: '/app/ponto-focal/revisao',
     icon: FileCheck
   }
 ]
@@ -190,16 +190,18 @@ const pontoFocalItems = [
 const pontoFocalTematicoItems = [
   {
     name: 'pf-tematico-dashboard',
-    label: 'Painel PF Tematico',
-    path: '/ponto-focal-tematico',
+    label: 'Painel PF Temático',
+    path: '/app/ponto-focal-tematico',
     icon: FileCheck
   }
 ]
 
 const isActive = (path) => {
-  if (path === '/') {
-    return route.path === '/'
-  }
+  // Exact match for root-level public pages
+  if (path === '/') return route.path === '/'
+  // Exact match for /app (dashboard root)
+  if (path === '/app') return route.path === '/app'
+  // Prefix match for all sub-routes
   return route.path.startsWith(path)
 }
 </script>

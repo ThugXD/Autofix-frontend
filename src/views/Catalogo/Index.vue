@@ -1,11 +1,44 @@
 <template>
   <div class="min-h-screen flex flex-col bg-[#050505] text-gray-200 font-sans">
-    <!-- Hero Section Dark -->
-    <section class="relative w-full h-[80vh] min-h-[600px] flex flex-col justify-center items-center overflow-hidden">
+
+    <!-- ===================== FIXED TOP NAVBAR ===================== -->
+    <nav class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4">
+      <div
+        :class="[
+          'flex items-center justify-between w-full max-w-4xl rounded-full px-3 py-1.5 transition-all duration-300',
+          scrolled
+            ? 'bg-[#050505]/95 backdrop-blur-md border border-white/10 shadow-2xl'
+            : 'bg-black/40 backdrop-blur-md border border-white/10 shadow-xl'
+        ]"
+      >
+        <!-- Logo / Brand -->
+        <div class="flex items-center gap-2 ml-1">
+          <img src="@/assets/sacco_logo.png" alt="SACCO" class="w-8 h-8 rounded-full object-cover" />
+          <span class="text-sm font-bold text-white hidden sm:inline tracking-wide">SACCO</span>
+        </div>
+
+        <!-- Menu Links (Center) -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+          <a href="#inicio" class="hover:text-white transition">Início</a>
+          <a href="#como-funciona" class="hover:text-white transition">Como Funciona</a>
+          <a href="#catalogo" class="hover:text-white transition">Crianças</a>
+        </div>
+
+        <!-- Botão (Right) -->
+        <RouterLink
+          to="/login"
+          class="inline-block bg-[#a3e635] text-green-950 px-5 py-2 rounded-full text-sm font-bold hover:bg-[#bceb65] transition shadow-[0_0_15px_rgba(163,230,53,0.3)] mr-1"
+        >
+          Área do Padrinho
+        </RouterLink>
+      </div>
+    </nav>
+    <!-- =========================== END NAV ========================= -->
+
+    <!-- Hero Section Dark (padding-top para não ser coberto pela navbar) -->
+    <section id="inicio" class="relative w-full h-screen min-h-[600px] flex flex-col justify-center items-center overflow-hidden pt-20">
       <!-- Background Image with Overlay -->
       <div class="absolute inset-0 z-0">
-        <!-- Optional: A placeholder dark image of children or community. 
-             We use a neutral Unsplash image heavily darkened. -->
         <img 
           src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop" 
           alt="Crianças sorrindo" 
@@ -14,32 +47,8 @@
         <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-[#050505]/50 to-[#050505]"></div>
       </div>
 
-      <!-- Top Floating Navbar in the style of the design -->
-      <div class="absolute top-6 w-full px-4 sm:px-8 z-20 flex justify-center">
-        <div class="flex items-center justify-between bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-2 py-1.5 max-w-4xl w-full shadow-2xl">
-          <!-- Logo ou Icone -->
-          <div class="w-10 h-10 flex items-center justify-center text-white ml-2">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          </div>
-          
-          <!-- Menu Links (Center) -->
-          <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-             <RouterLink to="/" class="hover:text-white transition">Início</RouterLink>
-             <a href="#como-funciona" class="hover:text-white transition">Como Funciona</a>
-             <a href="#catalogo" class="hover:text-white transition">Crianças</a>
-          </div>
-          
-          <!-- Botão (Right) -->
-          <div class="mr-1">
-            <RouterLink to="/login" class="inline-block bg-[#a3e635] text-green-950 px-6 py-2 rounded-full text-sm font-bold hover:bg-[#bceb65] transition shadow-[0_0_15px_rgba(163,230,53,0.3)]">
-              Área do Padrinho
-            </RouterLink>
-          </div>
-        </div>
-      </div>
-
       <!-- Hero Center Text -->
-      <div class="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mt-12">
+      <div class="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl">
         <!-- Floating Pill com Avatares -->
         <div class="flex items-center justify-center gap-2 bg-black/50 backdrop-blur-sm border border-white/10 rounded-full pl-2 pr-4 py-1.5 mb-6 shadow-xl">
            <div class="flex -space-x-2">
@@ -246,37 +255,11 @@
       </div>
     </section>
 
-    <!-- Bottom Menu Flutuante -->
-    <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-      <div class="bg-black/80 backdrop-blur-md rounded-full px-6 py-2.5 flex gap-8 items-center border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
-        <RouterLink
-          to="/"
-          class="flex flex-col items-center text-gray-400 hover:text-white transition"
-        >
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m0 0l-7-4-7 4m7 4v5" />
-          </svg>
-          <span class="text-[9px] font-medium tracking-wide uppercase">Início</span>
-        </RouterLink>
-
-        <div class="w-px h-6 bg-white/20"></div>
-
-        <RouterLink
-          to="/login"
-          class="flex flex-col items-center text-gray-400 hover:text-white transition"
-        >
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-          <span class="text-[9px] font-medium tracking-wide uppercase">Entrar</span>
-        </RouterLink>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, onUnmounted } from 'vue'
   import { RouterLink } from 'vue-router'
   import { useCriancasStore } from '@/stores/criancas'
 
@@ -310,7 +293,18 @@
     return new Intl.NumberFormat('pt-MZ', { style: 'currency', currency: 'MZN' }).format(valor)
   }
 
+  const scrolled = ref(false)
+
+  const handleScroll = () => {
+    scrolled.value = window.scrollY > 60
+  }
+
   onMounted(() => {
     criancasStore.fetchCriancas()
+    window.addEventListener('scroll', handleScroll)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll)
   })
 </script>

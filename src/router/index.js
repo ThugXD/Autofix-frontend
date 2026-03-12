@@ -3,12 +3,18 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // Landing Page Publica - Catalogo de Criancas (para Padrinhos)
+    // Landing Page Publica - Catalogo (rota raiz)
     {
-      path: '/catalogo',
+      path: '/',
       name: 'catalogo',
       component: () => import('@/views/Catalogo/Index.vue'),
-      meta: { title: 'Catalogo de Criancas' }
+      meta: { title: 'Catálogo de Crianças' }
+    },
+
+    // Redirecionar /catalogo -> / para compatibilidade
+    {
+      path: '/catalogo',
+      redirect: { name: 'catalogo' }
     },
 
     // Perfil da Crianca - Pagina Publica
@@ -19,9 +25,9 @@ const router = createRouter({
       meta: { title: 'Perfil da Crianca' }
     },
 
-    // Dashboard Principal (Autenticado)
+    // Dashboard Principal (Autenticado) - agora em /app/
     {
-      path: '/',
+      path: '/app',
       component: () => import('@/layouts/MainLayout.vue'),
       meta: { requiresAuth: true },
       children: [
@@ -49,7 +55,6 @@ const router = createRouter({
           component: () => import('@/views/Info/Index.vue'),
           meta: { title: 'Info' }
         },
-        // Meu Dashboard do Padrinho (Seu Canto)
         {
           path: 'meu-padrinhado',
           name: 'meu-padrinhado',
@@ -97,18 +102,13 @@ const router = createRouter({
           meta: { title: 'Revisao - Ponto Focal' }
         },
 
-        // =============================================
         // PONTO FOCAL TEMATICO - MODULO 3
-        // =============================================
-
-        // Dashboard do PF Tematico
         {
           path: 'ponto-focal-tematico',
           name: 'pf-tematico-dashboard',
           component: () => import('@/views/PontoFocalTematico/Dashboard.vue'),
           meta: { title: 'Dashboard - PF Tematico' }
         },
-        // Ficha Tecnica
         {
           path: 'ponto-focal-tematico/ficha/:id',
           name: 'pf-tematico-ficha',
