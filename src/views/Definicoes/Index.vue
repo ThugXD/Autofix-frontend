@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="card mb-6">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Definições</h2>
-      <p class="text-gray-600">Configure as preferências da sua oficina</p>
+      <h2 class="page-title">Definições</h2>
+      <p class="page-subtitle">Configure as preferências da sua oficina</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -30,12 +30,12 @@
       <div class="lg:col-span-2">
         <!-- Perfil da Oficina -->
         <div v-if="activeTab === 'oficina'" class="card">
-          <h3 class="text-lg font-semibold text-gray-900 mb-6">Perfil da Oficina</h3>
+          <h3 class="section-title">Perfil da Oficina</h3>
           <div class="space-y-4">
             <BaseInput
               v-model="settings.oficina.name"
               label="Nome da Oficina"
-              placeholder="Ex: AutoFix Maputo"
+              placeholder="Ex: SACCO Maputo"
             />
             <div class="grid grid-cols-2 gap-4">
               <BaseInput
@@ -77,7 +77,7 @@
 
         <!-- Horário de Funcionamento -->
         <div v-if="activeTab === 'horario'" class="card">
-          <h3 class="text-lg font-semibold text-gray-900 mb-6">Horário de Funcionamento</h3>
+          <h3 class="section-title">Horário de Funcionamento</h3>
           <div class="space-y-4">
             <div v-for="day in weekDays" :key="day.id" class="flex items-center gap-4">
               <div class="w-32">
@@ -116,7 +116,7 @@
 
         <!-- Notificações -->
         <div v-if="activeTab === 'notificacoes'" class="card">
-          <h3 class="text-lg font-semibold text-gray-900 mb-6">Notificações</h3>
+          <h3 class="section-title">Notificações</h3>
           <div class="space-y-4">
             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div>
@@ -161,7 +161,7 @@
 
         <!-- Segurança -->
         <div v-if="activeTab === 'seguranca'" class="card">
-          <h3 class="text-lg font-semibold text-gray-900 mb-6">Segurança</h3>
+          <h3 class="section-title">Segurança</h3>
           <div class="space-y-6">
             <div>
               <h4 class="font-medium text-gray-900 mb-3">Alterar Senha</h4>
@@ -205,8 +205,8 @@
 
         <!-- Sistema -->
         <div v-if="activeTab === 'sistema'" class="card">
-          <h3 class="text-lg font-semibold text-gray-900 mb-6">Sistema</h3>
-          <div class="space-y-4">
+          <h3 class="section-title">Sistema</h3>
+          <div class="space-y-6">
             <div class="p-4 bg-gray-50 rounded-lg">
               <div class="flex justify-between items-center mb-2">
                 <span class="text-sm text-gray-600">Versão do Sistema</span>
@@ -223,6 +223,40 @@
             </div>
 
             <div class="border-t pt-4">
+              <h4 class="font-medium text-gray-900 mb-3">Navegação</h4>
+              <p class="text-sm text-gray-600 mb-4">
+                Escolha como pretende navegar na aplicação. A alteração é aplicada imediatamente.
+              </p>
+              <div class="flex flex-col gap-3">
+                <label class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 cursor-pointer hover:border-blue-400">
+                  <div>
+                    <p class="font-medium text-gray-900">Barra Lateral</p>
+                    <p class="text-sm text-gray-600">Navegação tradicional com menu à esquerda.</p>
+                  </div>
+                  <input
+                    type="radio"
+                    value="sidebar"
+                    v-model="menuType"
+                    class="w-4 h-4 text-blue-600"
+                  />
+                </label>
+
+                <label class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 cursor-pointer hover:border-blue-400">
+                  <div>
+                    <p class="font-medium text-gray-900">Menu Inferior</p>
+                    <p class="text-sm text-gray-600">Menu compacto fixo na parte inferior.</p>
+                  </div>
+                  <input
+                    type="radio"
+                    value="bottom"
+                    v-model="menuType"
+                    class="w-4 h-4 text-blue-600"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div class="border-t pt-4">
               <h4 class="font-medium text-gray-900 mb-3">Backup de Dados</h4>
               <p class="text-sm text-gray-600 mb-3">Faça backup dos seus dados regularmente</p>
               <BaseButton variant="secondary" :icon="Download">
@@ -232,7 +266,7 @@
 
             <div class="border-t pt-4">
               <h4 class="font-medium text-gray-900 mb-3 text-red-600">Zona de Perigo</h4>
-              <p class="text-sm text-gray-600 mb-3">Ações irreversíveis</p>
+              <p class="text-sm text-gray-600 mb-3">AÇÕES IRREVERSÍVEIS</p>
               <BaseButton variant="danger">
                 Desativar Conta
               </BaseButton>
@@ -245,7 +279,7 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
+    import { ref, computed } from 'vue'
     import {
     Building2,
     Clock,
@@ -257,8 +291,10 @@
     import BaseInput from '@/components/common/BaseInput.vue'
     import BaseButton from '@/components/common/BaseButton.vue'
     import { useToast } from 'vue-toastification'
+    import { useAuthStore } from '@/stores/auth'
 
     const toast = useToast()
+    const authStore = useAuthStore()
 
     const activeTab = ref('oficina')
 
@@ -282,8 +318,8 @@
 
     const settings = ref({
     oficina: {
-        name: 'AutoFix Maputo',
-        email: 'contato@autofix.com',
+        name: 'SACCO Maputo',
+        email: 'contato@SACCO.com',
         phone: '841234567',
         address: 'Av. Julius Nyerere, 1234',
         city: 'Maputo',
@@ -309,6 +345,15 @@
     current: '',
     new: '',
     confirm: ''
+    })
+
+    const menuType = computed({
+    get() {
+        return authStore.settings?.menu?.type || 'sidebar'
+    },
+    set(value) {
+        authStore.setMenuType(value)
+    }
     })
 
     const saveSettings = () => {

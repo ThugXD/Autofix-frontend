@@ -2,14 +2,14 @@
   <div class="h-screen flex overflow-hidden">
     <!-- LEFT: FORMULÁRIO -->
     <div class="w-full lg:w-[35%] h-screen bg-gray-50 flex flex-col">
-      
+
       <!-- CONTEÚDO COM SCROLL -->
       <div class="flex-1 overflow-y-auto px-6 py-6">
         <div class="max-w-md mx-auto">
-          
+
           <!-- HEADER -->
           <div class="mb-6 text-center">
-            <h1 class="text-3xl font-bold text-gray-900">AutoFixApp</h1>
+            <h1 class="text-3xl font-bold text-gray-900">SACCO</h1>
             <p class="text-sm text-gray-600">Criar nova conta</p>
           </div>
 
@@ -27,7 +27,7 @@
                   <input
                     v-model="form.oficina_name"
                     type="text"
-                    placeholder="AutoFix Maputo"
+                    placeholder="SACCO Maputo"
                     class="input"
                     :class="{ 'border-red-500': errors.oficina_name }"
                     required
@@ -164,7 +164,7 @@
               </div>
 
               <!-- Botão -->
-     
+
               <BaseButton
                 type="submit"
                 variant="primary"

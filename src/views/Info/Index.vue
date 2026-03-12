@@ -1,20 +1,20 @@
 <template>
   <div>
     <div class="card mb-6">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Informações</h2>
-      <p class="text-gray-600">Sobre o sistema e suporte</p>
+      <h2 class="page-title">Informações</h2>
+      <p class="page-subtitle">Sobre o sistema e suporte</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Sobre o Sistema -->
       <div class="card">
-        <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-3 mb-6">
           <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
             <Wrench class="w-6 h-6 text-blue-600" />
           </div>
           <div>
-            <h3 class="text-lg font-semibold text-gray-900">AutoFixApp</h3>
-            <p class="text-sm text-gray-600">Sistema de Gestão para Oficinas</p>
+            <h3 class="text-lg font-semibold text-gray-900">SACCO</h3>
+            <p class="text-sm text-gray-600">Sistema de Acolhelimente Crianças Orfãos</p>
           </div>
         </div>
 
@@ -46,7 +46,7 @@
 
       <!-- Suporte -->
       <div class="card">
-        <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-3 mb-6">
           <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
             <Headphones class="w-6 h-6 text-green-600" />
           </div>
@@ -58,7 +58,7 @@
 
         <div class="space-y-4">
           <a
-            href="mailto:suporte@autofixapp.com"
+            href="mailto:suporte@SACCO.com"
             class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <Mail class="w-5 h-5 text-gray-600" />
@@ -113,7 +113,7 @@
 
       <!-- Recursos -->
       <div class="card">
-        <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-3 mb-6">
           <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
             <BookOpen class="w-6 h-6 text-purple-600" />
           </div>
@@ -172,7 +172,7 @@
 
       <!-- Novidades -->
       <div class="card">
-        <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-3 mb-6">
           <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
             <Zap class="w-6 h-6 text-orange-600" />
           </div>
@@ -215,7 +215,7 @@
 
     <!-- Feedback -->
     <div class="card mt-6">
-      <div class="flex items-center gap-3 mb-4">
+      <div class="flex items-center gap-3 mb-6">
         <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
           <Star class="w-6 h-6 text-yellow-600" />
         </div>
@@ -227,7 +227,7 @@
 
       <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6">
         <p class="text-gray-700 mb-4">
-          Sua opinião é muito importante para nós! Compartilhe suas sugestões, 
+          Sua opinião é muito importante para nós! Compartilhe suas sugestões,
           reporte problemas ou simplesmente nos diga o que achou do sistema.
         </p>
         <BaseButton variant="primary" :icon="Send">

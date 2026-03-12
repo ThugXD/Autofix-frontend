@@ -1,21 +1,21 @@
 <template>
   <div>
-    <!-- Header com Refresh -->
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>
-        <p class="text-sm text-gray-600 mt-1">
-          Visão geral do desempenho da oficina
-        </p>
+    <!-- Cabeçalho da página -->
+    <div class="card mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="page-title">Dashboard</h2>
+          <p class="page-subtitle">Visão geral do desempenho da oficina</p>
+        </div>
+        <BaseButton
+          variant="secondary"
+          :icon="RefreshCw"
+          :loading="dashboardStore.loading"
+          @click="refreshData"
+        >
+          Atualizar
+        </BaseButton>
       </div>
-      <BaseButton
-        variant="secondary"
-        :icon="RefreshCw"
-        :loading="dashboardStore.loading"
-        @click="refreshData"
-      >
-        Atualizar
-      </BaseButton>
     </div>
 
     <!-- Loading State -->

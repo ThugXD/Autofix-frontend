@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="card mb-6">
-      <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-2xl font-bold text-gray-900">Utilizadores</h2>
-          <p class="text-sm text-gray-600 mt-1">{{ users.length }} utilizador(es) registrado(s)</p>
+          <h2 class="page-title">Utilizadores</h2>
+          <p class="page-subtitle">{{ users.length }} utilizador(es) registrado(s)</p>
         </div>
         <BaseButton variant="primary" :icon="Plus" @click="openCreateModal">
           Novo Utilizador
         </BaseButton>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
         <div class="md:col-span-2">
           <BaseInput
             v-model="searchQuery"

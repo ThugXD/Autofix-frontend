@@ -3,6 +3,23 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // Landing Page Pública - Catálogo de Crianças (para Padrinhos)
+    {
+      path: '/catalogo',
+      name: 'catalogo',
+      component: () => import('@/views/Catalogo/Index.vue'),
+      meta: { title: 'Catálogo de Crianças' }
+    },
+
+    // Perfil da Criança - Página Pública
+    {
+      path: '/crianca/:id',
+      name: 'crianca-perfil',
+      component: () => import('@/views/Crianca/Perfil.vue'),
+      meta: { title: 'Perfil da Criança' }
+    },
+
+    // Dashboard Principal (Autenticado)
     {
       path: '/',
       component: () => import('@/layouts/MainLayout.vue'),
@@ -31,9 +48,18 @@ const router = createRouter({
           name: 'info',
           component: () => import('@/views/Info/Index.vue'),
           meta: { title: 'Info' }
+        },
+        // Meu Dashboard do Padrinho (Seu Canto)
+        {
+          path: 'meu-padrinhado',
+          name: 'meu-padrinhado',
+          component: () => import('@/views/MeuPadrinhado/Index.vue'),
+          meta: { title: 'Meu Padrinhado' }
         }
       ]
     },
+
+    // Autenticação
     {
       path: '/login',
       name: 'login',
@@ -46,6 +72,8 @@ const router = createRouter({
       component: () => import('@/views/Auth/Register.vue'),
       meta: { title: 'Registar', guest: true }
     },
+
+    // 404
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
@@ -61,8 +89,8 @@ router.beforeEach((to, from, next) => {
 
   // Atualizar título da página
   document.title = to.meta.title
-    ? `${to.meta.title} - AutoFixApp`
-    : 'AutoFixApp - Sistema de Gestão'
+    ? `${to.meta.title} - SACCO`
+    : 'SACCO - Sistema de Gestão'
 
   // Verificar autenticação
   if (to.meta.requiresAuth && !isAuthenticated) {

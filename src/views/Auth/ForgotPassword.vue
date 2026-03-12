@@ -10,7 +10,7 @@
         <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-2xl">
           <Wrench class="w-10 h-10 text-white" />
         </div>
-        <h1 class="text-4xl font-bold text-white mb-2">AutoFixApp</h1>
+        <h1 class="text-4xl font-bold text-white mb-2">SACCO</h1>
       </div>
 
       <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
@@ -98,7 +98,7 @@ const emailSent = ref(false)
 
 const handleForgotPassword = async () => {
   error.value = ''
-  
+
   if (!email.value) {
     error.value = 'Email é obrigatório'
     return
@@ -108,7 +108,7 @@ const handleForgotPassword = async () => {
 
   try {
     await new Promise(resolve => setTimeout(resolve, 1500))
-    
+
     // Simular envio de email
     emailSent.value = true
     toast.success('Link enviado para seu email!')
