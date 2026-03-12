@@ -4,6 +4,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // Landing Page (Public)
+    {
+      path: '/',
+      name: 'home',
+      component: () => import('@/views/Public/Home.vue'),
+      meta: { title: 'AutoFix - Gestão de Oficinas', guest: true }
+    },
+
     {
       path: '/',
       component: () => import('@/layouts/MainLayout.vue'),
@@ -37,7 +45,7 @@ const router = createRouter({
 
         // Rotas Normais
         {
-          path: '',
+          path: 'dashboard',
           name: 'dashboard',
           component: () => import('@/views/Dashboard.vue'),
           meta: { title: 'Dashboard' }

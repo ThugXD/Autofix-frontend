@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth'
 
 // Estilos
 import './assets/main.css'
+import './assets/theme-transitions.css'
 
 const app = createApp(App)
 const pinia = createPinia()

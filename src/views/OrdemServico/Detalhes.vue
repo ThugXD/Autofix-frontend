@@ -37,6 +37,15 @@
               Imprimir
             </BaseButton>
             <BaseButton
+              variant="primary"
+              :icon="Download"
+              :loading="isGeneratingPdf"
+              loading-text="Gerando..."
+              @click="handleDownloadPdf"
+            >
+              PDF
+            </BaseButton>
+            <BaseButton
               variant="secondary"
               :icon="Edit"
               @click="showEditModal = true"
@@ -434,7 +443,8 @@ import {
   Printer,
   Edit,
   CheckCircle,
-  Plus
+  Plus,
+  Download
 } from 'lucide-vue-next'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
@@ -540,6 +550,52 @@ const handleStatusUpdated = async () => {
 
 const handlePrint = () => {
   window.print()
+}
+
+import html2pdf from 'html2pdf.js'
+import { Download, FileText } from 'lucide-vue-next'
+
+const isGeneratingPdf = ref(false)
+
+const handleDownloadPdf = async () => {
+  const element = document.querySelector('.print-template')
+  
+  // Make flexible for PDF generation (temporarily remove hidden class if needed or clone)
+  // For simplicity, we clone the node to a visible off-screen area or just use the class trick
+  
+  // Better approach: Clone the element
+  const clone = element.cloneNode(true)
+  clone.classList.remove('hidden')
+  clone.classList.remove('print:block')
+  clone.style.display = 'block'
+  clone.style.width = '800px' // A4 width approx
+  
+  // Container for the clone
+  const container = document.createElement('div')
+  container.style.position = 'fixed'
+  container.style.top = '-9999px'
+  container.style.left = '-9999px'
+  container.appendChild(clone)
+  document.body.appendChild(container)
+  
+  isGeneratingPdf.value = true
+  
+  const opt = {
+    margin: 10,
+    filename: `Ordem_${ordem.value.numero}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }
+
+  try {
+    await html2pdf().set(opt).from(clone).save()
+  } catch (err) {
+    console.error('PDF Generation Error:', err)
+  } finally {
+    document.body.removeChild(container)
+    isGeneratingPdf.value = false
+  }
 }
 </script>
 

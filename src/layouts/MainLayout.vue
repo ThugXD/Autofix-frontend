@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen bg-gray-50 overflow-hidden">
+  <div class="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden transition-colors">
     <!-- Sidebar -->
     <Sidebar :isOpen="sidebarOpen" @toggle="toggleSidebar" class="no-print" />
     

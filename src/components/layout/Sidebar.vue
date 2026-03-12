@@ -1,12 +1,12 @@
 <template>
   <aside
     :class="[
-      'bg-white text-gray-800 border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col',
+      'bg-white dark:bg-gray-800 text-gray-800 dark:text-white border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out flex flex-col',
       isOpen ? 'w-64' : 'w-20'
     ]"
   >
     <!-- Logo/Brand -->
-    <div class="border-b m-2 border-gray-200">
+    <div class="border-b m-2 border-gray-200 dark:border-gray-700">
         <div class="h-20 flex items-center justify-center flex-shrink-0">
           <img
             :src="logo"
@@ -35,15 +35,15 @@
     </nav>
 
     <!-- User Section -->
-    <div class="p-4 border-t border-gray-200">
+    <div class="p-4 border-t border-gray-200 dark:border-gray-700">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-          <User class="w-5 h-5 text-gray-700" />
+        <div class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <User class="w-5 h-5 text-gray-700 dark:text-white" />
         </div>
         <transition name="fade">
           <div v-if="isOpen" class="flex-1 overflow-hidden">
-            <p class="text-sm font-medium truncate">{{ user?.name || 'Usuário' }}</p>
-            <p class="text-xs text-gray-500 truncate">{{ user?.email || 'email@exemplo.com' }}</p>
+            <p class="text-sm font-medium truncate dark:text-white">{{ user?.name || 'Usuário' }}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ user?.email || 'email@exemplo.com' }}</p>
           </div>
         </transition>
       </div>
