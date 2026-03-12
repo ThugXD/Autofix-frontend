@@ -8,7 +8,7 @@
         <!-- Logo -->
         <div class="text-center mb-8">
           <h1 class="text-3xl font-bold text-gray-900">
-            Sistema de Gestão de Oficinas
+            Sistema de SACCO
           </h1>
         </div>
 
