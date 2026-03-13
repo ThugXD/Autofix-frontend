@@ -16,7 +16,7 @@
             <Clock class="w-5 h-5 text-amber-600" />
           </div>
           <div>
-            <p class="text-2xl font-bold text-gray-900">{{ cadastrosPendentes.length }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ pfStore.cadastrosAguardandoRevisao.length }}</p>
             <p class="text-sm text-gray-500">Aguardando Revisao</p>
           </div>
         </div>
@@ -28,7 +28,7 @@
             <Calculator class="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <p class="text-2xl font-bold text-gray-900">{{ cadastrosOrcamento.length }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ pfStore.cadastrosOrcamento.length }}</p>
             <p class="text-sm text-gray-500">Definir Orcamento</p>
           </div>
         </div>
@@ -40,7 +40,7 @@
             <Globe class="w-5 h-5 text-green-600" />
           </div>
           <div>
-            <p class="text-2xl font-bold text-gray-900">{{ cadastrosProntos.length }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ pfStore.cadastrosProntos.length }}</p>
             <p class="text-sm text-gray-500">Prontos Publicar</p>
           </div>
         </div>
@@ -52,7 +52,7 @@
             <CheckCircle class="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <p class="text-2xl font-bold text-gray-900">{{ cadastrosPublicados.length }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ pfStore.cadastrosPublicados.length }}</p>
             <p class="text-sm text-gray-500">Publicados</p>
           </div>
         </div>
@@ -87,170 +87,170 @@
       </nav>
     </div>
 
-    <!-- Tab: Pendentes -->
-    <div v-if="activeTab === 'pendentes'" class="space-y-4">
-      <div v-if="cadastrosPendentes.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
-        <CheckCircle class="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <p class="text-gray-500">Nenhum cadastro aguardando revisao N2</p>
-      </div>
-
-      <div
-        v-for="cadastro in cadastrosPendentes"
-        :key="cadastro.id"
-        class="bg-white rounded-xl border border-gray-100 p-5"
-      >
-        <div class="flex items-start gap-4">
-          <img
-            :src="cadastro.foto"
-            :alt="cadastro.nome"
-            class="w-16 h-16 rounded-xl object-cover"
-          />
-          <div class="flex-1">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs font-mono text-gray-400">{{ cadastro.codigo }}</span>
-              <span class="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-700">
-                Aguardando N2
-              </span>
-            </div>
-            <h3 class="font-semibold text-gray-900">{{ cadastro.nome }}</h3>
-            <p class="text-sm text-gray-500">{{ cadastro.localidade }}</p>
-            <p class="text-xs text-green-600 mt-2">7/7 fichas aprovadas em N1</p>
-          </div>
-          <button
-            @click="abrirRevisaoN2(cadastro)"
-            class="btn-primary text-sm"
-          >
-            <Shield class="w-4 h-4 mr-1" />
-            Revisar
-          </button>
-        </div>
-      </div>
+    <!-- Tab Content -->
+    <div v-if="loading" class="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-gray-100">
+      <Loader2 class="w-10 h-10 animate-spin text-primary mb-4" />
+      <p class="text-gray-500 font-medium">A carregar cadastros...</p>
     </div>
 
-    <!-- Tab: Orcamento -->
-    <div v-if="activeTab === 'orcamento'" class="space-y-4">
-      <div v-if="cadastrosOrcamento.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
-        <Calculator class="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <p class="text-gray-500">Nenhum cadastro aguardando definicao de orcamento</p>
-      </div>
+    <div v-else class="space-y-4">
+      <!-- Active Tab: Pendentes -->
+      <div v-if="activeTab === 'pendentes'" class="space-y-4">
+        <div v-if="pfStore.cadastrosAguardandoRevisao.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
+          <CheckCircle class="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <p class="text-gray-500">Nenhum cadastro aguardando revisao N2</p>
+        </div>
 
-      <div
-        v-for="cadastro in cadastrosOrcamento"
-        :key="cadastro.id"
-        class="bg-white rounded-xl border border-gray-100 p-5"
-      >
-        <div class="flex items-start gap-4">
-          <img
-            :src="cadastro.foto"
-            :alt="cadastro.nome"
-            class="w-16 h-16 rounded-xl object-cover"
-          />
-          <div class="flex-1">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs font-mono text-gray-400">{{ cadastro.codigo }}</span>
-              <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">
-                Definir Orcamento
-              </span>
+        <div
+          v-for="cadastro in pfStore.cadastrosAguardandoRevisao"
+          :key="cadastro.id"
+          class="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md transition-shadow group"
+        >
+          <div class="flex items-start gap-4">
+            <img
+              :src="cadastro.foto"
+              class="w-16 h-16 rounded-xl object-cover ring-2 ring-gray-100"
+            />
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-mono text-gray-400">{{ cadastro.codigo }}</span>
+                <span class="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-700">
+                  Aguardando N2
+                </span>
+              </div>
+              <h3 class="font-bold text-gray-900">{{ cadastro.nomeCompleto }}</h3>
+              <p class="text-sm text-gray-500">{{ cadastro.localResidencia }}</p>
+              <p class="text-xs text-green-600 mt-2 font-bold">✓ 7/7 fichas técnicas concluídas</p>
             </div>
-            <h3 class="font-semibold text-gray-900">{{ cadastro.nome }}</h3>
-            <p class="text-sm text-gray-500">{{ cadastro.localidade }}</p>
-            <div class="mt-2 flex items-center gap-4 text-sm">
-              <span class="text-gray-500">{{ cadastro.necessidades }} necessidades</span>
-              <span class="text-gray-500">{{ formatCurrency(cadastro.custoEstimado) }} estimado</span>
-            </div>
+            <button
+              @click="abrirRevisaoN2(cadastro)"
+              class="btn-primary text-sm bg-indigo-600 hover:bg-indigo-700"
+            >
+              <ShieldCheck class="w-4 h-4 mr-2" />
+              Revisar Agora
+            </button>
           </div>
-          <button
-            @click="abrirOrcamento(cadastro)"
-            class="btn-primary text-sm"
-          >
-            <Calculator class="w-4 h-4 mr-1" />
-            Definir
-          </button>
         </div>
       </div>
-    </div>
 
-    <!-- Tab: Prontos -->
-    <div v-if="activeTab === 'prontos'" class="space-y-4">
-      <div v-if="cadastrosProntos.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
-        <Globe class="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <p class="text-gray-500">Nenhum cadastro pronto para publicacao</p>
-      </div>
+      <!-- Tab: Orcamento -->
+      <div v-if="activeTab === 'orcamento'" class="space-y-4">
+        <div v-if="pfStore.cadastrosOrcamento.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
+          <Calculator class="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <p class="text-gray-500">Nenhum cadastro aguardando definicao de orcamento</p>
+        </div>
 
-      <div
-        v-for="cadastro in cadastrosProntos"
-        :key="cadastro.id"
-        class="bg-white rounded-xl border border-gray-100 p-5"
-      >
-        <div class="flex items-start gap-4">
-          <img
-            :src="cadastro.foto"
-            :alt="cadastro.nome"
-            class="w-16 h-16 rounded-xl object-cover"
-          />
-          <div class="flex-1">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs font-mono text-gray-400">{{ cadastro.codigo }}</span>
-              <span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700">
-                Pronto
-              </span>
+        <div
+          v-for="cadastro in pfStore.cadastrosOrcamento"
+          :key="cadastro.id"
+          class="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md transition-shadow"
+        >
+          <div class="flex items-start gap-4">
+            <img
+              :src="cadastro.foto"
+              class="w-16 h-16 rounded-xl object-cover"
+            />
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-mono text-gray-400">{{ cadastro.codigo }}</span>
+                <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">
+                  Definir Orcamento
+                </span>
+              </div>
+              <h3 class="font-bold text-gray-900">{{ cadastro.nomeCompleto }}</h3>
+              <p class="text-sm text-gray-500">{{ cadastro.localResidencia }}</p>
             </div>
-            <h3 class="font-semibold text-gray-900">{{ cadastro.nome }}</h3>
-            <p class="text-sm text-gray-500">{{ cadastro.localidade }}</p>
-            <p class="text-sm text-green-600 mt-2 font-medium">
-              {{ formatCurrency(cadastro.orcamentoAnual) }}/ano
-            </p>
+            <button
+              @click="abrirOrcamento(cadastro)"
+              class="btn-primary text-sm bg-blue-600 hover:bg-blue-700"
+            >
+              <Calculator class="w-4 h-4 mr-2" />
+              Calcular Custos
+            </button>
           </div>
-          <button
-            @click="publicarCadastro(cadastro)"
-            class="btn-primary text-sm bg-green-600 hover:bg-green-700"
-          >
-            <Globe class="w-4 h-4 mr-1" />
-            Publicar
-          </button>
         </div>
       </div>
-    </div>
 
-    <!-- Tab: Publicados -->
-    <div v-if="activeTab === 'publicados'" class="space-y-4">
-      <div v-if="cadastrosPublicados.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
-        <CheckCircle class="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <p class="text-gray-500">Nenhum cadastro publicado ainda</p>
+      <!-- Tab: Prontos -->
+      <div v-if="activeTab === 'prontos'" class="space-y-4">
+        <div v-if="pfStore.cadastrosProntos.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
+          <Globe class="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <p class="text-gray-500">Nenhum cadastro pronto para publicacao</p>
+        </div>
+
+        <div
+          v-for="cadastro in pfStore.cadastrosProntos"
+          :key="cadastro.id"
+          class="bg-white rounded-xl border border-gray-100 p-5"
+        >
+          <div class="flex items-start gap-4">
+            <img
+              :src="cadastro.foto"
+              class="w-16 h-16 rounded-xl object-cover"
+            />
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-mono text-gray-400">{{ cadastro.codigo }}</span>
+                <span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700">
+                  Pronto
+                </span>
+              </div>
+              <h3 class="font-bold text-gray-900">{{ cadastro.nomeCompleto }}</h3>
+              <p class="text-sm text-gray-500">{{ cadastro.localResidencia }}</p>
+              <p class="text-sm text-green-600 mt-2 font-bold">
+                Orcamento: {{ formatCurrency(cadastro.orcamentoAnual) }} / ano
+              </p>
+            </div>
+            <button
+              @click="handlePublicar(cadastro)"
+              class="btn-primary text-sm bg-green-600 hover:bg-green-700"
+            >
+              <Globe class="w-4 h-4 mr-2" />
+              Publicar no Catalogo
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div
-        v-for="cadastro in cadastrosPublicados"
-        :key="cadastro.id"
-        class="bg-white rounded-xl border border-gray-100 p-5"
-      >
-        <div class="flex items-start gap-4">
-          <img
-            :src="cadastro.foto"
-            :alt="cadastro.nome"
-            class="w-16 h-16 rounded-xl object-cover"
-          />
-          <div class="flex-1">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs font-mono text-gray-400">{{ cadastro.codigo }}</span>
-              <span class="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-700">
-                Publicado
-              </span>
-              <span v-if="cadastro.temPadrinho" class="px-2 py-0.5 text-xs rounded-full bg-pink-100 text-pink-700">
-                Apadrinhado
-              </span>
+      <!-- Tab: Publicados -->
+      <div v-if="activeTab === 'publicados'" class="space-y-4">
+        <div v-if="pfStore.cadastrosPublicados.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
+          <CheckCircle class="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <p class="text-gray-500">Nenhum cadastro publicado ainda</p>
+        </div>
+
+        <div
+          v-for="cadastro in pfStore.cadastrosPublicados"
+          :key="cadastro.id"
+          class="bg-white rounded-xl border border-gray-100 p-5"
+        >
+          <div class="flex items-start gap-4">
+            <img
+              :src="cadastro.foto"
+              class="w-16 h-16 rounded-xl object-cover grayscale opacity-80"
+            />
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-mono text-gray-400">{{ cadastro.codigo }}</span>
+                <span class="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-700 font-bold">
+                  Publicado
+                </span>
+                <span v-if="cadastro.padrinhoId" class="px-2 py-0.5 text-xs rounded-full bg-pink-100 text-pink-700 font-bold">
+                  Apadrinhado
+                </span>
+              </div>
+              <h3 class="font-bold text-gray-900">{{ cadastro.nomeCompleto }}</h3>
+              <p class="text-sm text-gray-500">{{ cadastro.localResidencia }}</p>
+              <p class="text-xs text-gray-400 mt-2">Publicado em {{ cadastro.dataPublicacao }}</p>
             </div>
-            <h3 class="font-semibold text-gray-900">{{ cadastro.nome }}</h3>
-            <p class="text-sm text-gray-500">{{ cadastro.localidade }}</p>
-            <p class="text-xs text-gray-400 mt-2">Publicado em {{ cadastro.dataPublicacao }}</p>
+            <router-link
+              :to="`/app/padrinho/detalhes/${cadastro.id}`"
+              class="btn-secondary text-sm"
+            >
+              <Eye class="w-4 h-4 mr-2" />
+              Ver Perfil
+            </router-link>
           </div>
-          <button
-            @click="verDetalhes(cadastro)"
-            class="btn-secondary text-sm"
-          >
-            <Eye class="w-4 h-4 mr-1" />
-            Detalhes
-          </button>
         </div>
       </div>
     </div>
@@ -258,147 +258,129 @@
     <!-- Modal Revisao N2 -->
     <BaseModal
       v-model="showModalN2"
-      title="Revisao Final - Nivel 2"
-      size="lg"
+      title="Revisao Final Nivel 2"
+      size="xl"
     >
-      <div v-if="cadastroSelecionado" class="space-y-6">
-        <!-- Info da Crianca -->
-        <div class="flex items-start gap-4 pb-4 border-b border-gray-100">
+      <div v-if="cadastroSelecionado" class="space-y-8">
+        <!-- Crianca Info -->
+        <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
           <img
             :src="cadastroSelecionado.foto"
-            :alt="cadastroSelecionado.nome"
-            class="w-20 h-20 rounded-xl object-cover"
+            class="w-24 h-24 rounded-2xl object-cover shadow-sm ring-4 ring-white"
           />
           <div>
-            <h3 class="text-lg font-semibold text-gray-900">{{ cadastroSelecionado.nome }}</h3>
-            <p class="text-gray-500">{{ cadastroSelecionado.localidade }}</p>
-            <p class="text-sm text-gray-400 mt-1">{{ cadastroSelecionado.codigo }}</p>
+            <span class="text-xs font-mono text-gray-400">{{ cadastroSelecionado.codigo }}</span>
+            <h3 class="text-xl font-bold text-gray-900">{{ cadastroSelecionado.nomeCompleto }}</h3>
+            <p class="text-gray-600">{{ cadastroSelecionado.localResidencia }}</p>
           </div>
         </div>
 
-        <!-- Resumo -->
-        <div class="bg-gray-50 rounded-xl p-4">
-          <h4 class="font-medium text-gray-900 mb-3">Resumo do Cadastro</h4>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <p class="text-gray-500">Fichas</p>
-              <p class="font-semibold">7/7 aprovadas</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Necessidades</p>
-              <p class="font-semibold">{{ cadastroSelecionado.necessidades || 0 }}</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Custo Estimado</p>
-              <p class="font-semibold">{{ formatCurrency(cadastroSelecionado.custoEstimado || 0) }}</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Idade</p>
-              <p class="font-semibold">{{ cadastroSelecionado.idade }} anos</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Fichas Resumidas -->
-        <div>
-          <h4 class="font-medium text-gray-900 mb-3">Fichas Tecnicas</h4>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-            <div
-              v-for="ficha in fichasResumo"
-              :key="ficha.id"
-              class="p-3 bg-green-50 rounded-lg border border-green-100"
+        <!-- Summary of Technical Assessments -->
+        <div class="space-y-4">
+          <h4 class="font-bold text-gray-900 border-l-4 border-indigo-500 pl-3">Sumário de Avaliações Técnicas</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div 
+              v-for="area in specialistAreas" 
+              :key="area.id"
+              class="p-4 rounded-xl border bg-white flex flex-col gap-2"
+              :class="getFichaStatusColor(area.id)"
             >
               <div class="flex items-center gap-2">
-                <CheckCircle class="w-4 h-4 text-green-600" />
-                <span class="text-sm font-medium text-green-700">{{ ficha.nome }}</span>
+                <component :is="area.icon" class="w-4 h-4" />
+                <span class="text-xs font-bold uppercase tracking-wider">{{ area.id }}</span>
               </div>
+              <p class="text-sm font-bold text-gray-800">{{ area.nome }}</p>
+              <p class="text-xs text-gray-500 italic mt-1">
+                "{{ getSummaryForArea(area.id) }}"
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- Observacoes -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Observacoes da Revisao (opcional)
-          </label>
+        <!-- Decision Box -->
+        <div class="space-y-4 pt-4 border-t border-gray-100">
+          <label class="block text-sm font-bold text-gray-700">Parecer Final do Gestor</label>
           <textarea
-            v-model="observacoesN2"
+            v-model="gestorComment"
             rows="3"
-            class="input-field"
-            placeholder="Adicione observacoes sobre esta revisao..."
+            class="input p-4 bg-gray-50 border border-gray-200 rounded-2xl w-full"
+            placeholder="Observações ou instruções para os pontos focais..."
           ></textarea>
         </div>
       </div>
 
       <template #footer>
-        <button @click="showModalN2 = false" class="btn-secondary">
-          Cancelar
-        </button>
-        <button
-          @click="solicitarAjustes"
-          class="px-4 py-2.5 text-sm rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200"
-        >
-          Solicitar Ajustes
-        </button>
-        <button @click="aprovarParaOrcamento" class="btn-primary bg-green-600 hover:bg-green-700">
-          Aprovar para Orcamento
-        </button>
+        <div class="flex justify-between items-center w-full">
+          <button @click="handleRejeitar" class="btn-secondary text-red-600 hover:bg-red-50">
+            <XCircle class="w-4 h-4 mr-2" />
+            Solicitar Ajustes
+          </button>
+          <div class="flex gap-3">
+            <BaseButton variant="secondary" @click="showModalN2 = false">Fechar</BaseButton>
+            <BaseButton variant="primary" :loading="processing" @click="handleAprovarN2">
+              <CheckCircle class="w-4 h-4 mr-2" />
+              Aprovar para Orçamento
+            </BaseButton>
+          </div>
+        </div>
       </template>
     </BaseModal>
 
     <!-- Modal Orcamento -->
     <BaseModal
       v-model="showModalOrcamento"
-      title="Definicao de Orcamento"
+      title="Definicao de Orcamento Anual"
       size="xl"
     >
       <div v-if="cadastroSelecionado" class="space-y-6">
-        <!-- Info da Crianca -->
-        <div class="flex items-start gap-4 pb-4 border-b border-gray-100">
-          <img
-            :src="cadastroSelecionado.foto"
-            :alt="cadastroSelecionado.nome"
-            class="w-16 h-16 rounded-xl object-cover"
-          />
+        <div class="p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-center gap-4">
+          <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600">
+            <Calculator class="w-6 h-6" />
+          </div>
           <div>
-            <h3 class="font-semibold text-gray-900">{{ cadastroSelecionado.nome }}</h3>
-            <p class="text-sm text-gray-500">{{ cadastroSelecionado.codigo }}</p>
+            <h4 class="font-bold text-blue-900">Plano de Custos: {{ cadastroSelecionado.nomeCompleto }}</h4>
+            <p class="text-sm text-blue-700">Preencha os valores anuais estimados para cada rubrica de apoio.</p>
           </div>
         </div>
 
-        <!-- Tabela de Orcamento -->
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto rounded-2xl border border-gray-100 overflow-hidden">
           <table class="w-full">
-            <thead>
-              <tr class="border-b border-gray-200">
-                <th class="text-left py-3 px-4 text-sm font-medium text-gray-700">Area</th>
-                <th class="text-right py-3 px-4 text-sm font-medium text-gray-700">Necessidades</th>
-                <th class="text-right py-3 px-4 text-sm font-medium text-gray-700">Estimado</th>
-                <th class="text-right py-3 px-4 text-sm font-medium text-gray-700">Orcamento Anual</th>
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="text-left p-4 text-xs font-bold text-gray-500 uppercase">Rubrica Técnica</th>
+                <th class="text-right p-4 text-xs font-bold text-gray-500 uppercase">Necessidades</th>
+                <th class="text-right p-4 text-xs font-bold text-gray-500 uppercase w-48">Orçamento Anual (MZN)</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="area in areasOrcamento" :key="area.id" class="border-b border-gray-100">
-                <td class="py-3 px-4">
-                  <span class="text-sm font-medium text-gray-900">{{ area.nome }}</span>
+            <tbody class="divide-y divide-gray-100">
+              <tr v-for="item in budgetLines" :key="item.areaId">
+                <td class="p-4">
+                  <div class="flex items-center gap-2">
+                    <component :is="getAreaIcon(item.areaId)" class="w-4 h-4 text-gray-400" />
+                    <span class="text-sm font-bold text-gray-900">{{ getAreaName(item.areaId) }}</span>
+                  </div>
                 </td>
-                <td class="py-3 px-4 text-right text-sm text-gray-600">{{ area.necessidades }}</td>
-                <td class="py-3 px-4 text-right text-sm text-gray-600">{{ formatCurrency(area.estimado) }}</td>
-                <td class="py-3 px-4 text-right">
+                <td class="p-4 text-right">
+                  <span class="text-sm text-gray-600">{{ item.count || 2 }} itens</span>
+                </td>
+                <td class="p-4">
                   <input
-                    v-model.number="area.orcamento"
                     type="number"
-                    class="w-32 px-3 py-1.5 text-sm text-right border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    v-model="item.value"
+                    class="input text-right text-sm py-1.5 focus:ring-blue-500"
+                    placeholder="0.00"
                   />
                 </td>
               </tr>
             </tbody>
-            <tfoot>
-              <tr class="bg-gray-50">
-                <td class="py-3 px-4 font-semibold text-gray-900">Total</td>
-                <td class="py-3 px-4 text-right font-semibold text-gray-900">{{ totalNecessidades }}</td>
-                <td class="py-3 px-4 text-right font-semibold text-gray-900">{{ formatCurrency(totalEstimado) }}</td>
-                <td class="py-3 px-4 text-right font-semibold text-primary">{{ formatCurrency(totalOrcamento) }}</td>
+            <tfoot class="bg-indigo-50">
+              <tr>
+                <td colspan="2" class="p-4 text-right">
+                  <span class="text-indigo-900 font-bold">TOTAL ANUAL ESTIMADO</span>
+                </td>
+                <td class="p-4 text-right">
+                  <span class="text-lg font-black text-indigo-900">{{ formatCurrency(totalBudget) }}</span>
+                </td>
               </tr>
             </tfoot>
           </table>
@@ -406,208 +388,186 @@
       </div>
 
       <template #footer>
-        <button @click="showModalOrcamento = false" class="btn-secondary">
-          Cancelar
-        </button>
-        <button @click="salvarOrcamento" class="btn-primary">
-          Salvar e Aprovar
-        </button>
+        <div class="flex gap-3 justify-end w-full">
+          <BaseButton variant="secondary" @click="showModalOrcamento = false">Cancelar</BaseButton>
+          <BaseButton variant="primary" :loading="processing" @click="handleSalvarOrcamento">
+            <Save class="w-4 h-4 mr-2" />
+            Salvar e Definir como Pronto
+          </BaseButton>
+        </div>
       </template>
     </BaseModal>
-
-    <!-- Toast -->
-    <div
-      v-if="toast.show"
-      :class="[
-        'fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2',
-        toast.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
-      ]"
-    >
-      <CheckCircle v-if="toast.type === 'success'" class="w-5 h-5" />
-      <span>{{ toast.message }}</span>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { 
-  Clock, Calculator, Globe, CheckCircle, Shield, Eye
+  Clock, Calculator, Globe, CheckCircle, ShieldCheck, Eye, 
+  XCircle, FileText, Heart, Stethoscope, UtensilsCrossed, 
+  GraduationCap, Shield, Brain, Loader2, Save
 } from 'lucide-vue-next'
+import { usePontoFocalStore } from '@/stores/pontoFocal'
+import { usePontoFocalTematicoStore } from '@/stores/pontoFocalTematico'
 import BaseModal from '@/components/common/BaseModal.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import { useToast } from 'vue-toastification'
 
-// State
+const toast = useToast()
+const pfStore = usePontoFocalStore()
+const tematicoStore = usePontoFocalTematicoStore()
+
+const loading = ref(false)
+const processing = ref(false)
 const activeTab = ref('pendentes')
 const showModalN2 = ref(false)
 const showModalOrcamento = ref(false)
 const cadastroSelecionado = ref(null)
-const observacoesN2 = ref('')
-const toast = ref({ show: false, message: '', type: 'success' })
+const gestorComment = ref('')
 
-// Mock Data
-const cadastros = ref([
-  {
-    id: 1,
-    codigo: 'CR-2024-001',
-    nome: 'Ana Maria Silva',
-    idade: 8,
-    localidade: 'Bairro Esperanca, Luanda',
-    foto: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=200&h=200&fit=crop',
-    status: 'pendente_n2',
-    necessidades: 12,
-    custoEstimado: 450000,
-  },
-  {
-    id: 2,
-    codigo: 'CR-2024-002',
-    nome: 'Joao Pedro Santos',
-    idade: 10,
-    localidade: 'Viana, Luanda',
-    foto: 'https://images.unsplash.com/photo-1545171519-4ec7cdb9f0ef?w=200&h=200&fit=crop',
-    status: 'pendente_n2',
-    necessidades: 8,
-    custoEstimado: 320000,
-  },
-  {
-    id: 3,
-    codigo: 'CR-2024-003',
-    nome: 'Maria Esperanca',
-    idade: 6,
-    localidade: 'Cazenga, Luanda',
-    foto: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=200&h=200&fit=crop',
-    status: 'orcamento',
-    necessidades: 15,
-    custoEstimado: 580000,
-  },
-  {
-    id: 4,
-    codigo: 'CR-2024-004',
-    nome: 'Pedro Antonio',
-    idade: 9,
-    localidade: 'Kilamba, Luanda',
-    foto: 'https://images.unsplash.com/photo-1504439904031-93ded9f93e4e?w=200&h=200&fit=crop',
-    status: 'pronto',
-    necessidades: 10,
-    custoEstimado: 400000,
-    orcamentoAnual: 420000,
-  },
-  {
-    id: 5,
-    codigo: 'CR-2024-005',
-    nome: 'Teresa Cumba',
-    idade: 7,
-    localidade: 'Talatona, Luanda',
-    foto: 'https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=200&h=200&fit=crop',
-    status: 'publicado',
-    dataPublicacao: '15/01/2024',
-    temPadrinho: true,
-    orcamentoAnual: 380000,
-  },
-  {
-    id: 6,
-    codigo: 'CR-2024-006',
-    nome: 'Manuel Jose',
-    idade: 11,
-    localidade: 'Maianga, Luanda',
-    foto: 'https://images.unsplash.com/photo-1599566219227-2efe0c9b7f5f?w=200&h=200&fit=crop',
-    status: 'publicado',
-    dataPublicacao: '10/01/2024',
-    temPadrinho: false,
-    orcamentoAnual: 450000,
-  }
-])
+const budgetLines = ref([])
 
-const areasOrcamento = ref([
-  { id: 'saude', nome: 'Saude', necessidades: 3, estimado: 120000, orcamento: 120000 },
-  { id: 'alimentacao', nome: 'Alimentacao', necessidades: 2, estimado: 80000, orcamento: 80000 },
-  { id: 'psicossocial', nome: 'Psico-Social', necessidades: 2, estimado: 60000, orcamento: 60000 },
-  { id: 'nutricao', nome: 'Nutricao', necessidades: 2, estimado: 50000, orcamento: 50000 },
-  { id: 'documentacao', nome: 'Documentacao', necessidades: 1, estimado: 30000, orcamento: 30000 },
-  { id: 'protecao', nome: 'Protecao', necessidades: 2, estimado: 80000, orcamento: 80000 },
-])
-
-const fichasResumo = [
-  { id: 'saude', nome: 'Saude' },
-  { id: 'alimentacao', nome: 'Alimentacao' },
-  { id: 'psicossocial', nome: 'Psico-Social' },
-  { id: 'nutricao', nome: 'Nutricao' },
-  { id: 'documentacao', nome: 'Documentacao' },
-  { id: 'protecao', nome: 'Protecao' },
-  { id: 'dados', nome: 'Dados Gerais' },
+const specialistAreas = [
+  { id: 'sadd', nome: 'Direitos e Documentação', icon: FileText },
+  { id: 'sanc', nome: 'Nutrição e Crescimento', icon: Heart },
+  { id: 'sasbe', nome: 'Saúde e Bem-Estar', icon: Stethoscope },
+  { id: 'saad', nome: 'Alimentação Diária', icon: UtensilsCrossed },
+  { id: 'saeie', nome: 'Educação e Inclusão', icon: GraduationCap },
+  { id: 'saps', nome: 'Proteção e Segurança', icon: Shield },
+  { id: 'sape', nome: 'Psicosocial Emocional', icon: Brain }
 ]
 
-// Computed
-const cadastrosPendentes = computed(() => cadastros.value.filter(c => c.status === 'pendente_n2'))
-const cadastrosOrcamento = computed(() => cadastros.value.filter(c => c.status === 'orcamento'))
-const cadastrosProntos = computed(() => cadastros.value.filter(c => c.status === 'pronto'))
-const cadastrosPublicados = computed(() => cadastros.value.filter(c => c.status === 'publicado'))
-
 const tabs = computed(() => [
-  { id: 'pendentes', label: 'Aguardando N2', count: cadastrosPendentes.value.length },
-  { id: 'orcamento', label: 'Definir Orcamento', count: cadastrosOrcamento.value.length },
-  { id: 'prontos', label: 'Prontos Publicar', count: cadastrosProntos.value.length },
-  { id: 'publicados', label: 'Publicados', count: cadastrosPublicados.value.length },
+  { id: 'pendentes', label: 'Aguardando N2', count: pfStore.cadastrosAguardandoRevisao.length },
+  { id: 'orcamento', label: 'Definir Orçamento', count: pfStore.cadastrosOrcamento.length },
+  { id: 'prontos', label: 'Prontos Publicar', count: pfStore.cadastrosProntos.length },
+  { id: 'publicados', label: 'Publicados', count: pfStore.cadastrosPublicados.length }
 ])
 
-const totalNecessidades = computed(() => areasOrcamento.value.reduce((sum, a) => sum + a.necessidades, 0))
-const totalEstimado = computed(() => areasOrcamento.value.reduce((sum, a) => sum + a.estimado, 0))
-const totalOrcamento = computed(() => areasOrcamento.value.reduce((sum, a) => sum + a.orcamento, 0))
+const totalBudget = computed(() => {
+  return budgetLines.value.reduce((acc, line) => acc + (line.value || 0), 0)
+})
 
 // Methods
-const formatCurrency = (value) => {
-  return new Intl.NumberFormat('pt-AO', {
-    style: 'currency',
-    currency: 'AOA',
-    minimumFractionDigits: 0
-  }).format(value)
-}
-
-const showToast = (message, type = 'success') => {
-  toast.value = { show: true, message, type }
-  setTimeout(() => { toast.value.show = false }, 3000)
+const fetchAll = async () => {
+  loading.value = true
+  await Promise.all([
+    pfStore.fetchCadastros(),
+    tematicoStore.fetchFichasTecnicas()
+  ])
+  loading.value = false
 }
 
 const abrirRevisaoN2 = (cadastro) => {
   cadastroSelecionado.value = cadastro
-  observacoesN2.value = ''
+  gestorComment.value = ''
   showModalN2.value = true
+}
+
+const handleAprovarN2 = async () => {
+  processing.value = true
+  try {
+    await pfStore.aprovarNivel2(cadastroSelecionado.value.id)
+    toast.success('Cadastro aprovado para definição de orçamento!')
+    showModalN2.value = false
+    activeTab.value = 'orcamento'
+  } catch (e) {
+    toast.error('Erro ao aprovar cadastro')
+  } finally {
+    processing.value = false
+  }
+}
+
+const handleRejeitar = async () => {
+  if (!gestorComment.value) {
+    toast.warning('Por favor, descreva os ajustes necessários.')
+    return
+  }
+  processing.value = true
+  try {
+    await pfStore.rejeitarNivel2(cadastroSelecionado.value.id, gestorComment.value)
+    toast.success('Solicitação de ajustes enviada com sucesso.')
+    showModalN2.value = false
+  } catch (e) {
+    toast.error('Erro ao enviar solicitação')
+  } finally {
+    processing.value = false
+  }
 }
 
 const abrirOrcamento = (cadastro) => {
   cadastroSelecionado.value = cadastro
+  budgetLines.value = specialistAreas.map(area => ({
+    areaId: area.id,
+    value: 0,
+    count: 1
+  }))
   showModalOrcamento.value = true
 }
 
-const aprovarParaOrcamento = () => {
-  if (cadastroSelecionado.value) {
-    cadastroSelecionado.value.status = 'orcamento'
-    showModalN2.value = false
-    showToast('Cadastro aprovado para definicao de orcamento')
+const handleSalvarOrcamento = async () => {
+  if (totalBudget.value <= 0) {
+    toast.warning('O orçamento total deve ser superior a zero.')
+    return
   }
-}
-
-const solicitarAjustes = () => {
-  showModalN2.value = false
-  showToast('Solicitacao de ajustes enviada', 'success')
-}
-
-const salvarOrcamento = () => {
-  if (cadastroSelecionado.value) {
-    cadastroSelecionado.value.status = 'pronto'
-    cadastroSelecionado.value.orcamentoAnual = totalOrcamento.value
+  processing.value = true
+  try {
+    await pfStore.definirOrcamento(cadastroSelecionado.value.id, totalBudget.value)
+    toast.success('Orçamento definido! O cadastro está pronto para publicação.')
     showModalOrcamento.value = false
-    showToast('Orcamento definido com sucesso')
+    activeTab.value = 'prontos'
+  } catch (e) {
+    toast.error('Erro ao salvar orçamento')
+  } finally {
+    processing.value = false
   }
 }
 
-const publicarCadastro = (cadastro) => {
-  cadastro.status = 'publicado'
-  cadastro.dataPublicacao = new Date().toLocaleDateString('pt-AO')
-  cadastro.temPadrinho = false
-  showToast('Crianca publicada no catalogo')
+const handlePublicar = async (cadastro) => {
+  if (!confirm(`Confirmar publicação de ${cadastro.nomeCompleto} no catálogo?`)) return
+  
+  try {
+    await pfStore.publicarNoCatalogo(cadastro.id)
+    toast.success('Criança publicada no catálogo com sucesso!')
+    activeTab.value = 'publicados'
+  } catch (e) {
+    toast.error('Erro ao publicar cadastro')
+  }
 }
 
-const verDetalhes = (cadastro) => {
-  cadastroSelecionado.value = cadastro
+const getFichaStatusColor = (areaId) => {
+  return 'border-green-100 bg-green-50 shadow-sm'
 }
+
+const getSummaryForArea = (areaId) => {
+  const ficha = tematicoStore.fichasTecnicas.find(
+    f => f.cadastroId === cadastroSelecionado.value.id && f.pfTematico === areaId
+  )
+  if (ficha) return ficha.observacoesPF || 'Necessidades identificadas e validadas pelo especialista.'
+  return 'Avaliação concluída com sucesso.'
+}
+
+const getAreaIcon = (id) => specialistAreas.find(a => a.id === id)?.icon || FileText
+const getAreaName = (id) => specialistAreas.find(a => a.id === id)?.nome || id
+
+const formatCurrency = (value) => {
+  return new Intl.NumberFormat('pt-MZ', {
+    style: 'currency',
+    currency: 'MZN',
+    minimumFractionDigits: 0
+  }).format(value)
+}
+
+onMounted(fetchAll)
 </script>
+
+<style scoped>
+.input {
+  outline: none;
+  transition: all 0.2s;
+}
+.input:focus {
+  border-color: #4f46e5;
+  background-color: white;
+}
+</style>

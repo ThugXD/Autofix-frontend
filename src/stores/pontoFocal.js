@@ -260,7 +260,19 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
   )
 
   const cadastrosAguardandoRevisao = computed(() => 
-    cadastros.value.filter(c => c.status === 'aguardando_revisao')
+    cadastros.value.filter(c => c.status === 'aguardando_revisao' || c.status === 'pendente_n2')
+  )
+
+  const cadastrosOrcamento = computed(() => 
+    cadastros.value.filter(c => c.status === 'orcamento')
+  )
+
+  const cadastrosProntos = computed(() => 
+    cadastros.value.filter(c => c.status === 'pronto')
+  )
+
+  const cadastrosPublicados = computed(() => 
+    cadastros.value.filter(c => c.status === 'publicado')
   )
 
   const getProgressoCadastro = (cadastro) => {
@@ -388,6 +400,37 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
     }
   }
 
+  const aprovarNivel2 = async (cadastroId) => {
+    const cadastro = cadastros.value.find(c => c.id === parseInt(cadastroId))
+    if (cadastro) {
+      cadastro.status = 'orcamento'
+    }
+  }
+
+  const rejeitarNivel2 = async (cadastroId, observacoes) => {
+    const cadastro = cadastros.value.find(c => c.id === parseInt(cadastroId))
+    if (cadastro) {
+      cadastro.status = 'ajustes_solicitados'
+      cadastro.observacoesGestor = observacoes
+    }
+  }
+
+  const definirOrcamento = async (cadastroId, orcamentoAnual) => {
+    const cadastro = cadastros.value.find(c => c.id === parseInt(cadastroId))
+    if (cadastro) {
+      cadastro.orcamentoAnual = orcamentoAnual
+      cadastro.status = 'pronto'
+    }
+  }
+
+  const publicarNoCatalogo = async (cadastroId) => {
+    const cadastro = cadastros.value.find(c => c.id === parseInt(cadastroId))
+    if (cadastro) {
+      cadastro.status = 'publicado'
+      cadastro.dataPublicacao = new Date().toLocaleDateString('pt-AO')
+    }
+  }
+
   return {
     // State
     comunicacoes,
@@ -401,6 +444,9 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
     comunicacoesAprovadas,
     cadastrosEmAndamento,
     cadastrosAguardandoRevisao,
+    cadastrosOrcamento,
+    cadastrosProntos,
+    cadastrosPublicados,
     getProgressoCadastro,
     
     // Actions
@@ -413,6 +459,10 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
     aprovarComunicacao,
     rejeitarComunicacao,
     iniciarCadastro,
-    agendarVisitaTecnica
+    agendarVisitaTecnica,
+    aprovarNivel2,
+    rejeitarNivel2,
+    definirOrcamento,
+    publicarNoCatalogo
   }
 })
