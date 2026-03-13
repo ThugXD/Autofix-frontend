@@ -11,7 +11,7 @@ export const useCriancasStore = defineStore('criancas', () => {
       id: 1,
       nome: 'Maria Silva',
       idade: 8,
-      foto: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=500&fit=crop',
+      foto: '/img/children/maria_silva.png',
       regiao: 'Maputo',
       vulnerabilidades: ['Pobreza extrema', 'Acesso à educação'],
       necessidades: [
@@ -61,7 +61,7 @@ export const useCriancasStore = defineStore('criancas', () => {
       id: 2,
       nome: 'João Nkomo',
       idade: 12,
-      foto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+      foto: '/img/children/joao_nkomo.png',
       regiao: 'Gaza',
       vulnerabilidades: ['Órfão', 'Criança de rua'],
       necessidades: [
@@ -102,7 +102,7 @@ export const useCriancasStore = defineStore('criancas', () => {
       id: 3,
       nome: 'Ana Dlamini',
       idade: 6,
-      foto: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&h=500&fit=crop',
+      foto: '/img/children/ana_dlamini.png',
       regiao: 'Inhambane',
       vulnerabilidades: ['Deficiência visual', 'Pobreza'],
       necessidades: [
@@ -134,7 +134,7 @@ export const useCriancasStore = defineStore('criancas', () => {
       id: 4,
       nome: 'Tomás Mussa',
       idade: 14,
-      foto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&h=500&fit=crop',
+      foto: '/img/children/tomas_mussa.png',
       regiao: 'Sofala',
       vulnerabilidades: ['Trabalho infantil', 'Abandono escolar'],
       necessidades: [
@@ -166,7 +166,7 @@ export const useCriancasStore = defineStore('criancas', () => {
       id: 5,
       nome: 'Zita Machava',
       idade: 10,
-      foto: 'https://images.unsplash.com/photo-1517849845537-1d51a20414de?w=500&h=500&fit=crop',
+      foto: '/img/children/zita_machava.png',
       regiao: 'Maputo',
       vulnerabilidades: ['Abuso infantil', 'Trauma'],
       necessidades: [

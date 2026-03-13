@@ -326,16 +326,6 @@ const router = createRouter({
           }
         },
 
-        // Rota legada - manter compatibilidade
-        {
-          path: 'utilizadores',
-          name: 'utilizadores',
-          component: () => import('@/views/Utilizadores/Index.vue'),
-          meta: { 
-            title: 'Utilizadores',
-            allowedRoles: [ROLES.ADMIN]
-          }
-        },
         {
           path: 'meu-padrinhado',
           redirect: { name: 'padrinho-dashboard' }
