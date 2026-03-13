@@ -112,7 +112,16 @@
           </div>
         </div>
 
-        <!-- B. Necessidades Especificas -->
+        <!-- B. Especializada (Dinamica) -->
+        <div v-if="pfInfo" class="space-y-6">
+          <component 
+            :is="specializedFormComponent" 
+            v-model="form.especializada"
+            :is-read-only="isReadOnly"
+          />
+        </div>
+
+        <!-- C. Necessidades Especificas -->
         <div class="bg-white rounded-xl border border-gray-100 p-6">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
@@ -384,6 +393,15 @@ import {
   X
 } from 'lucide-vue-next'
 
+// Specialist Forms
+import SADDForm from '@/components/pontoFocalTematico/specialized/SADDForm.vue'
+import SANCForm from '@/components/pontoFocalTematico/specialized/SANCForm.vue'
+import SASBEForm from '@/components/pontoFocalTematico/specialized/SASBEForm.vue'
+import SAADForm from '@/components/pontoFocalTematico/specialized/SAADForm.vue'
+import SAEIEForm from '@/components/pontoFocalTematico/specialized/SAEIEForm.vue'
+import SAPSForm from '@/components/pontoFocalTematico/specialized/SAPSForm.vue'
+import SAPEForm from '@/components/pontoFocalTematico/specialized/SAPEForm.vue'
+
 const route = useRoute()
 const router = useRouter()
 const pfStore = usePontoFocalStore()
@@ -399,9 +417,24 @@ const form = ref({
     dadosColectados: '',
     recomendacoes: ''
   },
+  especializada: {},
   necessidades: [],
   evidencias: [],
   observacoesPF: ''
+})
+
+const specializedComponents = {
+  sadd: SADDForm,
+  sanc: SANCForm,
+  sasbe: SASBEForm,
+  saad: SAADForm,
+  saeie: SAEIEForm,
+  saps: SAPSForm,
+  sape: SAPEForm
+}
+
+const specializedFormComponent = computed(() => {
+  return specializedComponents[pfInfo.value?.id] || null
 })
 
 const ficha = computed(() => pfTematicoStore.getFichaById(route.params.id))
@@ -490,6 +523,7 @@ const submeter = async () => {
   try {
     await pfTematicoStore.submeterFicha(ficha.value.id, {
       diagnostico: form.value.diagnostico,
+      especializada: form.value.especializada,
       necessidades: form.value.necessidades,
       evidencias: form.value.evidencias,
       observacoesPF: form.value.observacoesPF
@@ -505,6 +539,7 @@ const submeter = async () => {
 const loadFichaData = () => {
   if (ficha.value) {
     form.value.diagnostico = { ...ficha.value.diagnostico }
+    form.value.especializada = { ...(ficha.value.especializada || {}) }
     form.value.necessidades = [...(ficha.value.necessidades || [])]
     form.value.evidencias = [...(ficha.value.evidencias || [])]
     form.value.observacoesPF = ficha.value.observacoesPF || ''

@@ -124,10 +124,14 @@ export const MENU_BY_ROLE = {
   
   [ROLES.PF_TEMATICO]: {
     main: [
-      { name: 'pf-tematico', label: 'Minhas Fichas', path: '/app/ponto-focal-tematico', icon: 'FileText' }
+      { name: 'pf-tematico', label: 'Minhas Fichas', path: '/app/ponto-focal-tematico', icon: 'FileText' },
+      { name: 'cadastro-ficha', label: 'Cadastro Ficha', path: '/app/ponto-focal-tematico/cadastro', icon: 'PlusSquare' },
+      { name: 'visitas', label: 'Agenda de Visitas', path: '/app/ponto-focal-tematico/visitas', icon: 'Calendar' },
+      { name: 'biblioteca', label: 'Biblioteca Técnica', path: '/app/ponto-focal-tematico/biblioteca', icon: 'BookOpen' },
+      { name: 'impacto', label: 'Resumo de Impacto', path: '/app/ponto-focal-tematico/impacto', icon: 'BarChart' }
     ],
     sections: [
-      { title: 'PF Tematico', items: ['pf-tematico'] }
+      { title: 'PF Tematico', items: ['pf-tematico', 'cadastro-ficha', 'visitas', 'biblioteca', 'impacto'] }
     ]
   },
   

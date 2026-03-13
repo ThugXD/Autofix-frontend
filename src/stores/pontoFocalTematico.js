@@ -6,6 +6,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
   const fichasTecnicas = ref([])
   const loading = ref(false)
   const currentPFTematico = ref('sadd') // Simula o PF logado
+  const drafts = ref({}) // Armazena rascunhos por fichaId ou (cadastroId + tipo)
 
   // Mock data - Fichas Tecnicas (MOD 3)
   const fichasTecnicasMock = [
@@ -613,6 +614,30 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     const fichas = getFichasByCadastro(cadastroId)
     return fichas.flatMap(f => f.necessidades || [])
   }
+  const childrenNeedingAssessment = computed(() => {
+    // Retorna uma lista unia de criancas baseada nas fichas
+    const uniqueChildren = []
+    const map = new Map()
+    
+    fichasTecnicas.value.forEach(ficha => {
+      if (!map.has(ficha.cadastroId)) {
+        map.set(ficha.cadastroId, {
+          id: ficha.cadastroId,
+          nome: ficha.criancaNome,
+          foto: ficha.criancaFoto,
+          fichas: []
+        })
+        uniqueChildren.push(map.get(ficha.cadastroId))
+      }
+      map.get(ficha.cadastroId).fichas.push({
+        id: ficha.id,
+        tipo: ficha.pfTematico,
+        status: ficha.status
+      })
+    })
+    
+    return uniqueChildren
+  })
 
   // ==================== ACTIONS ====================
   const fetchFichasTecnicas = async () => {
@@ -642,6 +667,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     const ficha = fichasTecnicas.value.find(f => f.id === fichaId)
     if (ficha) {
       ficha.diagnostico = dados.diagnostico
+      ficha.especializada = dados.especializada
       ficha.necessidades = dados.necessidades
       ficha.evidencias = dados.evidencias
       ficha.observacoesPF = dados.observacoesPF
@@ -680,6 +706,16 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
       ficha.feedbackRevisaoN2 = feedback
       ficha.status = 'submetida'
     }
+  }
+
+  const getDraft = (key) => drafts.value[key] || null
+
+  const updateDraft = (key, data) => {
+    drafts.value[key] = { ...data, updatedAt: new Date().toISOString() }
+  }
+
+  const clearDraft = (key) => {
+    delete drafts.value[key]
   }
 
   const salvarOrcamento = async (cadastroId, orcamentos) => {
@@ -732,6 +768,10 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     pedirRevisaoN1,
     aprovarFichaN2,
     pedirRevisaoN2,
-    salvarOrcamento
+    salvarOrcamento,
+    getDraft,
+    updateDraft,
+    clearDraft,
+    childrenNeedingAssessment
   }
 })

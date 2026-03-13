@@ -161,6 +161,42 @@ const router = createRouter({
             allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
           }
         },
+        {
+          path: 'ponto-focal-tematico/cadastro',
+          name: 'pf-tematico-cadastro',
+          component: () => import('@/views/PontoFocalTematico/CadastroFicha.vue'),
+          meta: { 
+            title: 'Novo Cadastro - PF Tematico',
+            allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'ponto-focal-tematico/visitas',
+          name: 'visitas',
+          component: () => import('@/views/PontoFocalTematico/Visitas.vue'),
+          meta: { 
+            title: 'Agenda de Visitas - PF Tematico',
+            allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'ponto-focal-tematico/biblioteca',
+          name: 'biblioteca',
+          component: () => import('@/views/PontoFocalTematico/Biblioteca.vue'),
+          meta: { 
+            title: 'Biblioteca Técnica - PF Tematico',
+            allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'ponto-focal-tematico/impacto',
+          name: 'impacto',
+          component: () => import('@/views/PontoFocalTematico/Impacto.vue'),
+          meta: { 
+            title: 'Resumo de Impacto - PF Tematico',
+            allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
+          }
+        },
 
         // =============================================
         // GESTOR DA ASSOCIACAO

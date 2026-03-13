@@ -371,6 +371,23 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
     }
   }
 
+  const agendarVisitaTecnica = async (cadastroId, pfId, data) => {
+    const cadastro = cadastros.value.find(c => c.id === parseInt(cadastroId))
+    if (cadastro && cadastro.pontosFocais) {
+      const pfItem = cadastro.pontosFocais.find(pf => pf.pfId === pfId)
+      if (pfItem) {
+        pfItem.dataVisita = data
+      } else {
+        cadastro.pontosFocais.push({
+          pfId,
+          dataVisita: data,
+          observacoes: '',
+          status: 'pendente'
+        })
+      }
+    }
+  }
+
   return {
     // State
     comunicacoes,
@@ -395,6 +412,7 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
     addCadastro,
     aprovarComunicacao,
     rejeitarComunicacao,
-    iniciarCadastro
+    iniciarCadastro,
+    agendarVisitaTecnica
   }
 })
