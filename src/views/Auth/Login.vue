@@ -125,8 +125,8 @@
           </form>
 
           <!-- Info Demo -->
-          <div class="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-100">
-            <p class="text-xs text-blue-700">
+          <div class="mt-6 p-3 bg-green-50 rounded-lg border border-green-100">
+            <p class="text-xs text-green-700">
               <strong>Modo Demo:</strong> Selecione um utilizador de teste acima para explorar o sistema com diferentes permissoes.
             </p>
           </div>
@@ -165,18 +165,18 @@
       <div class="relative z-10 flex flex-col justify-center px-16">
         <h2 class="text-4xl font-extrabold mb-4 leading-tight">
           Sistema de Assistencia<br />
-          <span class="text-blue-400">Contínua a Criancas Orfãs</span>
+          <span class="text-green-500">Contínua a Criancas Orfãs</span>
         </h2>
 
         <p class="text-gray-300 text-lg mb-8 max-w-md">
-          Gerencie o apadrinhamento de criancas vulneraveis com
+          Gere o apadrinhamento de criancas vulneraveis com
           transparencia e eficiencia.
         </p>
 
         <div class="flex gap-6">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
-              <Users class="w-5 h-5 text-blue-400" />
+            <div class="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
+              <Users class="w-5 h-5 text-green-400" />
             </div>
             <span class="text-sm text-gray-300">
               6 Perfis de Acesso
@@ -184,8 +184,8 @@
           </div>
 
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
-              <Shield class="w-5 h-5 text-blue-400" />
+            <div class="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
+              <Shield class="w-5 h-5 text-green-400" />
             </div>
             <span class="text-sm text-gray-300">
               Controle de Permissoes
@@ -193,7 +193,7 @@
           </div>
         </div>
 
-        <div class="mt-12 h-1 w-40 bg-gradient-to-r from-blue-500 to-transparent rounded-full"></div>
+        <div class="mt-12 h-1 w-40 bg-gradient-to-r from-green-500 to-transparent rounded-full"></div>
       </div>
     </div>
   </div>
@@ -266,7 +266,7 @@ const getRoleBadgeClass = (role) => {
   const classes = {
     [ROLES.PF_COMUNITARIO]: 'bg-green-100 text-green-700',
     [ROLES.PF_TEMATICO]: 'bg-purple-100 text-purple-700',
-    [ROLES.GESTOR]: 'bg-blue-100 text-blue-700',
+    [ROLES.GESTOR]: 'bg-green-100 text-green-700',
     [ROLES.TUTOR]: 'bg-orange-100 text-orange-700',
     [ROLES.PADRINHO]: 'bg-pink-100 text-pink-700',
     [ROLES.ADMIN]: 'bg-gray-800 text-white'

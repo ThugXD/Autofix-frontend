@@ -35,9 +35,9 @@ const mockApadrinhamentos = [
   {
     id: 1,
     criancaId: '1',
-    criancaNome: 'Ana Beatriz',
+    criancaNome: 'Ana Dlamini',
     criancaIdade: 10,
-    criancaFoto: 'https://i.pravatar.cc/300?img=47',
+    criancaFoto: '/img/children/ana_dlamini.png',
     criancaRegiao: 'Maputo',
     tutorId: 6,
     tutorNome: 'Rosa Tutora',

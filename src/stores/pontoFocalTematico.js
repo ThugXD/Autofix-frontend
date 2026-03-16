@@ -15,7 +15,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
       id: 1,
       cadastroId: 1,
       criancaNome: 'Carlos Alberto Sitoe',
-      criancaFoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+      criancaFoto: '/img/children/joao_nkomo.png',
       pfTematico: 'sadd',
       dataVisitaPlanejada: '2024-03-15',
       dataSubmissao: '2024-03-15',
@@ -286,8 +286,8 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     {
       id: 8,
       cadastroId: 2,
-      criancaNome: 'Ana Beatriz Mabunda',
-      criancaFoto: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop&crop=face',
+      criancaNome: 'Ana Dlamini Mabunda',
+      criancaFoto: '/img/children/ana_dlamini.png',
       pfTematico: 'sadd',
       dataVisitaPlanejada: '2024-03-18',
       dataSubmissao: '2024-03-18',
@@ -319,7 +319,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     {
       id: 9,
       cadastroId: 2,
-      criancaNome: 'Ana Beatriz Mabunda',
+      criancaNome: 'Ana Dlamini Mabunda',
       criancaFoto: '/img/children/maria_silva.png',
       pfTematico: 'sanc',
       dataVisitaPlanejada: '2024-03-19',
@@ -352,7 +352,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     {
       id: 10,
       cadastroId: 2,
-      criancaNome: 'Ana Beatriz Mabunda',
+      criancaNome: 'Ana Dlamini Mabunda',
       criancaFoto: '/img/children/maria_silva.png',
       pfTematico: 'sasbe',
       dataVisitaPlanejada: '2024-03-20',
@@ -372,7 +372,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     {
       id: 11,
       cadastroId: 2,
-      criancaNome: 'Ana Beatriz Mabunda',
+      criancaNome: 'Ana Dlamini Mabunda',
       criancaFoto: '/img/children/maria_silva.png',
       pfTematico: 'saad',
       dataVisitaPlanejada: '2024-03-21',
@@ -388,7 +388,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     {
       id: 12,
       cadastroId: 2,
-      criancaNome: 'Ana Beatriz Mabunda',
+      criancaNome: 'Ana Dlamini Mabunda',
       criancaFoto: '/img/children/maria_silva.png',
       pfTematico: 'saeie',
       dataVisitaPlanejada: '2024-03-22',
@@ -404,7 +404,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     {
       id: 13,
       cadastroId: 2,
-      criancaNome: 'Ana Beatriz Mabunda',
+      criancaNome: 'Ana Dlamini Mabunda',
       criancaFoto: '/img/children/maria_silva.png',
       pfTematico: 'saps',
       dataVisitaPlanejada: '2024-03-23',
@@ -420,7 +420,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
     {
       id: 14,
       cadastroId: 2,
-      criancaNome: 'Ana Beatriz Mabunda',
+      criancaNome: 'Ana Dlamini Mabunda',
       criancaFoto: '/img/children/maria_silva.png',
       pfTematico: 'sape',
       dataVisitaPlanejada: '2024-03-24',
@@ -439,7 +439,7 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
       id: 15,
       cadastroId: 3,
       criancaNome: 'Esperanca Maria Mondlane',
-      criancaFoto: 'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=400&fit=crop&crop=face',
+      criancaFoto: '/img/children/maria_silva.png',
       pfTematico: 'sadd',
       dataVisitaPlanejada: '2024-03-25',
       dataSubmissao: null,
