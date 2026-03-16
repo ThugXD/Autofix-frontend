@@ -56,7 +56,7 @@
           <PieChart class="w-5 h-5 text-primary" />
           Distribuição por Área
         </h2>
-        
+
         <div class="space-y-4">
           <div v-for="area in impactByArea" :key="area.name" class="space-y-1.5">
             <div class="flex items-center justify-between text-sm">
@@ -64,7 +64,7 @@
               <span class="font-bold">{{ formatCurrency(area.total) }}</span>
             </div>
             <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div 
+              <div
                 class="h-full bg-primary transition-all duration-1000"
                 :style="{ width: `${area.percent}%` }"
               ></div>
@@ -76,8 +76,8 @@
       <div class="card p-6 space-y-4">
         <h2 class="text-lg font-bold text-gray-900">Necessidades Críticas Recentes</h2>
         <div class="space-y-3">
-          <div 
-            v-for="need in criticalNeeds" 
+          <div
+            v-for="need in criticalNeeds"
             :key="need.id"
             class="p-4 rounded-xl border border-gray-100 hover:border-primary/20 transition-all bg-gray-50/30"
           >
@@ -99,10 +99,10 @@
 <script setup>
 import { computed } from 'vue'
 import { usePontoFocalTematicoStore } from '@/stores/pontoFocalTematico'
-import { 
-  Coins, 
-  AlertCircle, 
-  Target, 
+import {
+  Coins,
+  AlertCircle,
+  Target,
   PieChart,
   BarChart3,
   CheckCircle2
@@ -153,18 +153,18 @@ const impactByArea = computed(() => {
     saps: 'Proteção',
     sape: 'Psicossocial'
   }
-  
+
   const totals = {}
   Object.keys(areas).forEach(k => totals[k] = 0)
-  
+
   needsList.value.forEach(n => {
     if (totals[n.area] !== undefined) {
       totals[n.area] += (n.custoEstimado || 0)
     }
   })
-  
+
   const max = Math.max(...Object.values(totals), 1)
-  
+
   return Object.entries(areas).map(([k, label]) => ({
     name: label,
     total: totals[k],
@@ -186,9 +186,10 @@ const getAreaLabel = (id) => {
 }
 
 const formatCurrency = (val) => {
-  return new Intl.NumberFormat('pt-MZ', {
-    style: 'currency',
-    currency: 'MZN'
-  }).format(val)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return val.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 </script>

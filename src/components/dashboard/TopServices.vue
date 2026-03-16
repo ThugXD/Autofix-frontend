@@ -89,10 +89,10 @@ const getBarColor = (index) => {
 }
 
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'MZN',
-    minimumFractionDigits: 0
-  }).format(value)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return value.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 </script>

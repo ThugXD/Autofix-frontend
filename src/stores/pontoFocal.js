@@ -67,7 +67,7 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
       codigo: 'COM-2024-001',
       nome: 'Esperanca Mondlane',
       idadeAproximada: 8,
-      foto: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
+      foto: 'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=400&fit=crop&crop=face',
       bairro: 'Maxaquene A',
       descricao: 'Crianca encontrada em situacao de vulnerabilidade. Vive com a avo que nao tem condicoes de sustento.',
       contactoTutor: '84 123 4567',
@@ -80,7 +80,7 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
       codigo: 'COM-2024-002',
       nome: 'Carlos Sitoe',
       idadeAproximada: 12,
-      foto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
+      foto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
       bairro: 'Chamanculo C',
       descricao: 'Orfao de ambos os pais. Vive com tio que trabalha como vendedor ambulante.',
       contactoTutor: '82 987 6543',
@@ -93,7 +93,7 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
       codigo: 'COM-2024-003',
       nome: 'Ana Mabunda',
       idadeAproximada: 6,
-      foto: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop',
+      foto: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop&crop=face',
       bairro: 'Polana Canico',
       descricao: 'Crianca fora do sistema escolar. Mae solteira sem emprego fixo.',
       contactoTutor: '86 555 1234',
@@ -106,7 +106,7 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
       codigo: 'COM-2024-004',
       nome: 'Pedro Nhamussua',
       idadeAproximada: 10,
-      foto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
+      foto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
       bairro: 'Hulene B',
       descricao: 'Crianca com deficiencia motora. Familia muito pobre.',
       contactoTutor: '84 777 8888',
@@ -118,19 +118,18 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
 
   // Mock data - Cadastros (MOD 2)
   const cadastrosMock = [
+    // === AGUARDANDO REVISÃO N2 ===
     {
       id: 1,
       comunicacaoId: 2,
       codigo: 'CAD-2024-001',
-      // FICHA 00 - Identificacao
       nomeCompleto: 'Carlos Alberto Sitoe',
-      foto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
+      foto: 'https://images.unsplash.com/photo-1545171519-4ec7cdb9f0ef?w=200&h=200&fit=crop',
       dataNascimento: '2012-05-15',
       sexo: 'M',
       localResidencia: 'Chamanculo C, Rua 25',
       provincia: 'Maputo Cidade',
       distrito: 'KaMpfumo',
-      // FICHA 00 - Situacao Familiar
       nomeMae: 'Rosa Sitoe',
       situacaoMae: 'falecida',
       nomePai: 'Alberto Sitoe',
@@ -138,58 +137,53 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
       tutorNome: 'Manuel Sitoe (Tio)',
       tutorContacto: '82 987 6543',
       numeroIrmaos: 2,
-      situacaoEconomica: 'Familia em situacao de pobreza extrema. O tio trabalha como vendedor ambulante e mal consegue sustentar a propria familia.',
-      // FICHA 00 - Vulnerabilidades
+      situacaoEconomica: 'Familia em situacao de pobreza extrema. O tio trabalha como vendedor ambulante.',
       vulnerabilidades: ['pobreza_extrema', 'orfao_ambos', 'fora_escola'],
-      outraVulnerabilidade: '',
-      // FICHA 00 - Observacoes
-      observacoes: 'Carlos e uma crianca inteligente e resiliente. Apesar das dificuldades, demonstra vontade de estudar.',
-      // Pontos Focais Selecionados
+      observacoes: 'Carlos e uma crianca inteligente e resiliente. Todas as avaliacoes tecnicas foram concluidas.',
       pontosFocais: [
-        { pfId: 'sadd', dataVisita: '2024-03-15', observacoes: 'Precisa de certidao de nascimento', status: 'concluido' },
-        { pfId: 'sanc', dataVisita: '2024-03-16', observacoes: 'Avaliacao nutricional urgente', status: 'concluido' },
-        { pfId: 'sasbe', dataVisita: '2024-03-17', observacoes: 'Check-up geral', status: 'concluido' },
-        { pfId: 'saad', dataVisita: '2024-03-18', observacoes: 'Verificar alimentacao diaria', status: 'concluido' },
-        { pfId: 'saeie', dataVisita: '2024-03-19', observacoes: 'Reintegracao escolar', status: 'concluido' },
-        { pfId: 'saps', dataVisita: '2024-03-20', observacoes: 'Avaliacao de seguranca', status: 'concluido' },
-        { pfId: 'sape', dataVisita: '2024-03-21', observacoes: 'Apoio psicologico pelo trauma', status: 'concluido' }
+        { pfId: 'sadd', dataVisita: '2024-03-15', observacoes: 'Documentacao completa', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-03-16', observacoes: 'Avaliacao nutricional concluida', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-03-17', observacoes: 'Check-up geral realizado', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-03-18', observacoes: 'Plano alimentar definido', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-03-19', observacoes: 'Inscricao escolar garantida', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-03-20', observacoes: 'Avaliacao de protecao concluida', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-03-21', observacoes: 'Apoio psicologico iniciado', status: 'concluido' }
       ],
       status: 'aguardando_revisao',
       dataCriacao: '2024-03-10',
-      criadoPor: 'Joao Silva'
+      criadoPor: 'João Silva'
     },
     {
       id: 2,
       comunicacaoId: 3,
       codigo: 'CAD-2024-002',
       nomeCompleto: 'Ana Beatriz Mabunda',
-      foto: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop',
+      foto: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=200&h=200&fit=crop',
       dataNascimento: '2018-08-22',
       sexo: 'F',
-      localResidencia: 'Polana Canico A, Av. Julius Nyerere',
+      localResidencia: 'Polana Caniço A, Av. Julius Nyerere',
       provincia: 'Maputo Cidade',
       distrito: 'KaMpfumo',
       nomeMae: 'Teresa Mabunda',
       situacaoMae: 'viva',
       nomePai: 'Desconhecido',
       situacaoPai: 'desaparecido',
-      tutorNome: 'Teresa Mabunda (Mae)',
+      tutorNome: 'Teresa Mabunda (Mãe)',
       tutorContacto: '86 555 1234',
       numeroIrmaos: 3,
-      situacaoEconomica: 'Mae solteira sem emprego fixo. Faz trabalhos domesticos esporadicos.',
+      situacaoEconomica: 'Mãe solteira sem emprego fixo.',
       vulnerabilidades: ['pobreza_extrema', 'fora_escola', 'malnutricao'],
-      outraVulnerabilidade: '',
-      observacoes: 'Crianca timida mas afetuosa. Necessita urgentemente de apoio escolar.',
+      observacoes: 'Todas as fichas técnicas foram concluídas pelos especialistas.',
       pontosFocais: [
-        { pfId: 'sadd', dataVisita: '2024-03-18', observacoes: 'Verificar documentacao', status: 'concluido' },
-        { pfId: 'sanc', dataVisita: '2024-03-19', observacoes: 'Nutricao prioritaria', status: 'concluido' },
-        { pfId: 'sasbe', dataVisita: '2024-03-20', observacoes: 'Saude geral', status: 'em_andamento' },
-        { pfId: 'saad', dataVisita: '2024-03-21', observacoes: 'Alimentacao', status: 'pendente' },
-        { pfId: 'saeie', dataVisita: '2024-03-22', observacoes: 'Inscricao escolar', status: 'pendente' },
-        { pfId: 'saps', dataVisita: '2024-03-23', observacoes: 'Protecao', status: 'pendente' },
-        { pfId: 'sape', dataVisita: '2024-03-24', observacoes: 'Psico-social', status: 'pendente' }
+        { pfId: 'sadd', dataVisita: '2024-03-18', observacoes: 'Documentação verificada', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-03-19', observacoes: 'Plano nutricional definido', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-03-20', observacoes: 'Acompanhamento médico iniciado', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-03-21', observacoes: 'Programa alimentar implementado', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-03-22', observacoes: 'Matrícula escolar realizada', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-03-23', observacoes: 'Medidas de proteção aplicadas', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-03-24', observacoes: 'Apoio psicológico em curso', status: 'concluido' }
       ],
-      status: 'em_andamento',
+      status: 'aguardando_revisao',
       dataCriacao: '2024-03-12',
       criadoPor: 'Maria Santos'
     },
@@ -197,36 +191,283 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
       id: 3,
       comunicacaoId: 1,
       codigo: 'CAD-2024-003',
-      nomeCompleto: 'Esperanca Maria Mondlane',
-      foto: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
+      nomeCompleto: 'Esperança Maria Mondlane',
+      foto: 'https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=200&h=200&fit=crop',
       dataNascimento: '2016-02-10',
       sexo: 'F',
       localResidencia: 'Maxaquene A, Bloco 5',
       provincia: 'Maputo Cidade',
       distrito: 'KaMaxaqueni',
-      nomeMae: 'Lucia Mondlane',
+      nomeMae: 'Lúcia Mondlane',
       situacaoMae: 'falecida',
-      nomePai: 'Jose Mondlane',
+      nomePai: 'José Mondlane',
       situacaoPai: 'desaparecido',
-      tutorNome: 'Marta Mondlane (Avo)',
+      tutorNome: 'Marta Mondlane (Avó)',
       tutorContacto: '84 123 4567',
       numeroIrmaos: 1,
-      situacaoEconomica: 'Vive com a avo idosa que sobrevive de ajudas dos vizinhos.',
+      situacaoEconomica: 'Vive com a avó idosa em situação de extrema pobreza.',
       vulnerabilidades: ['pobreza_extrema', 'orfao_um', 'negligencia'],
-      outraVulnerabilidade: '',
-      observacoes: 'Crianca necessita de atencao urgente. Avo com saude fragilizada.',
+      observacoes: 'Avaliações técnicas concluídas. Aguardando revisão final.',
       pontosFocais: [
-        { pfId: 'sadd', dataVisita: '2024-03-25', observacoes: 'Documentacao urgente', status: 'pendente' },
-        { pfId: 'sanc', dataVisita: '2024-03-26', observacoes: 'Nutricao', status: 'pendente' },
-        { pfId: 'sasbe', dataVisita: '2024-03-27', observacoes: 'Saude', status: 'pendente' },
-        { pfId: 'saad', dataVisita: '2024-03-28', observacoes: 'Alimentacao', status: 'pendente' },
-        { pfId: 'saeie', dataVisita: '2024-03-29', observacoes: 'Educacao', status: 'pendente' },
-        { pfId: 'saps', dataVisita: '2024-03-30', observacoes: 'Protecao', status: 'pendente' },
-        { pfId: 'sape', dataVisita: '2024-03-31', observacoes: 'Psico-social', status: 'pendente' }
+        { pfId: 'sadd', dataVisita: '2024-03-25', observacoes: 'Documentação legal completa', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-03-26', observacoes: 'Suplementação nutricional necessária', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-03-27', observacoes: 'Acompanhamento médico regular', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-03-28', observacoes: 'Refeições escolares garantidas', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-03-29', observacoes: 'Reintegração escolar bem-sucedida', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-03-30', observacoes: 'Proteção social assegurada', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-03-31', observacoes: 'Apoio psicológico contínuo', status: 'concluido' }
       ],
-      status: 'iniciado',
+      status: 'aguardando_revisao',
       dataCriacao: '2024-03-14',
       criadoPor: 'Pedro Nkomo'
+    },
+
+    // === DEFINIR ORÇAMENTO ===
+    {
+      id: 4,
+      codigo: 'CAD-2024-004',
+      nomeCompleto: 'João Pedro Santos',
+      foto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
+      dataNascimento: '2014-11-08',
+      sexo: 'M',
+      localResidencia: 'Mafalala, Rua Principal',
+      provincia: 'Maputo Cidade',
+      distrito: 'Nlhamankulu',
+      nomeMae: 'Catarina Santos',
+      situacaoMae: 'viva',
+      nomePai: 'Pedro Santos',
+      situacaoPai: 'viva',
+      tutorNome: 'Catarina Santos (Mãe)',
+      tutorContacto: '87 444 7777',
+      numeroIrmaos: 4,
+      situacaoEconomica: 'Família numerosa em situação de vulnerabilidade econômica.',
+      vulnerabilidades: ['pobreza_extrema', 'malnutricao'],
+      observacoes: 'Aprovado na revisão N2. Aguardando definição de orçamento.',
+      pontosFocais: [
+        { pfId: 'sadd', dataVisita: '2024-03-10', observacoes: 'Documentação em dia', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-03-11', observacoes: 'Crescimento adequado', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-03-12', observacoes: 'Saúde estável', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-03-13', observacoes: 'Alimentação básica assegurada', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-03-14', observacoes: 'Frequenta escola regularmente', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-03-15', observacoes: 'Ambiente familiar seguro', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-03-16', observacoes: 'Bem-estar emocional adequado', status: 'concluido' }
+      ],
+      status: 'orcamento',
+      dataCriacao: '2024-03-08',
+      criadoPor: 'Ana Costa'
+    },
+    {
+      id: 5,
+      codigo: 'CAD-2024-005',
+      nomeCompleto: 'Teresa Cumbane',
+      foto: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=200&h=200&fit=crop',
+      dataNascimento: '2017-01-30',
+      sexo: 'F',
+      localResidencia: 'Hulene B, Sector 3',
+      provincia: 'Maputo Cidade',
+      distrito: 'KaMavota',
+      nomeMae: 'Júlia Cumbane',
+      situacaoMae: 'viva',
+      nomePai: 'Manuel Cumbane',
+      situacaoPai: 'falecido',
+      tutorNome: 'Júlia Cumbane (Mãe)',
+      tutorContacto: '83 222 8888',
+      numeroIrmaos: 2,
+      situacaoEconomica: 'Mãe viúva com dificuldades econômicas.',
+      vulnerabilidades: ['pobreza_extrema', 'orfao_um'],
+      observacoes: 'Revisão N2 aprovada. Orçamento pendente.',
+      pontosFocais: [
+        { pfId: 'sadd', dataVisita: '2024-03-12', observacoes: 'Certidão de nascimento obtida', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-03-13', observacoes: 'Peso adequado para idade', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-03-14', observacoes: 'Vacinas em dia', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-03-15', observacoes: 'Refeições escolares', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-03-16', observacoes: 'Material escolar fornecido', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-03-17', observacoes: 'Acompanhamento social', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-03-18', observacoes: 'Apoio emocional necessário', status: 'concluido' }
+      ],
+      status: 'orcamento',
+      dataCriacao: '2024-03-10',
+      criadoPor: 'Carlos Mendes'
+    },
+
+    // === PRONTOS PARA PUBLICAÇÃO ===
+    {
+      id: 6,
+      codigo: 'CAD-2024-006',
+      nomeCompleto: 'Manuel António',
+      foto: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop',
+      dataNascimento: '2013-07-12',
+      sexo: 'M',
+      localResidencia: 'Zimpeto, Bairro Central',
+      provincia: 'Maputo Cidade',
+      distrito: 'KaMubukwana',
+      nomeMae: 'Antónia Manuel',
+      situacaoMae: 'viva',
+      nomePai: 'José António',
+      situacaoPai: 'falecido',
+      tutorNome: 'Antónia Manuel (Mãe)',
+      tutorContacto: '85 777 3333',
+      numeroIrmaos: 3,
+      situacaoEconomica: 'Família monoparental com rendimentos instáveis.',
+      vulnerabilidades: ['pobreza_extrema', 'orfao_um'],
+      observacoes: 'Orçamento definido. Pronto para publicação no catálogo.',
+      orcamentoAnual: 420000,
+      pontosFocais: [
+        { pfId: 'sadd', dataVisita: '2024-03-05', observacoes: 'Documentação completa', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-03-06', observacoes: 'Suplementação alimentar', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-03-07', observacoes: 'Consulta pediátrica', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-03-08', observacoes: 'Programa de merenda escolar', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-03-09', observacoes: 'Uniforme e material escolar', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-03-10', observacoes: 'Acompanhamento familiar', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-03-11', observacoes: 'Atividades recreativas', status: 'concluido' }
+      ],
+      status: 'pronto',
+      dataCriacao: '2024-03-01',
+      criadoPor: 'Sofia Rodrigues'
+    },
+    {
+      id: 7,
+      codigo: 'CAD-2024-007',
+      nomeCompleto: 'Lúcia Fernandes',
+      foto: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop',
+      dataNascimento: '2015-12-03',
+      sexo: 'F',
+      localResidencia: 'Aeroporto, Sector 4',
+      provincia: 'Maputo Cidade',
+      distrito: 'KaMavota',
+      nomeMae: 'Maria Fernandes',
+      situacaoMae: 'viva',
+      nomePai: 'Carlos Fernandes',
+      situacaoPai: 'viva',
+      tutorNome: 'Maria Fernandes (Mãe)',
+      tutorContacto: '89 111 9999',
+      numeroIrmaos: 1,
+      situacaoEconomica: 'Família com dificuldades econômicas.',
+      vulnerabilidades: ['pobreza_extrema'],
+      observacoes: 'Orçamento anual definido. Aguardando publicação.',
+      orcamentoAnual: 380000,
+      pontosFocais: [
+        { pfId: 'sadd', dataVisita: '2024-03-08', observacoes: 'Registro civil atualizado', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-03-09', observacoes: 'Crescimento normal', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-03-10', observacoes: 'Saúde preventiva', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-03-11', observacoes: 'Alimentação balanceada', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-03-12', observacoes: 'Desempenho escolar bom', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-03-13', observacoes: 'Ambiente familiar estável', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-03-14', observacoes: 'Desenvolvimento emocional adequado', status: 'concluido' }
+      ],
+      status: 'pronto',
+      dataCriacao: '2024-03-05',
+      criadoPor: 'Miguel António'
+    },
+
+    // === PUBLICADOS ===
+    {
+      id: 8,
+      codigo: 'CAD-2024-008',
+      nomeCompleto: 'Pedro Miguel',
+      foto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
+      dataNascimento: '2011-09-18',
+      sexo: 'M',
+      localResidencia: 'Sommerschield, Rua 10',
+      provincia: 'Maputo Cidade',
+      distrito: 'KaMpfumo',
+      nomeMae: 'Isabel Miguel',
+      situacaoMae: 'viva',
+      nomePai: 'João Miguel',
+      situacaoPai: 'falecido',
+      tutorNome: 'Isabel Miguel (Mãe)',
+      tutorContacto: '81 666 4444',
+      numeroIrmaos: 2,
+      situacaoEconomica: 'Viúva com três filhos. Trabalha como empregada doméstica.',
+      vulnerabilidades: ['pobreza_extrema', 'orfao_um'],
+      observacoes: 'Publicado no catálogo em janeiro de 2024.',
+      orcamentoAnual: 450000,
+      padrinhoId: 1,
+      dataPublicacao: '15/01/2024',
+      pontosFocais: [
+        { pfId: 'sadd', dataVisita: '2024-01-10', observacoes: 'Documentação completa', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-01-11', observacoes: 'Avaliação nutricional', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-01-12', observacoes: 'Exame médico geral', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-01-13', observacoes: 'Programa alimentar', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-01-14', observacoes: 'Material escolar', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-01-15', observacoes: 'Acompanhamento social', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-01-16', observacoes: 'Apoio psicológico', status: 'concluido' }
+      ],
+      status: 'publicado',
+      dataCriacao: '2024-01-05',
+      criadoPor: 'Ana Silva'
+    },
+    {
+      id: 9,
+      codigo: 'CAD-2024-009',
+      nomeCompleto: 'Sofia Cristina',
+      foto: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop',
+      dataNascimento: '2016-04-25',
+      sexo: 'F',
+      localResidencia: 'Costa do Sol, Rua 15',
+      provincia: 'Maputo Cidade',
+      distrito: 'KaMpfumo',
+      nomeMae: 'Cristina Sofia',
+      situacaoMae: 'viva',
+      nomePai: 'Manuel Sofia',
+      situacaoPai: 'desaparecido',
+      tutorNome: 'Cristina Sofia (Mãe)',
+      tutorContacto: '88 333 7777',
+      numeroIrmaos: 1,
+      situacaoEconomica: 'Mãe solteira com dificuldades econômicas.',
+      vulnerabilidades: ['pobreza_extrema', 'orfao_um'],
+      observacoes: 'Publicada no catálogo em fevereiro de 2024.',
+      orcamentoAnual: 400000,
+      padrinhoId: 2,
+      dataPublicacao: '20/02/2024',
+      pontosFocais: [
+        { pfId: 'sadd', dataVisita: '2024-02-05', observacoes: 'Certidão de nascimento', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2024-02-06', observacoes: 'Controle de crescimento', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2024-02-07', observacoes: 'Vacinação completa', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2024-02-08', observacoes: 'Refeições escolares', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2024-02-09', observacoes: 'Inscrição escolar', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2024-02-10', observacoes: 'Proteção infantil', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2024-02-11', observacoes: 'Apoio emocional', status: 'concluido' }
+      ],
+      status: 'publicado',
+      dataCriacao: '2024-02-01',
+      criadoPor: 'João Pereira'
+    },
+    {
+      id: 10,
+      codigo: 'CAD-2024-010',
+      nomeCompleto: 'Ricardo João',
+      foto: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop',
+      dataNascimento: '2012-11-14',
+      sexo: 'M',
+      localResidencia: 'Bairro Triunfo, Rua 8',
+      provincia: 'Maputo Cidade',
+      distrito: 'Nlhamankulu',
+      nomeMae: 'Joana Ricardo',
+      situacaoMae: 'viva',
+      nomePai: 'António Ricardo',
+      situacaoPai: 'falecido',
+      tutorNome: 'Joana Ricardo (Mãe)',
+      tutorContacto: '84 999 2222',
+      numeroIrmaos: 2,
+      situacaoEconomica: 'Família em situação de pobreza.',
+      vulnerabilidades: ['pobreza_extrema', 'orfao_um'],
+      observacoes: 'Publicado no catálogo em dezembro de 2023.',
+      orcamentoAnual: 380000,
+      padrinhoId: null,
+      dataPublicacao: '10/12/2023',
+      pontosFocais: [
+        { pfId: 'sadd', dataVisita: '2023-12-01', observacoes: 'Documentação legal', status: 'concluido' },
+        { pfId: 'sanc', dataVisita: '2023-12-02', observacoes: 'Avaliação nutricional', status: 'concluido' },
+        { pfId: 'sasbe', dataVisita: '2023-12-03', observacoes: 'Saúde geral', status: 'concluido' },
+        { pfId: 'saad', dataVisita: '2023-12-04', observacoes: 'Alimentação diária', status: 'concluido' },
+        { pfId: 'saeie', dataVisita: '2023-12-05', observacoes: 'Educação formal', status: 'concluido' },
+        { pfId: 'saps', dataVisita: '2023-12-06', observacoes: 'Proteção social', status: 'concluido' },
+        { pfId: 'sape', dataVisita: '2023-12-07', observacoes: 'Saúde mental', status: 'concluido' }
+      ],
+      status: 'publicado',
+      dataCriacao: '2023-11-25',
+      criadoPor: 'Maria José'
     }
   ]
 
@@ -247,31 +488,31 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
   ])
 
   // ==================== GETTERS ====================
-  const comunicacoesPendentes = computed(() => 
+  const comunicacoesPendentes = computed(() =>
     comunicacoes.value.filter(c => c.status === 'pendente')
   )
 
-  const comunicacoesAprovadas = computed(() => 
+  const comunicacoesAprovadas = computed(() =>
     comunicacoes.value.filter(c => c.status === 'aprovada')
   )
 
-  const cadastrosEmAndamento = computed(() => 
+  const cadastrosEmAndamento = computed(() =>
     cadastros.value.filter(c => c.status === 'em_andamento' || c.status === 'iniciado')
   )
 
-  const cadastrosAguardandoRevisao = computed(() => 
+  const cadastrosAguardandoRevisao = computed(() =>
     cadastros.value.filter(c => c.status === 'aguardando_revisao' || c.status === 'pendente_n2')
   )
 
-  const cadastrosOrcamento = computed(() => 
+  const cadastrosOrcamento = computed(() =>
     cadastros.value.filter(c => c.status === 'orcamento')
   )
 
-  const cadastrosProntos = computed(() => 
+  const cadastrosProntos = computed(() =>
     cadastros.value.filter(c => c.status === 'pronto')
   )
 
-  const cadastrosPublicados = computed(() => 
+  const cadastrosPublicados = computed(() =>
     cadastros.value.filter(c => c.status === 'publicado')
   )
 
@@ -438,7 +679,7 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
     loading,
     pontosFocaisTematicos,
     vulnerabilidadesDisponiveis,
-    
+
     // Getters
     comunicacoesPendentes,
     comunicacoesAprovadas,
@@ -448,7 +689,7 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
     cadastrosProntos,
     cadastrosPublicados,
     getProgressoCadastro,
-    
+
     // Actions
     fetchComunicacoes,
     fetchCadastros,

@@ -235,7 +235,7 @@
 
 <script setup>
 import { ref, computed, shallowRef } from 'vue'
-import { 
+import {
   Download, Users, Heart, Wallet, TrendingUp,
   Stethoscope, Apple, Brain, Salad, FileText, ShieldCheck,
   UserPlus, CheckCircle, Globe
@@ -310,10 +310,10 @@ const totalExecucao = computed(() => Math.round((totalExecutado.value / totalOrc
 
 // Methods
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('pt-AO', {
-    style: 'currency',
-    currency: 'AOA',
-    minimumFractionDigits: 0
-  }).format(value)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return value.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 </script>

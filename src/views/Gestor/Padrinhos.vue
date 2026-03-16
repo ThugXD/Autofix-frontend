@@ -253,7 +253,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { 
+import {
   Users, Heart, Clock, Globe, Search, Eye, Mail, CheckCircle
 } from 'lucide-vue-next'
 import BaseModal from '@/components/common/BaseModal.vue'
@@ -385,11 +385,11 @@ const padrinhosFiltrados = computed(() => {
 
 // Methods
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('pt-AO', {
-    style: 'currency',
-    currency: 'AOA',
-    minimumFractionDigits: 0
-  }).format(value)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return value.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 
 const getInitials = (nome) => {

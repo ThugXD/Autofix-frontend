@@ -107,9 +107,10 @@ const statusColor = computed(() => {
 })
 
 const formatarMoeda = (valor) => {
-  return new Intl.NumberFormat('pt-MZ', {
-    style: 'currency',
-    currency: 'MZN'
-  }).format(valor)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return valor.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 </script>

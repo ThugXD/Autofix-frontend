@@ -39,9 +39,9 @@
     <section id="inicio" class="relative w-full h-screen min-h-[600px] flex flex-col justify-center items-center overflow-hidden pt-20">
       <!-- Background Image with Overlay -->
       <div class="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop" 
-          alt="Crianças sorrindo" 
+        <img
+          src="https://images.unsplash.com/photo-1524503033411-c9566986fc8f?q=80&w=2070&auto=format&fit=crop"
+          alt="Crianças sorrindo"
           class="w-full h-full object-cover opacity-50"
         />
         <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-[#050505]/50 to-[#050505]"></div>
@@ -52,9 +52,9 @@
         <!-- Floating Pill com Avatares -->
         <div class="flex items-center justify-center gap-2 bg-black/50 backdrop-blur-sm border border-white/10 rounded-full pl-2 pr-4 py-1.5 mb-6 shadow-xl">
            <div class="flex -space-x-2">
-              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://i.pravatar.cc/100?img=1" alt="Avatar">
-              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://i.pravatar.cc/100?img=5" alt="Avatar">
-              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://i.pravatar.cc/100?img=3" alt="Avatar">
+              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Avatar">
+              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop&crop=face" alt="Avatar">
+              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face" alt="Avatar">
            </div>
            <span class="text-xs font-medium text-gray-300 ml-1">500+ padrinhos ativos</span>
         </div>
@@ -109,7 +109,7 @@
     <section id="catalogo" class="flex-grow py-16 px-4 sm:px-8 max-w-7xl mx-auto w-full bg-gray-50">
       <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 pb-6">
         <h2 class="text-2xl font-bold text-gray-900">Novas Crianças</h2>
-        
+
         <!-- Filtros -->
         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
           <div class="relative flex-1 md:w-48">
@@ -182,7 +182,7 @@
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
+
               <!-- Badge Over Image -->
               <div class="absolute bottom-3 left-3 right-3 flex justify-between items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <span class="text-white font-bold text-lg drop-shadow-md truncate max-w-[70%]">
@@ -200,14 +200,14 @@
                 {{ crianca.status }}
               </span>
             </div>
-            
+
             <div class="p-5 flex flex-col flex-grow">
               <h3 class="text-lg font-extrabold text-gray-900 mb-1 group-hover:text-[#171717] transition-colors line-clamp-1">{{ crianca.nome }}</h3>
               <p class="text-xs text-gray-500 font-medium mb-3 flex items-center">
                 <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                 {{ crianca.idade }} anos • {{ crianca.regiao }}
               </p>
-              
+
               <div class="flex flex-wrap gap-1.5 mb-4">
                 <span
                   v-for="(vuln, idx) in crianca.vulnerabilidades.slice(0, 2)"
@@ -220,7 +220,7 @@
                   +{{ crianca.vulnerabilidades.length - 2 }}
                 </span>
               </div>
-              
+
               <div class="mt-auto pt-4 border-t border-gray-100 flex justify-between items-center">
                 <div>
                   <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">Orçamento</p>
@@ -290,7 +290,11 @@
   }
 
   const formatarMoeda = (valor) => {
-    return new Intl.NumberFormat('pt-MZ', { style: 'currency', currency: 'MZN' }).format(valor)
+    // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+    return valor.toLocaleString('de-DE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }) + ' MZN'
   }
 
   const scrolled = ref(false)

@@ -1,12 +1,12 @@
 <template>
   <div class="p-6 space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between bg-white rounded-xl p-5 border border-gray-100">
       <div>
         <h1 class="text-2xl font-bold text-gray-900">Painel do Ponto Focal Tematico</h1>
         <p class="text-gray-500 mt-1">Gerencie suas fichas tecnicas e avaliacoes</p>
       </div>
-      
+
       <!-- Selector de PF Tematico (para demo) -->
       <div class="flex items-center gap-3">
         <label class="text-sm text-gray-600">Simular como:</label>
@@ -74,7 +74,7 @@
     </div>
 
     <!-- Current PF Info -->
-    <div class="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-5 border border-primary/20">
+    <div class="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-5 bg-white border border-primary/20">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
           <component :is="getPFIcon(currentPFInfo?.id)" class="w-6 h-6 text-primary" />
@@ -153,7 +153,7 @@
               </span>
               <router-link
                 :to="`/ponto-focal-tematico/ficha/${ficha.id}`"
-                class="btn-primary text-sm"
+                class="btn-primary text-sm border border-primary hover:bg-primary/10 rounded-full px-2 py-2"
               >
                 Iniciar Avaliacao
               </router-link>
@@ -195,7 +195,7 @@
               </span>
               <router-link
                 :to="`/ponto-focal-tematico/ficha/${ficha.id}`"
-                class="btn-primary text-sm"
+                class="btn-primary text-sm border border-primary hover:bg-primary/10 rounded-full px-2 py-2"
               >
                 Continuar
               </router-link>
@@ -280,7 +280,7 @@ const fichasEmAndamento = computed(() => pfTematicoStore.fichasEmAndamento)
 const fichasSubmetidas = computed(() => pfTematicoStore.fichasSubmetidas)
 const minhasFichas = computed(() => pfTematicoStore.minhasFichas)
 
-const currentPFInfo = computed(() => 
+const currentPFInfo = computed(() =>
   pontosFocais.value.find(pf => pf.id === pfTematicoStore.currentPFTematico)
 )
 

@@ -1,9 +1,10 @@
 <template>
-  <div class="space-y-6">
+  <div class="p-6 space-y-6">
+    <!-- Header -->
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">Mensagens</h1>
-        <p class="text-gray-500 mt-1">Comunique com os tutores e pontos focais</p>
+        <h1 class="text-2xl font-bold text-gray-900">Centro de Mensagens</h1>
+        <p class="text-gray-500 mt-1">Comunique com outros utilizadores do sistema</p>
       </div>
       <button @click="showModalNova = true" class="btn-primary">
         <Plus class="w-4 h-4 mr-2" />
@@ -11,15 +12,16 @@
       </button>
     </div>
 
+    <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-            <Inbox class="w-5 h-5 text-blue-600" />
+            <Mail class="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <p class="text-2xl font-bold text-gray-900">{{ mensagensRecebidas.length }}</p>
-            <p class="text-sm text-gray-500">Recebidas</p>
+            <p class="text-2xl font-bold text-gray-900">{{ mensagens.filter(m => !m.lida).length }}</p>
+            <p class="text-sm text-gray-500">Não Lidas</p>
           </div>
         </div>
       </div>
@@ -30,7 +32,7 @@
             <Send class="w-5 h-5 text-green-600" />
           </div>
           <div>
-            <p class="text-2xl font-bold text-gray-900">{{ mensagensEnviadas.length }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ mensagens.filter(m => m.direcao === 'enviada').length }}</p>
             <p class="text-sm text-gray-500">Enviadas</p>
           </div>
         </div>
@@ -39,11 +41,11 @@
       <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-            <Users class="w-5 h-5 text-purple-600" />
+            <Inbox class="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <p class="text-2xl font-bold text-gray-900">{{ conversasUnicas }}</p>
-            <p class="text-sm text-gray-500">Conversas</p>
+            <p class="text-2xl font-bold text-gray-900">{{ mensagens.filter(m => m.direcao === 'recebida').length }}</p>
+            <p class="text-sm text-gray-500">Recebidas</p>
           </div>
         </div>
       </div>
@@ -51,16 +53,17 @@
       <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
-            <Bell class="w-5 h-5 text-amber-600" />
+            <Users class="w-5 h-5 text-amber-600" />
           </div>
           <div>
-            <p class="text-2xl font-bold text-gray-900">{{ novasMensagens }}</p>
-            <p class="text-sm text-gray-500">Não lidas</p>
+            <p class="text-2xl font-bold text-gray-900">{{ conversasUnicas }}</p>
+            <p class="text-sm text-gray-500">Conversas</p>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Tabs -->
     <div class="border-b border-gray-200">
       <nav class="flex gap-6">
         <button
@@ -88,6 +91,7 @@
       </nav>
     </div>
 
+    <!-- Tab: Caixa de Entrada -->
     <div v-if="activeTab === 'recebidas'" class="space-y-4">
       <div v-if="mensagensRecebidas.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
         <Inbox class="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -132,6 +136,7 @@
       </div>
     </div>
 
+    <!-- Tab: Enviadas -->
     <div v-if="activeTab === 'enviadas'" class="space-y-4">
       <div v-if="mensagensEnviadas.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-100">
         <Send class="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -162,19 +167,26 @@
       </div>
     </div>
 
+    <!-- Modal Nova Mensagem -->
     <BaseModal v-model="showModalNova" title="Nova Mensagem" size="lg">
       <form @submit.prevent="enviarMensagem" class="space-y-6">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Destinatário</label>
           <select v-model="formMensagem.destinatario" required class="input w-full">
             <option value="">Selecione um destinatário</option>
-            <optgroup label="Tutors">
-              <option value="Ana Tutor">Ana Tutor</option>
-              <option value="Carlos Tutor">Carlos Tutor</option>
+            <optgroup label="Ponto Focal Comunitário">
+              <option value="João Silva (PF Comunitário)">João Silva (PF Comunitário)</option>
             </optgroup>
-            <optgroup label="Pontos Focais">
-              <option value="João Silva">João Silva</option>
-              <option value="Maria Santos">Maria Santos</option>
+            <optgroup label="Ponto Focal Temático">
+              <option value="Maria Santos (PF Temático)">Maria Santos (PF Temático)</option>
+            </optgroup>
+            <optgroup label="Tutores">
+              <option value="Ana Tutor (Tutor)">Ana Tutor (Tutor)</option>
+            </optgroup>
+            <optgroup label="Padrinhos">
+              <option value="Pedro Padrinho (Padrinho)">Pedro Padrinho (Padrinho)</option>
+              <option value="Jean Pierre Dubois (Padrinho)">Jean Pierre Dubois (Padrinho)</option>
+              <option value="Maria Garcia (Padrinho)">Maria Garcia (Padrinho)</option>
             </optgroup>
           </select>
         </div>
@@ -211,6 +223,7 @@
       </template>
     </BaseModal>
 
+    <!-- Modal Ver Mensagem -->
     <BaseModal v-model="showModalMensagem" title="Mensagem" size="lg">
       <div v-if="mensagemSelecionada" class="space-y-6">
         <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
@@ -244,105 +257,132 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Inbox, Send, Reply, Users, Bell, Plus } from 'lucide-vue-next'
+import {
+  Mail, Send, Inbox, Plus, Reply, Users
+} from 'lucide-vue-next'
 import BaseModal from '@/components/common/BaseModal.vue'
 
-const mensagens = ref([
-  {
-    id: 1,
-    remetente: 'Ana Tutor',
-    destinatario: 'Carlos Padrinho',
-    data: '15/03/2026',
-    assunto: 'Relatório de frequência escolar',
-    conteudo: 'Boa tarde! Envio em anexo o relatório de frequência do Miguel. Ele está progredindo muito bem nas aulas.',
-    direcao: 'recebida',
-    lida: false
-  },
-  {
-    id: 2,
-    remetente: 'João Silva',
-    destinatario: 'Carlos Padrinho',
-    data: '12/03/2026',
-    assunto: 'Plano de nutrição atualizado',
-    conteudo: 'Olá! Atualizamos o plano de nutrição da Sara. Alguns ajustes foram feitos para garantir mais calorias por refeição.',
-    direcao: 'recebida',
-    lida: true
-  },
-  {
-    id: 3,
-    remetente: 'Carlos Padrinho',
-    destinatario: 'Ana Tutor',
-    data: '10/03/2026',
-    assunto: 'Agradecimento',
-    conteudo: 'Obrigado pelo relatório. Fico feliz em saber que o Miguel está bem na escola.',
-    direcao: 'enviada',
-    lida: true
-  }
-])
-
+// State
+const activeTab = ref('recebidas')
 const showModalNova = ref(false)
 const showModalMensagem = ref(false)
 const mensagemSelecionada = ref(null)
-
 const formMensagem = ref({
   destinatario: '',
   assunto: '',
   conteudo: ''
 })
 
-const activeTab = ref('recebidas')
+// Mock Data
+const mensagens = ref([
+  {
+    id: 1,
+    remetente: 'João Silva',
+    destinatario: 'Carlos Gestor',
+    assunto: 'Revisão de Cadastro Pendente',
+    conteudo: 'Olá Carlos,\n\nGostaria de informar que finalizei a avaliação técnica da criança Ana Maria Silva. O cadastro está pronto para revisão N2.\n\nAtenciosamente,\nJoão Silva\nPF Comunitário',
+    data: '15/03/2026 10:30',
+    direcao: 'recebida',
+    lida: false
+  },
+  {
+    id: 2,
+    remetente: 'Carlos Gestor',
+    destinatario: 'Ana Tutor',
+    assunto: 'Aprovação de Apadrinhamento',
+    conteudo: 'Olá Ana,\n\nO pedido de apadrinhamento entre Jean Pierre Dubois e Teresa Cumba foi aprovado. Pode proceder com a formalização do contrato.\n\nAtenciosamente,\nCarlos Gestor',
+    data: '14/03/2026 15:45',
+    direcao: 'enviada',
+    lida: true
+  },
+  {
+    id: 3,
+    remetente: 'Maria Santos',
+    destinatario: 'Carlos Gestor',
+    assunto: 'Ajustes Necessários no Cadastro',
+    conteudo: 'Olá Carlos,\n\nApós análise, identifiquei algumas informações incompletas no cadastro de João Pedro Santos. Solicito que o PF Comunitário complete os dados de contacto da família.\n\nAtenciosamente,\nMaria Santos\nPF Temático - SADD',
+    data: '13/03/2026 14:20',
+    direcao: 'recebida',
+    lida: true
+  },
+  {
+    id: 4,
+    remetente: 'Carlos Gestor',
+    destinatario: 'João Silva',
+    assunto: 'Re: Revisão de Cadastro Pendente',
+    conteudo: 'Olá João,\n\nObrigado pela informação. Iniciarei a revisão N2 hoje mesmo.\n\nAtenciosamente,\nCarlos Gestor',
+    data: '15/03/2026 11:00',
+    direcao: 'enviada',
+    lida: true
+  }
+])
 
+// Computed
 const mensagensRecebidas = computed(() => mensagens.value.filter(m => m.direcao === 'recebida'))
 const mensagensEnviadas = computed(() => mensagens.value.filter(m => m.direcao === 'enviada'))
-const novasMensagens = computed(() => mensagensRecebidas.value.filter(m => !m.lida).length)
 const conversasUnicas = computed(() => {
-  const contatos = new Set(
-    mensagens.value.flatMap(m => [m.remetente, m.destinatario]).filter(name => name !== 'Carlos Padrinho')
-  )
-  return contatos.size
+  const unique = new Set()
+  mensagens.value.forEach(m => {
+    unique.add(m.direcao === 'recebida' ? m.remetente : m.destinatario)
+  })
+  return unique.size
 })
 
 const tabs = computed(() => [
-  { id: 'recebidas', label: 'Recebidas', count: mensagensRecebidas.value.length },
+  { id: 'recebidas', label: 'Recebidas', count: mensagensRecebidas.value.filter(m => !m.lida).length },
   { id: 'enviadas', label: 'Enviadas', count: mensagensEnviadas.value.length }
 ])
 
-const getInitials = (nome) => {
-  return nome
-    .split(' ')
-    .map(p => p[0])
-    .slice(0, 2)
-    .join('')
+// Methods
+const getInitials = (name) => {
+  return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
 }
 
 const abrirMensagem = (mensagem) => {
-  mensagem.lida = true
   mensagemSelecionada.value = mensagem
+  mensagem.lida = true
   showModalMensagem.value = true
 }
 
-const enviarMensagem = () => {
-  if (!formMensagem.value.destinatario || !formMensagem.value.assunto || !formMensagem.value.conteudo) return
+const responderMensagem = (mensagem) => {
+  formMensagem.value = {
+    destinatario: mensagem.remetente,
+    assunto: `Re: ${mensagem.assunto}`,
+    conteudo: `\n\n--- Em ${mensagem.data}, ${mensagem.remetente} escreveu:\n${mensagem.conteudo}`
+  }
+  showModalNova.value = true
+  showModalMensagem.value = false
+}
 
-  mensagens.value.unshift({
+const enviarMensagem = () => {
+  const novaMensagem = {
     id: Date.now(),
-    remetente: 'Carlos Padrinho',
-    destinatario: formMensagem.value.destinatario,
-    data: new Date().toLocaleDateString('pt-MZ'),
-    assunto: formMensagem.value.assunto,
-    conteudo: formMensagem.value.conteudo,
+    ...formMensagem.value,
+    remetente: 'Carlos Gestor',
+    data: new Date().toLocaleString('pt-MZ'),
     direcao: 'enviada',
     lida: true
-  })
+  }
 
-  formMensagem.value = { destinatario: '', assunto: '', conteudo: '' }
+  mensagens.value.unshift(novaMensagem)
+
   showModalNova.value = false
-}
+  formMensagem.value = {
+    destinatario: '',
+    assunto: '',
+    conteudo: ''
+  }
 
-const responderMensagem = (mensagem) => {
-  if (!mensagem) return
-  showModalNova.value = true
-  formMensagem.value.destinatario = mensagem.remetente
-  formMensagem.value.assunto = `Re: ${mensagem.assunto}`
+  // Simular toast
+  console.log('Mensagem enviada com sucesso!')
 }
 </script>
+
+<style scoped>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

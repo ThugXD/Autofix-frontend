@@ -325,11 +325,16 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute, useRouter, RouterLink } from 'vue-router'
+import { useToast } from 'vue-toastification'
 import { useCriancasStore } from '@/stores/criancas'
+import { useApadrinhamentosStore } from '@/stores/apadrinhamentos'
 
 const route = useRoute()
+const router = useRouter()
+const toast = useToast()
 const criancasStore = useCriancasStore()
+const apadrinhamentosStore = useApadrinhamentosStore()
 
 const crianca = ref(null)
 const loading = ref(true)
@@ -366,7 +371,11 @@ const getPrioridadeBadge = (prioridade) => {
 }
 
 const formatarMoeda = (valor) => {
-  return new Intl.NumberFormat('pt-MZ', { style: 'currency', currency: 'MZN' }).format(valor)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return valor.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 
 const formatarData = (data) => {
@@ -393,8 +402,31 @@ const fecharFormulario = () => {
 const submeterFormulario = async () => {
   carregando.value = true
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await apadrinhamentosStore.expressarInteresse({
+      criancaId: crianca.value.id,
+      criancaNome: crianca.value.nome,
+      criancaFoto: crianca.value.foto,
+      criancaRegiao: crianca.value.regiao,
+      tutorId: 6,
+      tutorNome: 'Rosa Tutora',
+      padrinhoId: 9,
+      padrinhoNome: formulario.value.nome,
+      padrinhoEmail: formulario.value.email,
+      padrinhoTelefone: formulario.value.telefone,
+      padrinhoRegiao: formulario.value.regiao,
+      mensagem: formulario.value.mensagem,
+      valorMensal: 2500,
+      criancaIdade: crianca.value.idade,
+      orcamentoAnual: crianca.value.orcamentoAnual,
+      orcamentoCoberto: crianca.value.orcamentoCoberto
+    })
+
     mostrarSucesso.value = true
+
+    // Feedback e seguimento pós-submissão
+    toast.success('Seu interesse foi registrado! Acesse o painel para acompanhar seus afilhados.')
+    router.push({ name: 'padrinho-dashboard' })
+
     fecharFormulario()
     setTimeout(() => {
       mostrarSucesso.value = false

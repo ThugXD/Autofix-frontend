@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between bg-white rounded-xl p-5 border border-gray-100">
       <div>
         <h1 class="text-2xl font-bold text-gray-900">Cadastro de Fichas Técnicas</h1>
         <p class="text-gray-500 mt-1">
@@ -59,9 +59,9 @@
             <tr v-else v-for="child in filteredChildren" :key="child.id" class="group">
               <td>
                 <div class="flex items-center gap-3">
-                  <img 
-                    :src="child.foto" 
-                    :alt="child.nomeCompleto" 
+                  <img
+                    :src="child.foto"
+                    :alt="child.nomeCompleto"
                     class="w-10 h-10 rounded-xl object-cover ring-2 ring-gray-50 group-hover:ring-primary/20 transition-all"
                   />
                   <div>
@@ -75,7 +75,7 @@
               <td>
                 <div class="flex items-center gap-2">
                   <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       class="h-full bg-primary transition-all duration-500"
                       :style="{ width: `${(getProgresso(child).concluidos / 7) * 100}%` }"
                     ></div>
@@ -88,7 +88,7 @@
               <td>
                 <div class="flex items-center justify-center gap-1.5">
                   <!-- Scheduling Shortcut -->
-                  <button 
+                  <button
                     @click="openScheduleModal(child)"
                     title="Agendar Visita"
                     class="w-8 h-8 rounded-lg flex items-center justify-center transition-all bg-primary/5 text-primary hover:bg-primary hover:text-white border border-primary/10 mr-2"
@@ -96,8 +96,8 @@
                     <Calendar class="w-4 h-4" />
                   </button>
 
-                  <button 
-                    v-for="area in specialistAreas" 
+                  <button
+                    v-for="area in specialistAreas"
                     :key="area.id"
                     @click="openFichaModal(child, area)"
                     :title="area.nome"
@@ -126,7 +126,7 @@
         <h2 class="text-lg font-bold text-gray-900">Minhas Submissões Recentes</h2>
         <FileText class="w-5 h-5 text-gray-400" />
       </div>
-      
+
       <div class="overflow-x-auto">
         <table class="table table-sm">
           <thead>
@@ -156,7 +156,7 @@
                 </span>
               </td>
               <td class="text-right">
-                <router-link 
+                <router-link
                   :to="`/ponto-focal-tematico/ficha/${ficha.id}`"
                   class="text-primary hover:underline text-xs font-bold"
                 >
@@ -189,9 +189,9 @@
       <template #footer>
         <div class="flex gap-3 justify-end w-full">
           <BaseButton variant="secondary" @click="scheduleModalOpen = false">Cancelar</BaseButton>
-          <BaseButton 
-            variant="primary" 
-            :loading="scheduling" 
+          <BaseButton
+            variant="primary"
+            :loading="scheduling"
             :disabled="!scheduleDate"
             @click="handleSubmitSchedule"
           >
@@ -202,8 +202,8 @@
     </BaseModal>
 
     <!-- Ficha Modal -->
-    <BaseModal 
-      v-model="modalOpen" 
+    <BaseModal
+      v-model="modalOpen"
       :title="modalTitle"
       size="xl"
     >
@@ -224,8 +224,8 @@
 
         <!-- Dynamic Specialized Form -->
         <div class="min-h-[400px]">
-          <component 
-            :is="selectedArea.component" 
+          <component
+            :is="selectedArea.component"
             v-model="formData"
             :isReadOnly="false"
           />
@@ -234,9 +234,9 @@
         <!-- Shared Observations -->
         <div class="space-y-2 pt-4 border-t border-gray-100">
           <label class="block text-sm font-bold text-gray-700">Observações Gerais do Avaliador</label>
-          <textarea 
-            v-model="formData.observacoesPF" 
-            rows="3" 
+          <textarea
+            v-model="formData.observacoesPF"
+            rows="3"
             class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
             placeholder="Descreva observações importantes que não foram capturadas nos campos específicos..."
           ></textarea>
@@ -268,15 +268,15 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { usePontoFocalStore } from '@/stores/pontoFocal'
 import { usePontoFocalTematicoStore } from '@/stores/pontoFocalTematico'
-import { 
-  Search, 
-  Loader2, 
-  FileText, 
-  Heart, 
-  Stethoscope, 
-  UtensilsCrossed, 
-  GraduationCap, 
-  Shield, 
+import {
+  Search,
+  Loader2,
+  FileText,
+  Heart,
+  Stethoscope,
+  UtensilsCrossed,
+  GraduationCap,
+  Shield,
   Brain,
   Plus,
   Calendar
@@ -332,9 +332,9 @@ const formData = ref({
 
 const filteredChildren = computed(() => {
   let list = pfStore.cadastros
-  
+
   if (searchQuery.value) {
-    list = list.filter(c => 
+    list = list.filter(c =>
       c.nomeCompleto.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       c.codigo.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
@@ -349,7 +349,7 @@ const filteredChildren = computed(() => {
       return true
     })
   }
-  
+
   return list
 })
 
@@ -391,10 +391,10 @@ const getFichaStatusClass = (child, areaId) => {
 const openFichaModal = (child, area) => {
   selectedChild.value = child
   selectedArea.value = area
-  
+
   const draftKey = `draft_${child.id}_${area.id}`
   const existingDraft = tematicoStore.getDraft(draftKey)
-  
+
   if (existingDraft) {
     formData.value = JSON.parse(JSON.stringify(existingDraft))
   } else {
@@ -406,7 +406,7 @@ const openFichaModal = (child, area) => {
       observacoesPF: ''
     }
   }
-  
+
   modalOpen.value = true
 }
 
@@ -422,7 +422,7 @@ const openScheduleModal = (child) => {
 
 const handleSubmitSchedule = async () => {
   if (scheduling.value) return
-  
+
   scheduling.value = true
   try {
     await pfStore.agendarVisitaTecnica(
@@ -441,15 +441,15 @@ const handleSubmitSchedule = async () => {
 
 const handleSubmit = async () => {
   if (loading.value) return
-  
+
   loading.value = true
   try {
     // Simular submissão
     await new Promise(r => setTimeout(r, 1500))
-    
+
     const draftKey = `draft_${selectedChild.value.id}_${selectedArea.value.id}`
     tematicoStore.clearDraft(draftKey)
-    
+
     toast.success('Ficha submetida com sucesso!')
     modalOpen.value = false
   } catch (error) {

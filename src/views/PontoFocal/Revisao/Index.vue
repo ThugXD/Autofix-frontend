@@ -695,11 +695,11 @@ const tabs = computed(() => [
 ])
 
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('pt-MZ', {
-    style: 'currency',
-    currency: 'MZN',
-    minimumFractionDigits: 0
-  }).format(value || 0)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return (value || 0).toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 
 const getPFNome = (pfId) => {
@@ -770,7 +770,7 @@ const abrirRevisaoN2 = (cadastro) => {
 
 const abrirOrcamento = (cadastro) => {
   cadastroSelecionado.value = cadastro
-  
+
   // Preencher com dados existentes ou calcular dos custos
   const necs = pfTematicoStore.getAllNecessidadesByCadastro(cadastro.id)
   pontosFocais.value.forEach(pf => {
@@ -778,7 +778,7 @@ const abrirOrcamento = (cadastro) => {
     const total = necsDoTipo.reduce((sum, n) => sum + (n.custoEstimado || 0), 0)
     orcamentoForm[pf.id] = { total, coberto: 0 }
   })
-  
+
   showModalOrcamento.value = true
 }
 

@@ -6,19 +6,14 @@
     ]"
   >
     <!-- Logo/Brand -->
-    <div class="border-b border-gray-200 px-3 py-4">
+    <div class="border-b border-gray-200 px-2 py-3">
       <div class="flex items-center gap-3">
         <img
-          :src="logo"
+          :src="isOpen ? logo : logo_circle"
           alt="SACCO"
-          class="w-10 h-10 rounded-xl object-cover flex-shrink-0"
+          class="w-full h-full rounded-xl object-cover flex-shrink-0"
         />
-        <transition name="fade">
-          <div v-if="isOpen">
-            <p class="text-sm font-bold text-gray-900 leading-tight">SACCO</p>
-            <p class="text-[10px] text-gray-500 leading-tight">Poupe uma Crianca</p>
-          </div>
-        </transition>
+
       </div>
     </div>
 
@@ -29,8 +24,8 @@
         <!-- Separador com Titulo -->
         <div v-if="sIndex > 0 || section.title" class="my-4">
           <div v-if="sIndex > 0" class="border-t border-gray-200 mx-2"></div>
-          <p 
-            v-if="isOpen && section.title" 
+          <p
+            v-if="isOpen && section.title"
             class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-2"
           >
             {{ section.title }}
@@ -58,8 +53,8 @@
       <template v-if="isAdmin">
         <div class="my-4">
           <div class="border-t border-gray-200 mx-2"></div>
-          <p 
-            v-if="isOpen" 
+          <p
+            v-if="isOpen"
             class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-2"
           >
             Explorar Paineis
@@ -86,7 +81,7 @@
     <!-- User Section -->
     <div class="p-4 border-t border-gray-200">
       <div class="flex items-center gap-3">
-        <div 
+        <div
           class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
           :class="roleBadgeClass"
         >
@@ -109,6 +104,7 @@ import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { ROLES, MENU_BY_ROLE, getRoleLabel } from '@/config/roles'
 import logo from '@/assets/sacco_logo.png'
+import logo_circle from '@/assets/sacco_circle.png'
 
 import {
   LayoutDashboard,
@@ -128,7 +124,10 @@ import {
   TrendingUp,
   MessageCircle,
   Baby,
-  Shield
+  Shield,
+  Calendar,
+  MapPin,
+  Bell
 } from 'lucide-vue-next'
 
 defineProps({
@@ -165,7 +164,10 @@ const icons = {
   TrendingUp,
   MessageCircle,
   Baby,
-  Shield
+  Shield,
+  Calendar,
+  MapPin,
+  Bell
 }
 
 const getIcon = (iconName) => {
@@ -180,7 +182,7 @@ const menuSections = computed(() => {
   // Agrupar items por section
   return roleMenu.sections.map(section => ({
     title: section.title,
-    items: section.items.map(itemName => 
+    items: section.items.map(itemName =>
       roleMenu.main.find(item => item.name === itemName)
     ).filter(Boolean)
   }))

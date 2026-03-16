@@ -7,7 +7,7 @@ const router = createRouter({
     // =============================================
     // ROTAS PUBLICAS
     // =============================================
-    
+
     // Landing Page Publica - Catalogo (rota raiz)
     {
       path: '/',
@@ -33,7 +33,7 @@ const router = createRouter({
     // =============================================
     // AUTENTICACAO
     // =============================================
-    
+
     {
       path: '/login',
       name: 'login',
@@ -50,7 +50,7 @@ const router = createRouter({
     // =============================================
     // AREA AUTENTICADA - /app
     // =============================================
-    
+
     {
       path: '/app',
       component: () => import('@/layouts/MainLayout.vue'),
@@ -61,29 +61,29 @@ const router = createRouter({
           path: '',
           name: 'dashboard',
           component: () => import('@/views/Dashboard.vue'),
-          meta: { 
+          meta: {
             title: 'Dashboard',
             allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.PF_TEMATICO, ROLES.GESTOR, ROLES.TUTOR, ROLES.PADRINHO, ROLES.ADMIN]
           }
         },
-        
+
         // Definicoes (todos)
         {
           path: 'definicoes',
           name: 'definicoes',
           component: () => import('@/views/Definicoes/Index.vue'),
-          meta: { 
+          meta: {
             title: 'Definicoes',
             allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.PF_TEMATICO, ROLES.GESTOR, ROLES.TUTOR, ROLES.PADRINHO, ROLES.ADMIN]
           }
         },
-        
+
         // Info (todos)
         {
           path: 'info',
           name: 'info',
           component: () => import('@/views/Info/Index.vue'),
-          meta: { 
+          meta: {
             title: 'Info',
             allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.PF_TEMATICO, ROLES.GESTOR, ROLES.TUTOR, ROLES.PADRINHO, ROLES.ADMIN]
           }
@@ -92,12 +92,12 @@ const router = createRouter({
         // =============================================
         // PONTO FOCAL COMUNITARIO
         // =============================================
-        
+
         {
           path: 'ponto-focal/comunicacao',
           name: 'comunicacao',
           component: () => import('@/views/PontoFocal/Comunicacao/Index.vue'),
-          meta: { 
+          meta: {
             title: 'Comunicacao - Ponto Focal',
             allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
           }
@@ -106,7 +106,7 @@ const router = createRouter({
           path: 'ponto-focal/cadastro',
           name: 'cadastro',
           component: () => import('@/views/PontoFocal/Cadastro/Index.vue'),
-          meta: { 
+          meta: {
             title: 'Cadastro - Ponto Focal',
             allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
           }
@@ -115,7 +115,7 @@ const router = createRouter({
           path: 'ponto-focal/cadastro/novo',
           name: 'cadastro-novo',
           component: () => import('@/views/PontoFocal/Cadastro/Novo.vue'),
-          meta: { 
+          meta: {
             title: 'Novo Cadastro - Ponto Focal',
             allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
           }
@@ -124,7 +124,7 @@ const router = createRouter({
           path: 'ponto-focal/cadastro/:id',
           name: 'cadastro-detalhes',
           component: () => import('@/views/PontoFocal/Cadastro/Detalhes.vue'),
-          meta: { 
+          meta: {
             title: 'Detalhes do Cadastro - Ponto Focal',
             allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
           }
@@ -133,8 +133,55 @@ const router = createRouter({
           path: 'ponto-focal/revisao',
           name: 'revisao',
           component: () => import('@/views/PontoFocal/Revisao/Index.vue'),
-          meta: { 
+          meta: {
             title: 'Revisao - Ponto Focal',
+            allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
+          }
+        },
+
+        // Novas rotas para Ponto Focal Comunitário
+        {
+          path: 'ponto-focal/dashboard',
+          name: 'pf-comunitario-dashboard',
+          component: () => import('@/views/PontoFocal/Dashboard.vue'),
+          meta: {
+            title: 'Dashboard - Ponto Focal',
+            allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'ponto-focal/agenda',
+          name: 'pf-comunitario-agenda',
+          component: () => import('@/views/PontoFocal/Agenda/Index.vue'),
+          meta: {
+            title: 'Agenda - Ponto Focal',
+            allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'ponto-focal/relatorios',
+          name: 'pf-comunitario-relatorios',
+          component: () => import('@/views/PontoFocal/Relatorios/Index.vue'),
+          meta: {
+            title: 'Relatorios - Ponto Focal',
+            allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'ponto-focal/comunidade',
+          name: 'pf-comunitario-comunidade',
+          component: () => import('@/views/PontoFocal/Comunidade/Index.vue'),
+          meta: {
+            title: 'Comunidade - Ponto Focal',
+            allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'ponto-focal/notificacoes',
+          name: 'pf-comunitario-notificacoes',
+          component: () => import('@/views/PontoFocal/Notificacoes/Index.vue'),
+          meta: {
+            title: 'Notificacoes - Ponto Focal',
             allowedRoles: [ROLES.PF_COMUNITARIO, ROLES.ADMIN]
           }
         },
@@ -142,12 +189,12 @@ const router = createRouter({
         // =============================================
         // PONTO FOCAL TEMATICO
         // =============================================
-        
+
         {
           path: 'ponto-focal-tematico',
           name: 'pf-tematico-dashboard',
           component: () => import('@/views/PontoFocalTematico/Dashboard.vue'),
-          meta: { 
+          meta: {
             title: 'Dashboard - PF Tematico',
             allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
           }
@@ -156,7 +203,7 @@ const router = createRouter({
           path: 'ponto-focal-tematico/ficha/:id',
           name: 'pf-tematico-ficha',
           component: () => import('@/views/PontoFocalTematico/Ficha.vue'),
-          meta: { 
+          meta: {
             title: 'Ficha Tecnica - PF Tematico',
             allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
           }
@@ -165,7 +212,7 @@ const router = createRouter({
           path: 'ponto-focal-tematico/cadastro',
           name: 'pf-tematico-cadastro',
           component: () => import('@/views/PontoFocalTematico/CadastroFicha.vue'),
-          meta: { 
+          meta: {
             title: 'Novo Cadastro - PF Tematico',
             allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
           }
@@ -174,7 +221,7 @@ const router = createRouter({
           path: 'ponto-focal-tematico/visitas',
           name: 'visitas',
           component: () => import('@/views/PontoFocalTematico/Visitas.vue'),
-          meta: { 
+          meta: {
             title: 'Agenda de Visitas - PF Tematico',
             allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
           }
@@ -183,7 +230,7 @@ const router = createRouter({
           path: 'ponto-focal-tematico/biblioteca',
           name: 'biblioteca',
           component: () => import('@/views/PontoFocalTematico/Biblioteca.vue'),
-          meta: { 
+          meta: {
             title: 'Biblioteca Técnica - PF Tematico',
             allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
           }
@@ -192,7 +239,7 @@ const router = createRouter({
           path: 'ponto-focal-tematico/impacto',
           name: 'impacto',
           component: () => import('@/views/PontoFocalTematico/Impacto.vue'),
-          meta: { 
+          meta: {
             title: 'Resumo de Impacto - PF Tematico',
             allowedRoles: [ROLES.PF_TEMATICO, ROLES.ADMIN]
           }
@@ -201,12 +248,12 @@ const router = createRouter({
         // =============================================
         // GESTOR DA ASSOCIACAO
         // =============================================
-        
+
         {
           path: 'gestor',
           name: 'gestor-dashboard',
           component: () => import('@/views/Gestor/Dashboard.vue'),
-          meta: { 
+          meta: {
             title: 'Dashboard - Gestor',
             allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
           }
@@ -215,7 +262,7 @@ const router = createRouter({
           path: 'gestor/revisao',
           name: 'gestor-revisao',
           component: () => import('@/views/Gestor/Revisao.vue'),
-          meta: { 
+          meta: {
             title: 'Revisao Nivel 2 - Gestor',
             allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
           }
@@ -224,7 +271,7 @@ const router = createRouter({
           path: 'gestor/apadinhamentos',
           name: 'gestor-apadinhamentos',
           component: () => import('@/views/Gestor/Apadinhamentos.vue'),
-          meta: { 
+          meta: {
             title: 'Apadinhamentos - Gestor',
             allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
           }
@@ -233,7 +280,7 @@ const router = createRouter({
           path: 'gestor/padrinhos',
           name: 'gestor-padrinhos',
           component: () => import('@/views/Gestor/Padrinhos.vue'),
-          meta: { 
+          meta: {
             title: 'Padrinhos - Gestor',
             allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
           }
@@ -242,8 +289,53 @@ const router = createRouter({
           path: 'gestor/relatorios',
           name: 'gestor-relatorios',
           component: () => import('@/views/Gestor/Relatorios.vue'),
-          meta: { 
+          meta: {
             title: 'Relatorios - Gestor',
+            allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'gestor/utilizadores',
+          name: 'gestor-utilizadores',
+          component: () => import('@/views/Gestor/Utilizadores.vue'),
+          meta: {
+            title: 'Utilizadores - Gestor',
+            allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'gestor/notificacoes',
+          name: 'gestor-notificacoes',
+          component: () => import('@/views/Gestor/Notificacoes.vue'),
+          meta: {
+            title: 'Notificacoes - Gestor',
+            allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'gestor/mensagens',
+          name: 'gestor-mensagens',
+          component: () => import('@/views/Gestor/Mensagens.vue'),
+          meta: {
+            title: 'Mensagens - Gestor',
+            allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'gestor/logs',
+          name: 'gestor-logs',
+          component: () => import('@/views/Gestor/Logs.vue'),
+          meta: {
+            title: 'Logs Auditoria - Gestor',
+            allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
+          }
+        },
+        {
+          path: 'gestor/configuracoes',
+          name: 'gestor-configuracoes',
+          component: () => import('@/views/Gestor/Configuracoes.vue'),
+          meta: {
+            title: 'Configuracoes - Gestor',
             allowedRoles: [ROLES.GESTOR, ROLES.ADMIN]
           }
         },
@@ -251,12 +343,12 @@ const router = createRouter({
         // =============================================
         // TUTOR
         // =============================================
-        
+
         {
           path: 'tutor',
           name: 'tutor-dashboard',
           component: () => import('@/views/Tutor/Dashboard.vue'),
-          meta: { 
+          meta: {
             title: 'Dashboard - Tutor',
             allowedRoles: [ROLES.TUTOR, ROLES.ADMIN]
           }
@@ -265,7 +357,7 @@ const router = createRouter({
           path: 'tutor/interessados',
           name: 'tutor-interessados',
           component: () => import('@/views/Tutor/Interessados.vue'),
-          meta: { 
+          meta: {
             title: 'Padrinhos Interessados - Tutor',
             allowedRoles: [ROLES.TUTOR, ROLES.ADMIN]
           }
@@ -274,7 +366,7 @@ const router = createRouter({
           path: 'tutor/padrinhos',
           name: 'tutor-padrinhos',
           component: () => import('@/views/Tutor/Padrinhos.vue'),
-          meta: { 
+          meta: {
             title: 'Meus Padrinhos - Tutor',
             allowedRoles: [ROLES.TUTOR, ROLES.ADMIN]
           }
@@ -283,7 +375,7 @@ const router = createRouter({
           path: 'tutor/progresso',
           name: 'tutor-progresso',
           component: () => import('@/views/Tutor/Progresso.vue'),
-          meta: { 
+          meta: {
             title: 'Progresso - Tutor',
             allowedRoles: [ROLES.TUTOR, ROLES.ADMIN]
           }
@@ -292,7 +384,7 @@ const router = createRouter({
           path: 'tutor/mensagens',
           name: 'tutor-mensagens',
           component: () => import('@/views/Tutor/Mensagens.vue'),
-          meta: { 
+          meta: {
             title: 'Mensagens - Tutor',
             allowedRoles: [ROLES.TUTOR, ROLES.ADMIN]
           }
@@ -301,12 +393,12 @@ const router = createRouter({
         // =============================================
         // PADRINHO
         // =============================================
-        
+
         {
           path: 'padrinho',
           name: 'padrinho-dashboard',
           component: () => import('@/views/Padrinho/Dashboard.vue'),
-          meta: { 
+          meta: {
             title: 'Meu Padrinhado',
             allowedRoles: [ROLES.PADRINHO, ROLES.ADMIN]
           }
@@ -315,7 +407,7 @@ const router = createRouter({
           path: 'padrinho/mensagens',
           name: 'padrinho-mensagens',
           component: () => import('@/views/Padrinho/Mensagens.vue'),
-          meta: { 
+          meta: {
             title: 'Mensagens - Padrinho',
             allowedRoles: [ROLES.PADRINHO, ROLES.ADMIN]
           }
@@ -324,12 +416,12 @@ const router = createRouter({
         // =============================================
         // ADMIN
         // =============================================
-        
+
         {
           path: 'admin',
           name: 'admin-dashboard',
           component: () => import('@/views/Admin/Dashboard.vue'),
-          meta: { 
+          meta: {
             title: 'Dashboard - Admin',
             allowedRoles: [ROLES.ADMIN]
           }
@@ -338,7 +430,7 @@ const router = createRouter({
           path: 'admin/utilizadores',
           name: 'admin-utilizadores',
           component: () => import('@/views/Admin/Utilizadores.vue'),
-          meta: { 
+          meta: {
             title: 'Utilizadores - Admin',
             allowedRoles: [ROLES.ADMIN]
           }
@@ -347,7 +439,7 @@ const router = createRouter({
           path: 'admin/configuracoes',
           name: 'admin-configuracoes',
           component: () => import('@/views/Admin/Configuracoes.vue'),
-          meta: { 
+          meta: {
             title: 'Configuracoes - Admin',
             allowedRoles: [ROLES.ADMIN]
           }
@@ -356,7 +448,7 @@ const router = createRouter({
           path: 'admin/logs',
           name: 'admin-logs',
           component: () => import('@/views/Admin/Logs.vue'),
-          meta: { 
+          meta: {
             title: 'Logs de Auditoria - Admin',
             allowedRoles: [ROLES.ADMIN]
           }
@@ -372,7 +464,7 @@ const router = createRouter({
     // =============================================
     // ACESSO NEGADO
     // =============================================
-    
+
     {
       path: '/acesso-negado',
       name: 'acesso-negado',
@@ -383,7 +475,7 @@ const router = createRouter({
     // =============================================
     // 404
     // =============================================
-    
+
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
@@ -399,7 +491,7 @@ router.beforeEach((to, from, next) => {
   let token = sessionStorage.getItem('token') || localStorage.getItem('token')
   let userStr = sessionStorage.getItem('user') || localStorage.getItem('user')
   let user = null
-  
+
   try {
     user = userStr ? JSON.parse(userStr) : null
   } catch (e) {
@@ -434,7 +526,7 @@ router.beforeEach((to, from, next) => {
     const allowedRoles = to.meta.allowedRoles
     if (allowedRoles && allowedRoles.length > 0) {
       const userRole = user?.role
-      
+
       if (!userRole || !allowedRoles.includes(userRole)) {
         // Acesso negado - redirecionar com info
         return next({

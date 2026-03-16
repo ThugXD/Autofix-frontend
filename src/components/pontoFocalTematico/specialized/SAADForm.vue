@@ -1,75 +1,104 @@
 <template>
-  <div class="space-y-6">
+  <div class="max-w-4xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-xl p-6 shadow-lg">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        <ShoppingBag class="w-8 h-8" />
+        Ficha SAAD - Alimentação Diária
+      </h2>
+      <p class="text-amber-100 mt-2">Avaliação especializada para alimentação diária da criança</p>
+    </div>
+
     <!-- Procedimentos -->
-    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
-      <h4 class="text-sm font-bold text-amber-900 flex items-center gap-2 mb-2">
-        <Info class="w-4 h-4" />
-        Procedimentos de Preenchimento - SAAD
+    <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-6 shadow-sm">
+      <h4 class="text-lg font-bold text-amber-900 flex items-center gap-2 mb-4">
+        <Info class="w-5 h-5" />
+        Procedimentos de Preenchimento
       </h4>
-      <ul class="text-xs text-amber-800 space-y-1 list-disc pl-4">
-        <li>Entrevistar o responsável sobre o número de pessoas que partilham a mesa.</li>
-        <li>Avaliar o rendimento familiar mensal (incluindo agricultura de subsistência).</li>
-        <li>Identificar a principal fonte de alimentos (compra, produção própria, doações).</li>
-        <li>Registar a diversidade alimentar (quais grupos de alimentos são consumidos).</li>
-        <li>Identificar períodos de escassez alimentar severa.</li>
+      <ul class="text-sm text-amber-800 space-y-2">
+        <li class="flex items-start gap-2">
+          <span class="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></span>
+          Entrevistar o responsável sobre o número de pessoas que partilham a mesa.
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></span>
+          Avaliar o rendimento familiar mensal (incluindo agricultura de subsistência).
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></span>
+          Identificar a principal fonte de alimentos (compra, produção própria, doações).
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></span>
+          Registar a diversidade alimentar (quais grupos de alimentos são consumidos).
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></span>
+          Identificar períodos de escassez alimentar severa.
+        </li>
       </ul>
     </div>
 
-    <div class="bg-amber-50/50 rounded-xl border border-amber-100 p-6 space-y-4">
-      <h3 class="text-lg font-semibold text-amber-900 flex items-center gap-2">
-        <ShoppingBag class="w-5 h-5" />
-        Avaliação Especializada: SAAD - Alimentação Diária
+    <!-- Formulário -->
+    <div class="bg-white rounded-xl border border-amber-200 p-8 shadow-sm">
+      <h3 class="text-xl font-semibold text-amber-900 flex items-center gap-2 mb-6">
+        <ShoppingBag class="w-6 h-6" />
+        Dados da Avaliação
       </h3>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Membros no Agregado -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
             Quantidade de Membros no Agregado *
           </label>
-          <input 
-            v-model.number="modelValue.membrosAgregado" 
-            type="number" 
+          <input
+            v-model.number="modelValue.membrosAgregado"
+            type="number"
             min="1"
-            class="input-field"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
             :disabled="isReadOnly"
             required
           />
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+        <!-- Rendimento Mensal -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
             Rendimento Mensal Estimado (MZN) *
           </label>
-          <input 
-            v-model.number="modelValue.rendimentoMensal" 
-            type="number" 
+          <input
+            v-model.number="modelValue.rendimentoMensal"
+            type="number"
             min="0"
-            class="input-field"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
             :disabled="isReadOnly"
             required
           />
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+        <!-- Fonte de Rendimento -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
             Principal Fonte de Rendimento
           </label>
-          <input 
-            v-model="modelValue.fonteRendimento" 
-            type="text" 
-            class="input-field"
+          <input
+            v-model="modelValue.fonteRendimento"
+            type="text"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
             placeholder="Ex: Agricultura, Comércio informal..."
             :disabled="isReadOnly"
           />
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+        <!-- Frequência de Acesso -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
             Frequência de Acesso a Alimentos *
           </label>
-          <select 
-            v-model="modelValue.frequenciaAcessoAlimentos" 
-            class="input-field" 
+          <select
+            v-model="modelValue.frequenciaAcessoAlimentos"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all bg-white"
             :disabled="isReadOnly"
             required
           >
@@ -81,14 +110,15 @@
           </select>
         </div>
 
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+        <!-- Alimentos Habituais -->
+        <div class="md:col-span-2 space-y-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
             Alimentos Consumidos Habitualmente
           </label>
-          <textarea 
-            v-model="modelValue.alimentosHabituais" 
-            rows="2" 
-            class="input-field"
+          <textarea
+            v-model="modelValue.alimentosHabituais"
+            rows="4"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all resize-none"
             placeholder="Ex: Xima, feijão, vegetais, peixe seco..."
             :disabled="isReadOnly"
           ></textarea>

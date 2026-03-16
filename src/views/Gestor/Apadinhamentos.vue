@@ -334,8 +334,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { 
-  Clock, CheckCircle, RefreshCw, XCircle, Heart, 
+import {
+  Clock, CheckCircle, RefreshCw, XCircle, Heart,
   ArrowRight, Eye, Bell
 } from 'lucide-vue-next'
 
@@ -355,7 +355,7 @@ const apadinhamentos = ref([
       nome: 'Ana Maria Silva',
       codigo: 'CR-2024-001',
       localidade: 'Bairro Esperanca',
-      foto: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=200&h=200&fit=crop'
+      foto: '/img/children/maria_silva.png'
     },
     padrinho: {
       id: 1,
@@ -374,7 +374,7 @@ const apadinhamentos = ref([
       nome: 'Joao Pedro Santos',
       codigo: 'CR-2024-002',
       localidade: 'Viana',
-      foto: 'https://images.unsplash.com/photo-1545171519-4ec7cdb9f0ef?w=200&h=200&fit=crop'
+      foto: '/img/children/tomas_mussa.png'
     },
     padrinho: {
       id: 2,
@@ -395,7 +395,7 @@ const apadinhamentos = ref([
       nome: 'Teresa Cumba',
       codigo: 'CR-2024-005',
       localidade: 'Talatona',
-      foto: 'https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=200&h=200&fit=crop'
+      foto: '/img/children/zita_machava.png'
     },
     padrinho: {
       id: 3,
@@ -416,7 +416,7 @@ const apadinhamentos = ref([
       nome: 'Carlos Manuel',
       codigo: 'CR-2023-015',
       localidade: 'Cazenga',
-      foto: 'https://images.unsplash.com/photo-1504439904031-93ded9f93e4e?w=200&h=200&fit=crop'
+      foto: '/img/children/joao_nkomo.png'
     },
     padrinho: {
       id: 4,
@@ -435,7 +435,7 @@ const apadinhamentos = ref([
       nome: 'Maria Jose',
       codigo: 'CR-2023-008',
       localidade: 'Kilamba',
-      foto: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=200&h=200&fit=crop'
+      foto: '/img/children/maria_zita_machava.png'
     },
     padrinho: {
       id: 5,
@@ -454,7 +454,7 @@ const apadinhamentos = ref([
       nome: 'Pedro Antonio',
       codigo: 'CR-2023-012',
       localidade: 'Maianga',
-      foto: 'https://images.unsplash.com/photo-1599566219227-2efe0c9b7f5f?w=200&h=200&fit=crop'
+      foto: '/img/children/joao_nkomo.png'
     },
     padrinho: {
       id: 6,
@@ -480,11 +480,11 @@ const tabs = computed(() => [
 
 // Methods
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('pt-AO', {
-    style: 'currency',
-    currency: 'AOA',
-    minimumFractionDigits: 0
-  }).format(value)
+  // Formatação customizada para MZN: xxx,xxx,xxx.xx MZN
+  return value.toLocaleString('pt-MZ', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 
 const showToast = (message, type = 'success') => {
@@ -494,17 +494,17 @@ const showToast = (message, type = 'success') => {
 
 const aprovarApadinhamento = (item) => {
   item.status = 'ativo'
-  item.dataInicio = new Date().toLocaleDateString('pt-AO')
+  item.dataInicio = new Date().toLocaleDateString('pt-MZ')
   const dataFim = new Date()
   dataFim.setFullYear(dataFim.getFullYear() + 1)
-  item.dataFim = dataFim.toLocaleDateString('pt-AO')
+  item.dataFim = dataFim.toLocaleDateString('pt-MZ')
   item.progresso = 0
   showToast('Apadinhamento aprovado com sucesso')
 }
 
 const rejeitarApadinhamento = (item) => {
   item.status = 'cancelado'
-  item.dataCancelamento = new Date().toLocaleDateString('pt-AO')
+  item.dataCancelamento = new Date().toLocaleDateString('pt-MZ')
   item.motivoCancelamento = 'Solicitacao rejeitada'
   showToast('Solicitacao rejeitada', 'error')
 }

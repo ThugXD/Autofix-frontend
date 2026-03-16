@@ -23,7 +23,7 @@
           <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-sm">
             <Wrench class="w-6 h-6 text-gray-600" />
           </div>
-          
+
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-1">
               <span class="text-sm font-semibold text-gray-900">{{ service.id }}</span>
@@ -82,10 +82,11 @@ const statusClasses = {
 }
 
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'MZN'
-  }).format(value)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return value.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 
 const formatDate = (date) => {

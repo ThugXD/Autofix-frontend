@@ -279,8 +279,8 @@
         <div class="space-y-4">
           <h4 class="font-bold text-gray-900 border-l-4 border-indigo-500 pl-3">Sumário de Avaliações Técnicas</h4>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <div 
-              v-for="area in specialistAreas" 
+            <div
+              v-for="area in specialistAreas"
               :key="area.id"
               class="p-4 rounded-xl border bg-white flex flex-col gap-2"
               :class="getFichaStatusColor(area.id)"
@@ -402,9 +402,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { 
-  Clock, Calculator, Globe, CheckCircle, ShieldCheck, Eye, 
-  XCircle, FileText, Heart, Stethoscope, UtensilsCrossed, 
+import {
+  Clock, Calculator, Globe, CheckCircle, ShieldCheck, Eye,
+  XCircle, FileText, Heart, Stethoscope, UtensilsCrossed,
   GraduationCap, Shield, Brain, Loader2, Save
 } from 'lucide-vue-next'
 import { usePontoFocalStore } from '@/stores/pontoFocal'
@@ -525,7 +525,7 @@ const handleSalvarOrcamento = async () => {
 
 const handlePublicar = async (cadastro) => {
   if (!confirm(`Confirmar publicação de ${cadastro.nomeCompleto} no catálogo?`)) return
-  
+
   try {
     await pfStore.publicarNoCatalogo(cadastro.id)
     toast.success('Criança publicada no catálogo com sucesso!')
@@ -551,11 +551,11 @@ const getAreaIcon = (id) => specialistAreas.find(a => a.id === id)?.icon || File
 const getAreaName = (id) => specialistAreas.find(a => a.id === id)?.nome || id
 
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('pt-MZ', {
-    style: 'currency',
-    currency: 'MZN',
-    minimumFractionDigits: 0
-  }).format(value)
+  // Formatação customizada para MZN: xxx.xxx.xxx,xx MZN
+  return value.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + ' MZN'
 }
 
 onMounted(fetchAll)

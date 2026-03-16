@@ -87,22 +87,31 @@ export const ROUTE_PERMISSIONS = {
   '/app/ponto-focal/comunicacao': [ROLES.PF_COMUNITARIO, ROLES.ADMIN],
   '/app/ponto-focal/cadastro': [ROLES.PF_COMUNITARIO, ROLES.ADMIN],
   '/app/ponto-focal/revisao': [ROLES.PF_COMUNITARIO, ROLES.ADMIN],
-  
+
   // Ponto Focal Tematico
   '/app/ponto-focal-tematico': [ROLES.PF_TEMATICO, ROLES.ADMIN],
-  
+
   // Gestor
   '/app/gestor': [ROLES.GESTOR, ROLES.ADMIN],
-  
+  '/app/gestor/revisao': [ROLES.GESTOR, ROLES.ADMIN],
+  '/app/gestor/apadinhamentos': [ROLES.GESTOR, ROLES.ADMIN],
+  '/app/gestor/padrinhos': [ROLES.GESTOR, ROLES.ADMIN],
+  '/app/gestor/relatorios': [ROLES.GESTOR, ROLES.ADMIN],
+  '/app/gestor/utilizadores': [ROLES.GESTOR, ROLES.ADMIN],
+  '/app/gestor/notificacoes': [ROLES.GESTOR, ROLES.ADMIN],
+  '/app/gestor/mensagens': [ROLES.GESTOR, ROLES.ADMIN],
+  '/app/gestor/logs': [ROLES.GESTOR, ROLES.ADMIN],
+  '/app/gestor/configuracoes': [ROLES.GESTOR, ROLES.ADMIN],
+
   // Tutor
   '/app/tutor': [ROLES.TUTOR, ROLES.ADMIN],
-  
+
   // Padrinho
   '/app/padrinho': [ROLES.PADRINHO, ROLES.ADMIN],
-  
+
   // Admin
   '/app/admin': [ROLES.ADMIN],
-  
+
   // Dashboard geral - todos autenticados
   '/app': [ROLES.PF_COMUNITARIO, ROLES.PF_TEMATICO, ROLES.GESTOR, ROLES.TUTOR, ROLES.PADRINHO, ROLES.ADMIN],
   '/app/definicoes': [ROLES.PF_COMUNITARIO, ROLES.PF_TEMATICO, ROLES.GESTOR, ROLES.TUTOR, ROLES.PADRINHO, ROLES.ADMIN],
@@ -113,15 +122,21 @@ export const ROUTE_PERMISSIONS = {
 export const MENU_BY_ROLE = {
   [ROLES.PF_COMUNITARIO]: {
     main: [
+      { name: 'dashboard', label: 'Dashboard', path: '/app/ponto-focal/dashboard', icon: 'LayoutDashboard' },
       { name: 'comunicacao', label: 'Comunicacao', path: '/app/ponto-focal/comunicacao', icon: 'MessageSquarePlus' },
       { name: 'cadastro', label: 'Cadastro', path: '/app/ponto-focal/cadastro', icon: 'ClipboardList' },
-      { name: 'revisao', label: 'Revisao Nivel 1', path: '/app/ponto-focal/revisao', icon: 'FileCheck' }
+      { name: 'revisao', label: 'Revisao Nivel 1', path: '/app/ponto-focal/revisao', icon: 'FileCheck' },
+      { name: 'agenda', label: 'Agenda de Visitas', path: '/app/ponto-focal/agenda', icon: 'Calendar' },
+      { name: 'relatorios', label: 'Relatorios', path: '/app/ponto-focal/relatorios', icon: 'BarChart3' },
+      { name: 'comunidade', label: 'Perfil da Comunidade', path: '/app/ponto-focal/comunidade', icon: 'MapPin' },
+      { name: 'notificacoes', label: 'Notificacoes', path: '/app/ponto-focal/notificacoes', icon: 'Bell' }
     ],
     sections: [
-      { title: 'Ponto Focal', items: ['comunicacao', 'cadastro', 'revisao'] }
+      { title: 'Operacional', items: ['dashboard', 'comunicacao', 'cadastro', 'revisao'] },
+      { title: 'Gestao', items: ['agenda', 'relatorios', 'comunidade', 'notificacoes'] }
     ]
   },
-  
+
   [ROLES.PF_TEMATICO]: {
     main: [
       { name: 'pf-tematico', label: 'Minhas Fichas', path: '/app/ponto-focal-tematico', icon: 'FileText' },
@@ -134,20 +149,26 @@ export const MENU_BY_ROLE = {
       { title: 'PF Tematico', items: ['pf-tematico', 'cadastro-ficha', 'visitas', 'biblioteca', 'impacto'] }
     ]
   },
-  
+
   [ROLES.GESTOR]: {
     main: [
       { name: 'gestor-dashboard', label: 'Dashboard', path: '/app/gestor', icon: 'LayoutDashboard' },
       { name: 'revisao-l2', label: 'Revisao Nivel 2', path: '/app/gestor/revisao', icon: 'FileCheck' },
       { name: 'apadinhamentos', label: 'Apadinhamentos', path: '/app/gestor/apadinhamentos', icon: 'Heart' },
       { name: 'padrinhos', label: 'Padrinhos', path: '/app/gestor/padrinhos', icon: 'Users' },
-      { name: 'relatorios', label: 'Relatorios', path: '/app/gestor/relatorios', icon: 'BarChart3' }
+      { name: 'relatorios', label: 'Relatorios', path: '/app/gestor/relatorios', icon: 'BarChart3' },
+      { name: 'utilizadores', label: 'Utilizadores', path: '/app/gestor/utilizadores', icon: 'UserCog' },
+      { name: 'notificacoes', label: 'Notificacoes', path: '/app/gestor/notificacoes', icon: 'Bell' },
+      { name: 'mensagens', label: 'Mensagens', path: '/app/gestor/mensagens', icon: 'MessageSquare' },
+      { name: 'logs', label: 'Logs Auditoria', path: '/app/gestor/logs', icon: 'FileText' },
+      { name: 'configuracoes', label: 'Configuracoes', path: '/app/gestor/configuracoes', icon: 'Settings' }
     ],
     sections: [
-      { title: 'Gestao', items: ['gestor-dashboard', 'revisao-l2', 'apadinhamentos', 'padrinhos', 'relatorios'] }
+      { title: 'Operacional', items: ['gestor-dashboard', 'revisao-l2', 'apadinhamentos', 'padrinhos'] },
+      { title: 'Administracao', items: ['relatorios', 'utilizadores', 'notificacoes', 'mensagens', 'logs', 'configuracoes'] }
     ]
   },
-  
+
   [ROLES.TUTOR]: {
     main: [
       { name: 'tutor-dashboard', label: 'Dashboard', path: '/app/tutor', icon: 'LayoutDashboard' },
@@ -160,18 +181,19 @@ export const MENU_BY_ROLE = {
       { title: 'Tutor', items: ['tutor-dashboard', 'interessados', 'meus-padrinhos', 'progresso', 'mensagens'] }
     ]
   },
-  
+
   [ROLES.PADRINHO]: {
     main: [
       { name: 'catalogo', label: 'Catalogo', path: '/', icon: 'BookOpen' },
       { name: 'meu-padrinhado', label: 'Meu Padrinhado', path: '/app/padrinho', icon: 'Heart' },
-      { name: 'mensagens', label: 'Mensagens', path: '/app/padrinho/mensagens', icon: 'MessageCircle' }
+      { name: 'mensagens', label: 'Mensagens', path: '/app/padrinho/mensagens', icon: 'MessageCircle' },
+      { name: 'definicoes', label: 'Definicoes', path: '/app/definicoes', icon: 'Settings' }
     ],
     sections: [
-      { title: 'Padrinho', items: ['catalogo', 'meu-padrinhado', 'mensagens'] }
+      { title: 'Padrinho', items: ['catalogo', 'meu-padrinhado', 'mensagens', 'definicoes'] }
     ]
   },
-  
+
   [ROLES.ADMIN]: {
     main: [
       { name: 'admin-dashboard', label: 'Dashboard', path: '/app/admin', icon: 'LayoutDashboard' },
@@ -189,14 +211,14 @@ export const MENU_BY_ROLE = {
 export function hasRouteAccess(role, path) {
   // Admin tem acesso a tudo
   if (role === ROLES.ADMIN) return true
-  
+
   // Verificar permissao especifica
   for (const [routePattern, allowedRoles] of Object.entries(ROUTE_PERMISSIONS)) {
     if (path === routePattern || path.startsWith(routePattern + '/')) {
       return allowedRoles.includes(role)
     }
   }
-  
+
   // Rotas publicas ou sem restricao
   return true
 }

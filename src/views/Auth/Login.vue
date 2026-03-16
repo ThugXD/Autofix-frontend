@@ -10,14 +10,11 @@
           <img
             :src="logo"
             alt="SACCO"
-            class="w-20 h-20 mx-auto mb-4 rounded-2xl object-cover"
+            class="w-full h-full mx-auto mb-4 rounded-2xl object-cover"
           />
-          <h1 class="text-3xl font-bold text-gray-900">
-            Sistema SACCO
+          <h1 class="text-xl font-bold text-gray-900">
+            Sistema de Avaliação de Continuada a Criancas Orfãos
           </h1>
-          <p class="text-sm text-gray-500 mt-1">
-            Poupe uma Crianca
-          </p>
         </div>
 
         <!-- Login Card -->
@@ -155,7 +152,7 @@
           class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
         ></div>
         <!-- Pattern overlay -->
-        <div 
+        <div
           class="absolute inset-0 opacity-10"
           style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'2\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"
         ></div>
@@ -168,11 +165,11 @@
       <div class="relative z-10 flex flex-col justify-center px-16">
         <h2 class="text-4xl font-extrabold mb-4 leading-tight">
           Sistema de Assistencia<br />
-          <span class="text-blue-400">Contínua a Criancas</span>
+          <span class="text-blue-400">Contínua a Criancas Orfãs</span>
         </h2>
 
         <p class="text-gray-300 text-lg mb-8 max-w-md">
-          Gerencie o apadrinhamento de criancas vulneraveis com 
+          Gerencie o apadrinhamento de criancas vulneraveis com
           transparencia e eficiencia.
         </p>
 
@@ -207,11 +204,11 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { TEST_USERS, getRoleLabel, getRoleHome, ROLES } from '@/config/roles'
-import { 
-  Mail, 
-  Lock, 
-  ChevronDown, 
-  Users, 
+import {
+  Mail,
+  Lock,
+  ChevronDown,
+  Users,
   Shield,
   UserCog,
   ClipboardList,
@@ -283,11 +280,11 @@ const handleLogin = async () => {
 
   try {
     let success = false
-    
+
     // Se selecionou utilizador de teste
     if (selectedUserId.value) {
       success = await authStore.loginWithTestUser(selectedUserId.value)
-    } 
+    }
     // Login manual por email
     else if (form.value.email) {
       success = await authStore.login(form.value)
