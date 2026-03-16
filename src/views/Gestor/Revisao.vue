@@ -124,7 +124,7 @@
             </div>
             <button
               @click="abrirRevisaoN2(cadastro)"
-              class="btn-primary text-sm bg-indigo-600 hover:bg-indigo-700"
+              class="btn btn-primary"
             >
               <ShieldCheck class="w-4 h-4 mr-2" />
               Revisar Agora
@@ -162,7 +162,7 @@
             </div>
             <button
               @click="abrirOrcamento(cadastro)"
-              class="btn-primary text-sm bg-blue-600 hover:bg-blue-700"
+              class="btn btn-primary"
             >
               <Calculator class="w-4 h-4 mr-2" />
               Calcular Custos
@@ -203,7 +203,7 @@
             </div>
             <button
               @click="handlePublicar(cadastro)"
-              class="btn-primary text-sm bg-green-600 hover:bg-green-700"
+              class="btn btn-success"
             >
               <Globe class="w-4 h-4 mr-2" />
               Publicar no Catalogo
@@ -245,7 +245,7 @@
             </div>
             <router-link
               :to="`/app/padrinho/detalhes/${cadastro.id}`"
-              class="btn-secondary text-sm"
+              class="btn btn-primary text-sm"
             >
               <Eye class="w-4 h-4 mr-2" />
               Ver Perfil

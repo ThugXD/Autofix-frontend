@@ -119,6 +119,7 @@ export const ROUTE_PERMISSIONS = {
 
   // Admin
   '/app/admin': [ROLES.ADMIN],
+  '/app/admin/comunidades': [ROLES.ADMIN],
 
   // Dashboard geral - todos autenticados
   '/app': [ROLES.PF_COMUNITARIO, ROLES.PF_TEMATICO, ROLES.GESTOR, ROLES.TUTOR, ROLES.PADRINHO, ROLES.ADMIN],
@@ -206,11 +207,12 @@ export const MENU_BY_ROLE = {
     main: [
       { name: 'admin-dashboard', label: 'Dashboard', path: '/app/admin', icon: 'LayoutDashboard' },
       { name: 'utilizadores', label: 'Utilizadores', path: '/app/admin/utilizadores', icon: 'UserCog' },
+      { name: 'comunidades', label: 'Comunidades', path: '/app/admin/comunidades', icon: 'MapPin' },
       { name: 'configuracoes', label: 'Configuracoes', path: '/app/admin/configuracoes', icon: 'Settings' },
       { name: 'logs', label: 'Logs de Auditoria', path: '/app/admin/logs', icon: 'FileText' }
     ],
     sections: [
-      { title: 'Administracao', items: ['admin-dashboard', 'utilizadores', 'configuracoes', 'logs'] }
+      { title: 'Administracao', items: ['admin-dashboard', 'utilizadores', 'comunidades', 'configuracoes', 'logs'] }
     ]
   }
 }

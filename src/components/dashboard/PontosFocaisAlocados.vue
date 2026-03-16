@@ -5,9 +5,12 @@
         <Building2 class="w-5 h-5 text-blue-600" />
         Parceiros e Pontos Focais
       </h3>
-      <span class="text-sm text-blue-600 font-medium cursor-pointer hover:underline">
+      <button 
+        @click="router.push({ name: 'admin-comunidades' })"
+        class="text-sm text-blue-600 font-medium cursor-pointer hover:underline"
+      >
         Ver todos
-      </span>
+      </button>
     </div>
 
     <div class="space-y-4">
@@ -49,6 +52,9 @@
 
 <script setup>
 import { Building2 } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 defineProps({
   pontosFocais: {

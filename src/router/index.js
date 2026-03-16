@@ -453,6 +453,15 @@ const router = createRouter({
             allowedRoles: [ROLES.ADMIN]
           }
         },
+        {
+          path: 'admin/comunidades',
+          name: 'admin-comunidades',
+          component: () => import('@/views/Admin/Comunidades.vue'),
+          meta: {
+            title: 'Gestão de Comunidades - Admin',
+            allowedRoles: [ROLES.ADMIN]
+          }
+        },
 
         {
           path: 'meu-padrinhado',
