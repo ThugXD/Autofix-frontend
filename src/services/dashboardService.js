@@ -95,6 +95,33 @@ const mockDashboardData = {
     { regiao: 'Gaza', count: 5 },
     { regiao: 'Inhambane', count: 4 },
     { regiao: 'Sofala', count: 3 }
+  ],
+  
+  pontosFocaisAlocados: [
+    {
+      id: 1,
+      instituicao: 'Associação Vida Plena',
+      responsavel: 'Amélia Comunitária',
+      email: 'amelia.pf@sacco.org.mz',
+      status: 'Ativo',
+      criancas: 45
+    },
+    {
+      id: 2,
+      instituicao: 'Fundação Esperança',
+      responsavel: 'Fátima Nutrição',
+      email: 'fatima.sanc@sacco.org.mz',
+      status: 'Ativo',
+      criancas: 32
+    },
+    {
+      id: 3,
+      instituicao: 'ONG Criança Feliz',
+      responsavel: 'João Parceiro',
+      email: 'joao.parceiro@ong.org.mz',
+      status: 'Pendente',
+      criancas: 0
+    }
   ]
 }
 

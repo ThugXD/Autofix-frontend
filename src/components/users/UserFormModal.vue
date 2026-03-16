@@ -46,6 +46,18 @@
         <p v-if="errors.role" class="mt-1.5 text-sm text-red-600">{{ errors.role }}</p>
       </div>
 
+      <div v-if="form.role && form.role !== 'padrinho'">
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+          Instituição / Parceiro
+        </label>
+        <select v-model="form.instituicao" class="input">
+          <option value="">Nenhuma instituição vinculada</option>
+          <option v-for="inst in INSTITUICOES" :key="inst" :value="inst">
+            {{ inst }}
+          </option>
+        </select>
+      </div>
+
       <div v-if="!isEdit">
         <BaseInput
           v-model="form.password"
@@ -86,6 +98,7 @@ import { ref, computed, watch } from 'vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
+import { INSTITUICOES } from '@/config/roles'
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
@@ -106,6 +119,7 @@ const form = ref({
   email: '',
   phone: '',
   role: '',
+  instituicao: '',
   password: '',
   is_active: true
 })
@@ -120,6 +134,7 @@ watch(() => props.modelValue, (isOpen) => {
         email: props.user.email || '',
         phone: props.user.phone || '',
         role: props.user.role || '',
+        instituicao: props.user.instituicao || '',
         password: '',
         is_active: props.user.is_active !== undefined ? props.user.is_active : true
       }
@@ -136,6 +151,7 @@ const resetForm = () => {
     email: '',
     phone: '',
     role: '',
+    instituicao: '',
     password: '',
     is_active: true
   }

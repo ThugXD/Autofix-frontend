@@ -73,12 +73,11 @@
         Mapa da Comunidade
       </h3>
 
-      <div class="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
-        <div class="text-center">
-          <MapPin class="w-12 h-12 text-gray-400 mx-auto mb-2" />
-          <p class="text-gray-500">Mapa interativo da comunidade</p>
-          <p class="text-sm text-gray-400">Visualização das famílias e recursos</p>
-        </div>
+      <div class="h-[400px]">
+        <CommunityMap 
+          :resources="communityResources" 
+          :risks="riskAreas"
+        />
       </div>
     </div>
 
@@ -156,6 +155,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Plus, Home, Users, Package, AlertTriangle, MapPin, School, Heart, Utensils } from 'lucide-vue-next'
+import CommunityMap from '@/components/common/CommunityMap.vue'
 
 const communityResources = ref([
   {

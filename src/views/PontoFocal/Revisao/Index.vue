@@ -1,7 +1,7 @@
 <template>
   <div class="p-6 space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between card mb-6">
       <div>
         <h1 class="text-2xl font-bold text-gray-900">Revisao de Cadastros</h1>
         <p class="text-gray-500 mt-1">Revisao em 2 niveis + Consolidacao de necessidades</p>
@@ -140,7 +140,7 @@
             </div>
             <button
               @click="abrirRevisaoN1(cadastro)"
-              class="btn-primary text-sm"
+              class="btn-primary text-sm btn"
             >
               <FileCheck class="w-4 h-4 mr-1" />
               Revisar Fichas

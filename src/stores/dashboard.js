@@ -26,6 +26,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const necessidadesChart = ref({ labels: [], valores: [] })
   const cadastrosEmAndamento = ref([])
   const vulnerabilidadesPorRegiao = ref([])
+  const pontosFocaisAlocados = ref([])
   const loading = ref(false)
 
   // Actions
@@ -41,6 +42,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       necessidadesChart.value = response.data.necessidadesChart
       cadastrosEmAndamento.value = response.data.cadastrosEmAndamento
       vulnerabilidadesPorRegiao.value = response.data.vulnerabilidadesPorRegiao
+      pontosFocaisAlocados.value = response.data.pontosFocaisAlocados
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error)
       toast.error('Erro ao carregar dados do dashboard')
@@ -69,6 +71,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     necessidadesChart,
     cadastrosEmAndamento,
     vulnerabilidadesPorRegiao,
+    pontosFocaisAlocados,
     loading,
     
     // Actions

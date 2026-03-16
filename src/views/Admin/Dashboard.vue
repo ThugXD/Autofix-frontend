@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between">
         <div>
           <h2 class="page-title">Dashboard</h2>
-          <p class="page-subtitle">Ponto Focal Comunitario - Visao geral das criancas</p>
+          <p class="page-subtitle">Administrador do Sistema - Visão geral e gestão de parceiros</p>
         </div>
         <BaseButton
           variant="secondary"
@@ -65,8 +65,12 @@
 
       <!-- Bottom Row -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <RecentComunicacoes :comunicacoes="dashboardStore.recentComunicacoes" />
+        <PontosFocaisAlocados :pontos-focais="dashboardStore.pontosFocaisAlocados" />
         <CadastrosEmAndamento :cadastros="dashboardStore.cadastrosEmAndamento" />
+      </div>
+      
+      <div class="mt-6">
+        <RecentComunicacoes :comunicacoes="dashboardStore.recentComunicacoes" />
       </div>
     </div>
   </div>
@@ -89,6 +93,7 @@ import CadastrosChart from '@/components/dashboard/CadastrosChart.vue'
 import RecentComunicacoes from '@/components/dashboard/RecentComunicacoes.vue'
 import CadastrosEmAndamento from '@/components/dashboard/CadastrosEmAndamento.vue'
 import VulnerabilidadesPorRegiao from '@/components/dashboard/VulnerabilidadesPorRegiao.vue'
+import PontosFocaisAlocados from '@/components/dashboard/PontosFocaisAlocados.vue'
 
 const dashboardStore = useDashboardStore()
 

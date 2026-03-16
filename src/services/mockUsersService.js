@@ -6,6 +6,7 @@ let mockUsers = [
     phone: '841000001',
     role: 'admin',
     avatar: null,
+    instituicao: 'Governo Local',
     is_active: true,
     last_login: '2026-03-12T09:00:00Z',
     created_at: '2025-01-01T08:00:00Z'
@@ -17,6 +18,7 @@ let mockUsers = [
     phone: '841000002',
     role: 'gestor',
     avatar: null,
+    instituicao: 'Associação Vida Plena',
     is_active: true,
     last_login: '2026-03-12T08:30:00Z',
     created_at: '2025-01-05T09:00:00Z'
@@ -28,6 +30,7 @@ let mockUsers = [
     phone: '841000003',
     role: 'ponto_focal',
     avatar: null,
+    instituicao: 'Associação Vida Plena',
     is_active: true,
     last_login: '2026-03-11T14:00:00Z',
     created_at: '2025-02-01T10:00:00Z'
@@ -39,6 +42,7 @@ let mockUsers = [
     phone: '841000004',
     role: 'ponto_focal_tematico',
     avatar: null,
+    instituicao: 'Associação Vida Plena',
     is_active: true,
     last_login: '2026-03-10T11:00:00Z',
     created_at: '2025-02-05T10:00:00Z'
@@ -50,6 +54,7 @@ let mockUsers = [
     phone: '841000005',
     role: 'ponto_focal_tematico',
     avatar: null,
+    instituicao: 'Fundação Esperança',
     is_active: true,
     last_login: '2026-03-09T10:00:00Z',
     created_at: '2025-02-10T10:00:00Z'
@@ -61,6 +66,7 @@ let mockUsers = [
     phone: '841000006',
     role: 'tutor',
     avatar: null,
+    instituicao: 'Associação Vida Plena',
     is_active: true,
     last_login: '2026-03-08T09:30:00Z',
     created_at: '2025-03-01T12:00:00Z'
@@ -72,6 +78,7 @@ let mockUsers = [
     phone: '841000007',
     role: 'tutor',
     avatar: null,
+    instituicao: 'Associação Vida Plena',
     is_active: false,
     last_login: '2026-02-25T08:00:00Z',
     created_at: '2025-03-10T11:00:00Z'
@@ -83,6 +90,7 @@ let mockUsers = [
     phone: '841000008',
     role: 'padrinho',
     avatar: null,
+    instituicao: null,
     is_active: true,
     last_login: '2026-03-11T20:00:00Z',
     created_at: '2025-06-01T15:00:00Z'
@@ -94,6 +102,7 @@ let mockUsers = [
     phone: '841000009',
     role: 'padrinho',
     avatar: null,
+    instituicao: null,
     is_active: true,
     last_login: '2026-03-12T07:45:00Z',
     created_at: '2025-07-15T14:00:00Z'
@@ -102,7 +111,7 @@ let mockUsers = [
 
 let nextId = 10
 
-const delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms))
+const delay = (ms = 50) => new Promise(resolve => setTimeout(resolve, ms))
 
 export const mockUsersService = {
   async getAll(params = {}) {
@@ -120,6 +129,10 @@ export const mockUsersService = {
 
     if (params.role) {
       filtered = filtered.filter(u => u.role === params.role)
+    }
+
+    if (params.instituicao) {
+      filtered = filtered.filter(u => u.instituicao === params.instituicao)
     }
 
     if (params.is_active !== undefined) {

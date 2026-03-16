@@ -23,6 +23,14 @@ export const ROLE_LABELS = {
   [ROLES.ADMIN]: 'Administrador'
 }
 
+// Instituições / Parceiros (para demo)
+export const INSTITUICOES = [
+  'Associação Vida Plena',
+  'Fundação Esperança',
+  'ONG Criança Feliz',
+  'Governo Local'
+]
+
 // Utilizadores de Teste (para demo)
 export const TEST_USERS = [
   {

@@ -34,6 +34,12 @@
           <option value="tutor">Tutor</option>
           <option value="padrinho">Padrinho</option>
         </select>
+        <select v-model="instituicaoFilter" @change="loadUsers" class="input">
+          <option value="">Todas as instituições</option>
+          <option v-for="inst in INSTITUICOES" :key="inst" :value="inst">
+            {{ inst }}
+          </option>
+        </select>
       </div>
     </div>
 
@@ -47,6 +53,7 @@
               <th>Email</th>
               <th>Telefone</th>
               <th>Função</th>
+              <th>Instituição</th>
               <th>Último Acesso</th>
               <th>Status</th>
               <th class="text-center">Ações</th>
@@ -82,6 +89,9 @@
                 <span :class="['badge', roleClasses[user.role]]">
                   {{ roleLabels[user.role] }}
                 </span>
+              </td>
+              <td class="text-sm text-gray-600">
+                {{ user.instituicao || '-' }}
               </td>
               <td class="text-sm text-gray-600">
                 {{ user.last_login ? formatDate(user.last_login) : 'Nunca' }}
@@ -135,6 +145,7 @@ import { ref, onMounted } from 'vue'
 import { usersService } from '@/services/usersService'
 import { format } from 'date-fns'
 import { Plus, Search, Edit, Trash2 } from 'lucide-vue-next'
+import { INSTITUICOES } from '@/config/roles'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
@@ -148,6 +159,7 @@ const users = ref([])
 const loading = ref(false)
 const searchQuery = ref('')
 const roleFilter = ref('')
+const instituicaoFilter = ref('')
 const showForm = ref(false)
 const showDeleteModal = ref(false)
 const selectedUser = ref(null)
@@ -179,7 +191,8 @@ const loadUsers = async () => {
   try {
     const response = await usersService.getAll({
       search: searchQuery.value,
-      role: roleFilter.value
+      role: roleFilter.value,
+      instituicao: instituicaoFilter.value
     })
     users.value = response.data.data
   } catch (error) {
