@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between card">
       <div>
         <h1 class="text-2xl font-bold text-gray-900">Gestão de Comunidades e Parceiros</h1>
         <p class="text-gray-500 mt-1">
@@ -34,6 +34,7 @@
       </div>
     </div>
 
+
     <!-- Table -->
     <div class="card">
       <div class="overflow-x-auto">
@@ -65,7 +66,7 @@
             <tr v-else v-for="community in communities" :key="community.id">
               <td>
                 <div class="flex items-center gap-3">
-                  <div 
+                  <div
                     class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold"
                   >
                     {{ community.name.charAt(0) }}
@@ -106,6 +107,21 @@
       </div>
     </div>
 
+
+    <!-- Map View -->
+    <div class="card">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <MapPin class="w-5 h-5 text-green-600" />
+        Mapa das Comunidades
+      </h3>
+      <div class="h-[400px]">
+        <CommunityMap
+          :resources="mapResources"
+          :risks="riskAreas"
+        />
+      </div>
+    </div>
+
     <!-- Modals -->
     <CommunityFormModal
       v-model="showForm"
@@ -123,14 +139,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { comunidadeService } from '@/services/comunidadeService'
-import { Plus, Search, Edit, Trash2 } from 'lucide-vue-next'
+import { Plus, Search, Edit, Trash2, MapPin } from 'lucide-vue-next'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import CommunityFormModal from '@/components/comunidade/CommunityFormModal.vue'
 import DeleteConfirmation from '@/components/common/DeleteConfirmation.vue'
+import CommunityMap from '@/components/common/CommunityMap.vue'
 import { useToast } from 'vue-toastification'
 
 const toast = useToast()
@@ -148,6 +165,20 @@ const statusClasses = {
   'Inativo': 'badge-danger',
   'Pendente': 'badge-warning'
 }
+
+// Map data
+const mapResources = computed(() =>
+  communities.value.map((community, index) => ({
+    id: community.id,
+    name: community.name,
+    type: 'Comunidade',
+    lat: -25.9 + (index * 0.1), // Mock coordinates around Maputo
+    lng: 32.5 + (index * 0.1),
+    icon: MapPin
+  }))
+)
+
+const riskAreas = ref([]) // Empty for now, can be populated later
 
 onMounted(() => {
   loadCommunities()
