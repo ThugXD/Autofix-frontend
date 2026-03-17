@@ -20,7 +20,7 @@
               <!-- Nome da Oficina -->
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">
-                  Nome da Oficina
+                  Nome da Comunidade
                 </label>
                 <div class="relative">
                   <Building2 class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />

@@ -26,6 +26,13 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
         dadosColectados: 'Sem documentacao legal. Mae e pai falecidos sem deixar documentos. Tio possui apenas BI.',
         recomendacoes: 'Urgente obtencao de certidao de nascimento atraves de processo judicial de registo tardio.'
       },
+      // Dados especializados para o formulario SADD
+      especializada: {
+        temCertidao: false,
+        motivoFaltaCertidao: 'Registro tardio / Pais falecidos',
+        outrosDocumentosEmFalta: ['BI', 'NUIT'],
+        situacaoPais: 'Ambos falecidos sem documentacao em ordem.'
+      },
       // Necessidades
       necessidades: [
         {
@@ -61,6 +68,14 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
         descricaoAvaliacao: 'Avaliacao nutricional revelou peso abaixo do ideal para a idade. IMC de 15.2 indica desnutricao moderada.',
         dadosColectados: 'Peso: 28kg, Altura: 1.35m, IMC: 15.2. Alimentacao irregular, 1-2 refeicoes por dia.',
         recomendacoes: 'Acompanhamento nutricional mensal. Suplementacao vitaminica. Garantir 3 refeicoes diarias.'
+      },
+      // Dados especializados para o formulario SANC
+      especializada: {
+        peso: 28,
+        altura: 1.35,
+        imc: 15.2,
+        estadoNutricional: 'Desnutrição Moderada',
+        frequenciaRefeicoes: 2
       },
       necessidades: [
         {
@@ -149,6 +164,14 @@ export const usePontoFocalTematicoStore = defineStore('pontoFocalTematico', () =
         descricaoAvaliacao: 'Familia enfrenta inseguranca alimentar. Tio tem rendimento irregular que nao cobre necessidades basicas.',
         dadosColectados: 'Rendimento mensal: ~2000 MZN. Despesas basicas: ~3500 MZN. Deficit mensal significativo.',
         recomendacoes: 'Inclusao em programa de cesta basica. Apoio para horta comunitaria.'
+      },
+      // Dados especializados para o formulario SAAD
+      especializada: {
+        membrosAgregado: 5,
+        rendimentoMensal: 2000,
+        fonteRendimento: 'Trabalho informal (Construção)',
+        frequenciaAcessoAlimentos: 'irregular',
+        alimentosHabituais: 'Xima, folhas de abóbora, feijão ocasional.'
       },
       necessidades: [
         {

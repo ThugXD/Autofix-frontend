@@ -67,9 +67,9 @@
           :key="tab.id"
           @click="activeTab = tab.id"
           :class="[
-            'py-3 text-sm font-medium border-b-2 transition-colors',
+            'py-3 btn text-sm font-medium border-b-2 transition-colors',
             activeTab === tab.id
-              ? 'border-primary text-primary'
+              ? 'border-primary bg-gray-300 text-primary'
               : 'border-transparent text-gray-500 hover:text-gray-700'
           ]"
         >
@@ -255,57 +255,80 @@
       </div>
     </div>
 
-    <!-- Modal Revisao N2 -->
     <BaseModal
       v-model="showModalN2"
-      title="Revisao Final Nivel 2"
+      :title="selectedArea ? 'Detalhes da Avaliação Técnica' : 'Revisão Final Nível 2'"
       size="xl"
     >
       <div v-if="cadastroSelecionado" class="space-y-8">
-        <!-- Crianca Info -->
-        <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-          <img
-            :src="cadastroSelecionado.foto"
-            class="w-24 h-24 rounded-2xl object-cover shadow-sm ring-4 ring-white"
+        <!-- Drill-down View -->
+        <div v-if="selectedArea">
+          <TechnicalAssessmentViewer
+            :type="selectedArea.id"
+            :title="selectedArea.nome"
+            :data="getFichaDataForArea(selectedArea.id)"
+            :observations="getSummaryForArea(selectedArea.id)"
+            @back="selectedArea = null"
           />
-          <div>
-            <span class="text-xs font-mono text-gray-400">{{ cadastroSelecionado.codigo }}</span>
-            <h3 class="text-xl font-bold text-gray-900">{{ cadastroSelecionado.nomeCompleto }}</h3>
-            <p class="text-gray-600">{{ cadastroSelecionado.localResidencia }}</p>
-          </div>
         </div>
 
-        <!-- Summary of Technical Assessments -->
-        <div class="space-y-4">
-          <h4 class="font-bold text-gray-900 border-l-4 border-indigo-500 pl-3">Sumário de Avaliações Técnicas</h4>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <div
-              v-for="area in specialistAreas"
-              :key="area.id"
-              class="p-4 rounded-xl border bg-white flex flex-col gap-2"
-              :class="getFichaStatusColor(area.id)"
-            >
-              <div class="flex items-center gap-2">
-                <component :is="area.icon" class="w-4 h-4" />
-                <span class="text-xs font-bold uppercase tracking-wider">{{ area.id }}</span>
-              </div>
-              <p class="text-sm font-bold text-gray-800">{{ area.nome }}</p>
-              <p class="text-xs text-gray-500 italic mt-1">
-                "{{ getSummaryForArea(area.id) }}"
-              </p>
+        <!-- Summary View -->
+        <div v-else class="space-y-8">
+          <!-- Crianca Info -->
+          <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+            <img
+              :src="cadastroSelecionado.foto"
+              class="w-24 h-24 rounded-2xl object-cover shadow-sm ring-4 ring-white"
+            />
+            <div>
+              <span class="text-xs font-mono text-gray-400">{{ cadastroSelecionado.codigo }}</span>
+              <h3 class="text-xl font-bold text-gray-900">{{ cadastroSelecionado.nomeCompleto }}</h3>
+              <p class="text-gray-600">{{ cadastroSelecionado.localResidencia }}</p>
             </div>
           </div>
-        </div>
 
-        <!-- Decision Box -->
-        <div class="space-y-4 pt-4 border-t border-gray-100">
-          <label class="block text-sm font-bold text-gray-700">Parecer Final do Gestor</label>
-          <textarea
-            v-model="gestorComment"
-            rows="3"
-            class="input p-4 bg-gray-50 border border-gray-200 rounded-2xl w-full"
-            placeholder="Observações ou instruções para os pontos focais..."
-          ></textarea>
+          <!-- Summary of Technical Assessments -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-gray-900 border-l-4 border-indigo-500 pl-3">Sumário de Avaliações Técnicas</h4>
+              <span class="text-xs text-gray-500 font-medium">Clique em uma área para ver detalhes</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div
+                v-for="area in specialistAreas"
+                :key="area.id"
+                @click="selectedArea = area"
+                class="p-4 rounded-xl border bg-white flex flex-col gap-2 cursor-pointer hover:border-indigo-300 hover:shadow-md transition-all group"
+                :class="getFichaStatusColor(area.id)"
+              >
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <component :is="area.icon" class="w-4 h-4 text-indigo-500" />
+                    <span class="text-xs font-bold uppercase tracking-wider text-gray-400 group-hover:text-indigo-600">{{ area.id }}</span>
+                  </div>
+                  <Eye class="w-4 h-4 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <p class="text-sm font-bold text-gray-800">{{ area.nome }}</p>
+                <p class="text-xs text-gray-500 italic mt-1 line-clamp-2">
+                  "{{ getSummaryForArea(area.id) }}"
+                </p>
+                <button class="text-xs font-bold text-indigo-600 mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                  Ver Ficha Completa <ArrowRight class="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Decision Box -->
+          <div class="space-y-4 pt-4 border-t border-gray-100">
+            <label class="block text-sm font-bold text-gray-700">Parecer Final do Gestor</label>
+            <textarea
+              v-model="gestorComment"
+              rows="3"
+              class="input p-4 bg-gray-50 border border-gray-200 rounded-2xl w-full"
+              placeholder="Observações ou instruções para os pontos focais..."
+            ></textarea>
+          </div>
         </div>
       </div>
 
@@ -343,47 +366,100 @@
           </div>
         </div>
 
-        <div class="overflow-x-auto rounded-2xl border border-gray-100 overflow-hidden">
-          <table class="w-full">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="text-left p-4 text-xs font-bold text-gray-500 uppercase">Rubrica Técnica</th>
-                <th class="text-right p-4 text-xs font-bold text-gray-500 uppercase">Necessidades</th>
-                <th class="text-right p-4 text-xs font-bold text-gray-500 uppercase w-48">Orçamento Anual (MZN)</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-              <tr v-for="item in budgetLines" :key="item.areaId">
-                <td class="p-4">
-                  <div class="flex items-center gap-2">
-                    <component :is="getAreaIcon(item.areaId)" class="w-4 h-4 text-gray-400" />
-                    <span class="text-sm font-bold text-gray-900">{{ getAreaName(item.areaId) }}</span>
+        <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+          <div v-for="area in budgetLines" :key="area.areaId" class="rounded-2xl border border-gray-100 bg-white overflow-hidden transition-all">
+            <!-- Area Header (Clickable to Toggle) -->
+            <div 
+              @click="toggleArea(area.areaId)"
+              class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+              :class="{ 'bg-blue-50/30': isAreaOpen(area.areaId) }"
+            >
+              <div class="flex items-center gap-3">
+                <div 
+                  class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors"
+                  :class="isAreaOpen(area.areaId) ? 'bg-blue-100 text-blue-600' : 'bg-gray-50 text-gray-500'"
+                >
+                  <component :is="getAreaIcon(area.areaId)" class="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-900">{{ getAreaName(area.areaId) }}</h4>
+                  <p class="text-xs text-gray-500 uppercase tracking-wider">{{ area.areaId }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="text-right">
+                  <p class="text-xs text-gray-400 font-medium">Subtotal</p>
+                  <p class="font-bold text-gray-900">{{ formatCurrency(area.items.reduce((sum, i) => sum + (i.value || 0), 0)) }}</p>
+                </div>
+                <ChevronDown 
+                  class="w-5 h-5 text-gray-400 transition-transform duration-300"
+                  :class="{ 'rotate-180 text-blue-500': isAreaOpen(area.areaId) }"
+                />
+              </div>
+            </div>
+
+            <!-- Area Content (Collapsible) -->
+            <transition
+              enter-active-class="transition duration-300 ease-out"
+              enter-from-class="transform scale-95 opacity-0"
+              enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-200 ease-in"
+              leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0"
+            >
+              <div v-if="isAreaOpen(area.areaId)" class="p-5 pt-0 border-t border-gray-50 space-y-4 mt-4">
+                <!-- Line Items -->
+                <div class="space-y-3">
+                  <div v-for="(item, index) in area.items" :key="index" class="flex gap-3 items-start">
+                    <div class="flex-1">
+                      <input
+                        v-model="item.description"
+                        type="text"
+                        class="input text-sm py-2 px-3 focus:ring-blue-500 border-gray-200"
+                        placeholder="Ex: Consultas mensais, Medicamentos, etc."
+                      />
+                    </div>
+                    <div class="w-40">
+                      <div class="relative">
+                        <input
+                          v-model.number="item.value"
+                          type="number"
+                          class="input text-sm py-2 pl-3 pr-10 text-right focus:ring-blue-500 border-gray-200"
+                          placeholder="0.00"
+                        />
+                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">MZN</span>
+                      </div>
+                    </div>
+                    <button 
+                      @click.stop="area.items.splice(index, 1)"
+                      class="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Remover item"
+                    >
+                      <Trash2 class="w-4 h-4" />
+                    </button>
                   </div>
-                </td>
-                <td class="p-4 text-right">
-                  <span class="text-sm text-gray-600">{{ item.count || 2 }} itens</span>
-                </td>
-                <td class="p-4">
-                  <input
-                    type="number"
-                    v-model="item.value"
-                    class="input text-right text-sm py-1.5 focus:ring-blue-500"
-                    placeholder="0.00"
-                  />
-                </td>
-              </tr>
-            </tbody>
-            <tfoot class="bg-indigo-50">
-              <tr>
-                <td colspan="2" class="p-4 text-right">
-                  <span class="text-indigo-900 font-bold">TOTAL ANUAL ESTIMADO</span>
-                </td>
-                <td class="p-4 text-right">
-                  <span class="text-lg font-black text-indigo-900">{{ formatCurrency(totalBudget) }}</span>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+                </div>
+
+                <!-- Add Item Button -->
+                <button 
+                  @click.stop="area.items.push({ description: '', value: 0 })"
+                  class="flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors py-2"
+                >
+                  <Plus class="w-4 h-4" />
+                  Adicionar Item para {{ getAreaName(area.areaId) }}
+                </button>
+              </div>
+            </transition>
+          </div>
+        </div>
+
+        <!-- Total Footer -->
+        <div class="p-6 bg-indigo-50 rounded-2xl border border-indigo-100 mt-6 flex justify-between items-center">
+          <div>
+            <p class="text-indigo-900 font-bold">TOTAL ANUAL ESTIMADO</p>
+            <p class="text-xs text-indigo-700">Soma de todas as rubricas técnicas</p>
+          </div>
+          <span class="text-2xl font-black text-indigo-900">{{ formatCurrency(totalBudget) }}</span>
         </div>
       </div>
 
@@ -405,12 +481,15 @@ import { ref, computed, onMounted } from 'vue'
 import {
   Clock, Calculator, Globe, CheckCircle, ShieldCheck, Eye,
   XCircle, FileText, Heart, Stethoscope, UtensilsCrossed,
-  GraduationCap, Shield, Brain, Loader2, Save
+  GraduationCap, Shield, Brain, Loader2, Save, Trash2, Plus,
+  ChevronDown
 } from 'lucide-vue-next'
 import { usePontoFocalStore } from '@/stores/pontoFocal'
 import { usePontoFocalTematicoStore } from '@/stores/pontoFocalTematico'
 import BaseModal from '@/components/common/BaseModal.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
+import TechnicalAssessmentViewer from '@/components/gestor/TechnicalAssessmentViewer.vue'
+import { ArrowRight, ArrowLeft } from 'lucide-vue-next'
 import { useToast } from 'vue-toastification'
 
 const toast = useToast()
@@ -423,6 +502,8 @@ const activeTab = ref('pendentes')
 const showModalN2 = ref(false)
 const showModalOrcamento = ref(false)
 const cadastroSelecionado = ref(null)
+const selectedArea = ref(null)
+const openAreas = ref([]) // IDs das áreas abertas no orçamento
 const gestorComment = ref('')
 
 const budgetLines = ref([])
@@ -445,7 +526,9 @@ const tabs = computed(() => [
 ])
 
 const totalBudget = computed(() => {
-  return budgetLines.value.reduce((acc, line) => acc + (line.value || 0), 0)
+  return budgetLines.value.reduce((total, area) => {
+    return total + area.items.reduce((sum, item) => sum + (item.value || 0), 0)
+  }, 0)
 })
 
 // Methods
@@ -461,6 +544,7 @@ const fetchAll = async () => {
 const abrirRevisaoN2 = (cadastro) => {
   cadastroSelecionado.value = cadastro
   gestorComment.value = ''
+  selectedArea.value = null
   showModalN2.value = true
 }
 
@@ -495,15 +579,76 @@ const handleRejeitar = async () => {
   }
 }
 
+const defaultNeeds = {
+  sadd: ['Registo Civil / Certidão', 'Documentação do Tutor', 'Emissão de NUIT'],
+  sanc: ['Suplemento Multivitamínico', 'Acompanhamento Nutricional', 'Cesta Nutricional Especial'],
+  sasbe: ['Check-up Geral Trimestral', 'Esquema Vacinal', 'Medicamentos de Base'],
+  saad: ['Cesta Básica Mensal', 'Reforço Alimentar Escolar', 'Kit de Higiene'],
+  saeie: ['Kit Escolar Anual', 'Uniforme e Calçado', 'Apoio em Propinas / Matrícula'],
+  saps: ['Visitas de Monitoria Local', 'Melhoria de Condições de Dormida', 'Proteção / Fardamento Familiar'],
+  sape: ['Sessões de Aconselhamento', 'Atividades de Integração Social', 'Apoio Psicossocial à Família']
+}
+
 const abrirOrcamento = (cadastro) => {
   cadastroSelecionado.value = cadastro
-  budgetLines.value = specialistAreas.map(area => ({
-    areaId: area.id,
-    value: 0,
-    count: 1
-  }))
+  openAreas.value = [] // Resetar áreas abertas
+  
+  // Buscar todas as necessidades identificadas pelos especialistas
+  const assessmentNecessities = tematicoStore.getAllNecessidadesByCadastro(cadastro.id)
+  
+  // Agrupar necessidades por área especialista para inicializar as linhas do orçamento
+  budgetLines.value = specialistAreas.map(area => {
+    const areaNecessities = assessmentNecessities.filter(n => n.tipo === area.id)
+    
+    // Itens vindos da avaliação técnica
+    const assessmentItems = areaNecessities.map(n => ({
+      description: n.descricao,
+      value: n.custoEstimado || 0
+    }))
+    
+    // Itens padrão sugeridos para esta área
+    const defaults = (defaultNeeds[area.id] || []).map(desc => ({
+      description: desc,
+      value: 0
+    }))
+
+    // Combinar: itens da avaliação primeiro, depois completamos com os padrões até ter pelo menos 3
+    let combinedItems = [...assessmentItems]
+    for (const def of defaults) {
+      if (combinedItems.length >= 3) break
+      // Evitar duplicar descrições idênticas
+      if (!combinedItems.some(i => i.description.toLowerCase() === def.description.toLowerCase())) {
+        combinedItems.push(def)
+      }
+    }
+    
+    // Se ainda assim tiver menos de 3 (caso a lista padrão seja curta), adicionamos vazios
+    while (combinedItems.length < 3) {
+      combinedItems.push({ description: '', value: 0 })
+    }
+
+    return {
+      areaId: area.id,
+      items: combinedItems
+    }
+  })
+
+  // Manter todas as áreas colapsadas por padrão para um layout mais limpo
+  openAreas.value = []
+
   showModalOrcamento.value = true
 }
+
+const toggleArea = (areaId) => {
+  const index = openAreas.value.indexOf(areaId)
+  if (index === -1) {
+    openAreas.value.push(areaId)
+  } else {
+    openAreas.value.splice(index, 1)
+  }
+}
+
+const isAreaOpen = (areaId) => openAreas.value.includes(areaId)
 
 const handleSalvarOrcamento = async () => {
   if (totalBudget.value <= 0) {
@@ -512,7 +657,7 @@ const handleSalvarOrcamento = async () => {
   }
   processing.value = true
   try {
-    await pfStore.definirOrcamento(cadastroSelecionado.value.id, totalBudget.value)
+    await pfStore.definirOrcamento(cadastroSelecionado.value.id, totalBudget.value, budgetLines.value)
     toast.success('Orçamento definido! O cadastro está pronto para publicação.')
     showModalOrcamento.value = false
     activeTab.value = 'prontos'
@@ -545,6 +690,13 @@ const getSummaryForArea = (areaId) => {
   )
   if (ficha) return ficha.observacoesPF || 'Necessidades identificadas e validadas pelo especialista.'
   return 'Avaliação concluída com sucesso.'
+}
+
+const getFichaDataForArea = (areaId) => {
+  const ficha = tematicoStore.fichasTecnicas.find(
+    f => f.cadastroId === cadastroSelecionado.value.id && f.pfTematico === areaId
+  )
+  return ficha?.especializada || {}
 }
 
 const getAreaIcon = (id) => specialistAreas.find(a => a.id === id)?.icon || FileText

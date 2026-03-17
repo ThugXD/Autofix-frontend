@@ -2,237 +2,399 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useCriancasStore = defineStore('criancas', () => {
-  const criancas = ref([])
+  const lista = ref([])
   const loading = ref(false)
-  const filtros = ref({ regiao: '', vulnerabilidade: '' })
+  const filtros = ref({
+    regiao: '',
+    vulnerabilidade: ''
+  })
 
-  const criancasMock = [
+  // =============================================
+  // DADOS MOCK
+  // =============================================
+  const mockCriancas = [
     {
-      id: 1,
-      nome: 'Maria Silva',
-      idade: 8,
-      foto: '/img/children/maria_silva.png',
+      id: '1',
+      nome: 'Ana Dlamini',
+      idade: 10,
+      foto: '/img/children/ana_dlamini.png',
       regiao: 'Maputo',
-      vulnerabilidades: ['Pobreza extrema', 'Acesso à educação'],
+      status: 'Disponível',
+      dataRegistro: '2024-01-15',
+      vulnerabilidades: ['Pobreza Extrema', 'Fora da Escola'],
       necessidades: [
         {
-          id: 'sadd-1',
-          tipo: 'SADD',
-          nome: 'Documentação',
-          descricao: 'Certidão de nascença',
-          detalhes: 'A criança necessita de documentação oficial para acesso a direitos básicos e inscrição escolar.',
+          id: 1,
+          nome: 'Educação Primária',
+          tipo: 'saeie',
           prioridade: 'Alto',
-          impacto: 'Acesso a direitos básicos'
+          descricao: 'Matrícula e material escolar para a 5ª classe.',
+          detalhes: 'A Ana está fora da escola há 2 anos devido à falta de documentos e recursos.',
+          impacto: 'Reintegração no sistema de ensino e desenvolvimento cognitivo.'
         },
         {
-          id: 'sanc-1',
-          tipo: 'SANC',
-          nome: 'Nutrição',
-          descricao: 'Programa de nutrição',
-          detalhes: 'Desnutrição moderada. Necessita de acompanhamento nutricional e refeições diárias.',
-          prioridade: 'Alto',
-          impacto: 'Desenvolvimento saudável'
-        },
-        {
-          id: 'saeie-1',
-          tipo: 'SAEIE',
-          nome: 'Educação',
-          descricao: 'Volta à escola',
-          detalhes: 'Fora do sistema escolar há 2 anos. Precisa de apoio escolar e material didático.',
-          prioridade: 'Alto',
-          impacto: 'Educação de qualidade'
-        },
-        {
-          id: 'sape-1',
-          tipo: 'SAPE',
-          nome: 'Psico-social',
-          descricao: 'Apoio emocional',
-          detalhes: 'Trauma relacionado a perda. Necessita de acompanhamento psicológico.',
+          id: 2,
+          nome: 'Acompanhamento Nutricional',
+          tipo: 'sanc',
           prioridade: 'Médio',
-          impacto: 'Bem-estar emocional'
+          descricao: 'Suplementação alimentar e monitoramento de peso.',
+          detalhes: 'Apresenta sinais de desnutrição leve devido à dieta pouco variada.',
+          impacto: 'Melhoria da saúde física e imunidade.'
+        },
+        {
+          id: 10,
+          nome: 'Registro Civil',
+          tipo: 'sadd',
+          prioridade: 'Alto',
+          descricao: 'Obtenção de documentos de identidade.',
+          detalhes: 'Processo legal para emissão de certidão de nascimento.',
+          impacto: 'Acesso a direitos fundamentais e matrícula escolar.'
+        },
+        {
+          id: 11,
+          nome: 'Saúde Geral',
+          tipo: 'sasbe',
+          prioridade: 'Alto',
+          descricao: 'Check-up pediátrico completo.',
+          detalhes: 'Consultas de rotina e vacinação em dia.',
+          impacto: 'Prevenção de doenças crônicas.'
+        },
+        {
+          id: 12,
+          nome: 'Alimentação Diária',
+          tipo: 'saad',
+          prioridade: 'Alto',
+          descricao: 'Apoio à segurança alimentar familiar.',
+          detalhes: 'Garantia de refeições nutritivas diárias.',
+          impacto: 'Estabilidade física e foco nos estudos.'
+        },
+        {
+          id: 13,
+          nome: 'Kit de Proteção',
+          tipo: 'saps',
+          prioridade: 'Médio',
+          descricao: 'Produtos de higiene e mosquiteiro.',
+          detalhes: 'Prevenção contra malária e outras infecções.',
+          impacto: 'Ambiente doméstico mais seguro.'
+        },
+        {
+          id: 14,
+          nome: 'Integração Social',
+          tipo: 'sape',
+          prioridade: 'Baixo',
+          descricao: 'Atividades recreativas e psicossociais.',
+          detalhes: 'Apoio no desenvolvimento de competências emocionais.',
+          impacto: 'Aumento da autoestima e resiliência.'
         }
       ],
-      orcamentoAnual: 5000,
-      orcamentoCoberto: 1200,
-      status: 'Disponível',
-      dataRegistro: '2024-01-15'
+      orcamentoAnual: 64000,
+      orcamentoCoberto: 0,
+      orcamentoDetalhado: [
+        {
+          areaId: 'saeie',
+          items: [
+            { description: 'Matrícula e Mensalidades', value: 12000 },
+            { description: 'Uniforme e Material', value: 3000 }
+          ]
+        },
+        {
+          areaId: 'sanc',
+          items: [
+            { description: 'Suplementos e Fortificantes', value: 5000 }
+          ]
+        },
+        {
+          areaId: 'sadd',
+          items: [
+            { description: 'Emolumentos e Certidões', value: 2500 }
+          ]
+        },
+        {
+          areaId: 'sasbe',
+          items: [
+            { description: 'Consultas e Exames', value: 7500 }
+          ]
+        },
+        {
+          areaId: 'saad',
+          items: [
+            { description: 'Reforço Alimentar Mensal', value: 24000 }
+          ]
+        },
+        {
+          areaId: 'saps',
+          items: [
+            { description: 'Produtos de Higiene', value: 2500 },
+            { description: 'Rede Mosquiteira', value: 1500 }
+          ]
+        },
+        {
+          areaId: 'sape',
+          items: [
+            { description: 'Acompanhamento Especializado', value: 6000 }
+          ]
+        }
+      ]
     },
     {
-      id: 2,
-      nome: 'João Nkomo',
+      id: '2',
+      nome: 'Carlos Sitoe',
       idade: 12,
       foto: '/img/children/joao_nkomo.png',
       regiao: 'Gaza',
-      vulnerabilidades: ['Órfão', 'Criança de rua'],
+      status: 'Parcialmente Apoiada',
+      dataRegistro: '2024-02-10',
+      vulnerabilidades: ['Órfão de ambos os pais', 'Trabalho Infantil'],
       necessidades: [
         {
-          id: 'sadd-2',
-          tipo: 'SADD',
-          nome: 'Documentação',
-          descricao: 'Sem documentação',
-          detalhes: 'Sem qualquer documento de identificação. Prioridade máxima para registro legal.',
+          id: 3,
+          nome: 'Apoio Psicosocial',
+          tipo: 'sape',
           prioridade: 'Alto',
-          impacto: 'Identidade legal'
+          descricao: 'Sessões de terapia para processar o luto.',
+          detalhes: 'Carlos perdeu os pais recentemente e demonstra sinais de trauma.',
+          impacto: 'Estabilidade emocional e resiliência.'
+        }
+      ],
+      orcamentoAnual: 45000,
+      orcamentoCoberto: 22000,
+      orcamentoDetalhado: [
+        {
+          areaId: 'sape',
+          items: [
+            { description: 'Sessões de Terapia', value: 25000 },
+            { description: 'Atividades de Grupo', value: 10000 }
+          ]
         },
         {
-          id: 'saad-2',
-          tipo: 'SAAD',
-          nome: 'Alimentação',
-          descricao: 'Refeições diárias',
-          detalhes: 'Frequentemente sem refeições. Necessita de apoio alimentar consistente.',
-          prioridade: 'Alto',
-          impacto: 'Segurança alimentar'
-        },
+          areaId: 'sasbe',
+          items: [
+            { description: 'Check-up Geral', value: 5000 },
+            { description: 'Medicamentos', value: 5000 }
+          ]
+        }
+      ]
+    },
+    {
+      id: '3',
+      nome: 'Esperança Mondlane',
+      idade: 8,
+      foto: '/img/children/maria_silva.png',
+      regiao: 'Sofala',
+      status: 'Disponível',
+      dataRegistro: '2024-03-05',
+      vulnerabilidades: ['Deficiência Motora', 'Pobreza Extrema'],
+      necessidades: [
         {
-          id: 'saps-2',
-          tipo: 'SAPS',
-          nome: 'Proteção',
-          descricao: 'Acolhimento seguro',
-          detalhes: 'Criança em situação de rua. Necessita de acolhimento e proteção.',
+          id: 4,
+          nome: 'Fisioterapia',
+          tipo: 'sasbe',
           prioridade: 'Alto',
-          impacto: 'Proteção completa'
+          descricao: 'Sessões semanais de fisioterapia.',
+          detalhes: 'Necessário para melhorar a mobilidade e autonomia.',
+          impacto: 'Maior independência física.'
+        }
+      ],
+      orcamentoAnual: 60000,
+      orcamentoCoberto: 0,
+      orcamentoDetalhado: [
+        {
+          areaId: 'sasbe',
+          items: [
+            { description: 'Sessões de Fisioterapia', value: 40000 },
+            { description: 'Equipamentos de Apoio', value: 20000 }
+          ]
+        }
+      ]
+    },
+    {
+      id: '4',
+      nome: 'Lucas Tembe',
+      idade: 7,
+      foto: '/img/children/ana_dlamini.png',
+      regiao: 'Inhambane',
+      status: 'Disponível',
+      dataRegistro: '2024-03-10',
+      vulnerabilidades: ['Desnutrição Aguda'],
+      necessidades: [
+        {
+          id: 5,
+          nome: 'Cesta Básica Especial',
+          tipo: 'sanc',
+          prioridade: 'Alto',
+          descricao: 'Alimentos terapêuticos prontos para uso.',
+          detalhes: 'Lucas precisa de recuperação nutricional imediata.',
+          impacto: 'Recuperação do peso ideal e saúde.'
+        }
+      ],
+      orcamentoAnual: 25000,
+      orcamentoCoberto: 0,
+      orcamentoDetalhado: [
+        {
+          areaId: 'sanc',
+          items: [
+            { description: 'Alimentos Terapêuticos', value: 25000 }
+          ]
+        }
+      ]
+    },
+    {
+      id: '5',
+      nome: 'Zuleika Macamo',
+      idade: 11,
+      foto: '/img/children/maria_silva.png',
+      regiao: 'Nampula',
+      status: 'Disponível',
+      dataRegistro: '2024-03-12',
+      vulnerabilidades: ['Órfã de Pai'],
+      necessidades: [
+        {
+          id: 6,
+          nome: 'Material Escolar',
+          tipo: 'saeie',
+          prioridade: 'Médio',
+          descricao: 'Kit completo de livros e cadernos.',
+          detalhes: 'Início do ano letivo sem recursos para material.',
+          impacto: 'Continuidade dos estudos.'
+        }
+      ],
+      orcamentoAnual: 12000,
+      orcamentoCoberto: 0,
+      orcamentoDetalhado: [
+        {
+          areaId: 'saeie',
+          items: [
+            { description: 'Kit Escolar', value: 12000 }
+          ]
+        }
+      ]
+    },
+    {
+      id: '6',
+      nome: 'Mateus Chissano',
+      idade: 9,
+      foto: '/img/children/joao_nkomo.png',
+      regiao: 'Niassa',
+      status: 'Disponível',
+      dataRegistro: '2024-03-14',
+      vulnerabilidades: ['Pobreza Extrema'],
+      necessidades: [
+        {
+          id: 7,
+          nome: 'Vestuário',
+          tipo: 'saps',
+          prioridade: 'Baixo',
+          descricao: 'Roupas de frio e calçado.',
+          detalhes: 'Falta de agasalhos para o inverno.',
+          impacto: 'Proteção contra doenças sazonais.'
         }
       ],
       orcamentoAnual: 8000,
       orcamentoCoberto: 0,
-      status: 'Disponível',
-      dataRegistro: '2024-02-01'
+      orcamentoDetalhado: [
+        {
+          areaId: 'saps',
+          items: [
+            { description: 'Agasalhos e Calçado', value: 8000 }
+          ]
+        }
+      ]
     },
     {
-      id: 3,
-      nome: 'Ana Dlamini',
-      idade: 6,
+      id: '7',
+      nome: 'Bia Langa',
+      idade: 13,
       foto: '/img/children/ana_dlamini.png',
-      regiao: 'Inhambane',
-      vulnerabilidades: ['Deficiência visual', 'Pobreza'],
+      regiao: 'Zambézia',
+      status: 'Disponível',
+      dataRegistro: '2024-03-15',
+      vulnerabilidades: ['Fora da Escola'],
       necessidades: [
         {
-          id: 'sasbe-3',
-          tipo: 'SASBE',
-          nome: 'Saúde',
-          descricao: 'Reabilitação oftalmológica',
-          detalhes: 'Cegueira congénita. Necessita de acompanhamento médico especializado e reabilitação.',
-          prioridade: 'Alto',
-          impacto: 'Qualidade de vida'
-        },
-        {
-          id: 'saeie-3',
-          tipo: 'SAEIE',
-          nome: 'Educação Especial',
-          descricao: 'Escola inclusiva',
-          detalhes: 'Acesso a educação especializada para crianças com deficiência visual.',
-          prioridade: 'Alto',
-          impacto: 'Inclusão social'
+          id: 8,
+          nome: 'Curso Profissionalizante',
+          tipo: 'saeie',
+          prioridade: 'Médio',
+          descricao: 'Iniciação em Corte e Costura.',
+          detalhes: 'Bia quer aprender uma profissão para ajudar a família.',
+          impacto: 'Empoderamento e renda futura.'
         }
       ],
-      orcamentoAnual: 6500,
-      orcamentoCoberto: 2000,
-      status: 'Parcialmente Apoiada',
-      dataRegistro: '2024-01-20'
+      orcamentoAnual: 18000,
+      orcamentoCoberto: 0,
+      orcamentoDetalhado: [
+        {
+          areaId: 'saeie',
+          items: [
+            { description: 'Matrícula e Curso', value: 18000 }
+          ]
+        }
+      ]
     },
     {
-      id: 4,
-      nome: 'Tomás Mussa',
-      idade: 14,
-      foto: '/img/children/tomas_mussa.png',
-      regiao: 'Sofala',
-      vulnerabilidades: ['Trabalho infantil', 'Abandono escolar'],
+      id: '8',
+      nome: 'Samuel Guebuza',
+      idade: 6,
+      foto: '/img/children/joao_nkomo.png',
+      regiao: 'Tete',
+      status: 'Disponível',
+      dataRegistro: '2024-03-16',
+      vulnerabilidades: ['Órfão de ambos os pais'],
       necessidades: [
         {
-          id: 'saeie-4',
-          tipo: 'SAEIE',
-          nome: 'Educação',
-          descricao: 'Retorno à escola',
-          detalhes: 'Completar ensino primário. Atraso de 2 anos. Necessita de bolsa escolar.',
+          id: 9,
+          nome: 'Acompanhamento Psicológico',
+          tipo: 'sape',
           prioridade: 'Alto',
-          impacto: 'Futuro promissor'
-        },
-        {
-          id: 'saps-4',
-          tipo: 'SAPS',
-          nome: 'Proteção',
-          descricao: 'Eliminar trabalho infantil',
-          detalhes: 'Trabalho infantil em agricultura. Precisa de proteção legal e apoio.',
-          prioridade: 'Alto',
-          impacto: 'Direitos da criança'
+          descricao: 'Apoio emocional contínuo.',
+          detalhes: 'Lidando com a perda recente dos cuidadores.',
+          impacto: 'Saúde mental preservada.'
         }
       ],
-      orcamentoAnual: 4500,
+      orcamentoAnual: 30000,
       orcamentoCoberto: 0,
-      status: 'Disponível',
-      dataRegistro: '2024-02-10'
-    },
-    {
-      id: 5,
-      nome: 'Zita Machava',
-      idade: 10,
-      foto: '/img/children/zita_machava.png',
-      regiao: 'Maputo',
-      vulnerabilidades: ['Abuso infantil', 'Trauma'],
-      necessidades: [
+      orcamentoDetalhado: [
         {
-          id: 'sape-5',
-          tipo: 'SAPE',
-          nome: 'Psico-social',
-          descricao: 'Acompanhamento psicológico',
-          detalhes: 'Trauma por abuso. Necessita de psicoterapia e acompanhamento contínuo.',
-          prioridade: 'Alto',
-          impacto: 'Recuperação emocional'
-        },
-        {
-          id: 'saps-5',
-          tipo: 'SAPS',
-          nome: 'Proteção',
-          descricao: 'Proteção legal e acolhimento',
-          detalhes: 'Proteção contra abuso. Acolhimento em ambiente seguro.',
-          prioridade: 'Alto',
-          impacto: 'Segurança garantida'
+          areaId: 'sape',
+          items: [
+            { description: 'Sessões Mensais', value: 30000 }
+          ]
         }
-      ],
-      orcamentoAnual: 7000,
-      orcamentoCoberto: 0,
-      status: 'Disponível',
-      dataRegistro: '2024-02-05'
+      ]
     }
   ]
 
+  // =============================================
+  // GETTERS
+  // =============================================
   const criancasFiltradas = computed(() => {
-    let resultado = criancas.value
-    if (filtros.value.regiao) {
-      resultado = resultado.filter(c => c.regiao === filtros.value.regiao)
-    }
-    if (filtros.value.vulnerabilidade) {
-      resultado = resultado.filter(c => c.vulnerabilidades.includes(filtros.value.vulnerabilidade))
-    }
-    return resultado
+    return lista.value.filter(c => {
+      const isDisponivel = c.status === 'Disponível'
+      const matchRegiao = !filtros.value.regiao || c.regiao === filtros.value.regiao
+      const matchVuln = !filtros.value.vulnerabilidade || c.vulnerabilidades.includes(filtros.value.vulnerabilidade)
+      return isDisponivel && matchRegiao && matchVuln
+    })
   })
 
   const regioes = computed(() => {
-    return [...new Set(criancas.value.map(c => c.regiao))].sort()
+    const r = lista.value.map(c => c.regiao)
+    return [...new Set(r)]
   })
 
   const vulnerabilidades = computed(() => {
-    const todas = new Set()
-    criancas.value.forEach(c => {
-      c.vulnerabilidades.forEach(v => todas.add(v))
-    })
-    return Array.from(todas).sort()
+    const v = lista.value.flatMap(c => c.vulnerabilidades)
+    return [...new Set(v)]
   })
 
+  // =============================================
+  // ACTIONS
+  // =============================================
   const fetchCriancas = async () => {
     loading.value = true
-    try {
-      await new Promise(resolve => setTimeout(resolve, 300))
-      criancas.value = criancasMock
-    } catch (error) {
-      console.error('Erro:', error)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const getCriancaById = (id) => {
-    return criancas.value.find(c => c.id === parseInt(id))
+    // Simulando delay de API
+    await new Promise(resolve => setTimeout(resolve, 500))
+    lista.value = mockCriancas
+    loading.value = false
   }
 
   const setFiltros = (novosFiltros) => {
@@ -243,16 +405,20 @@ export const useCriancasStore = defineStore('criancas', () => {
     filtros.value = { regiao: '', vulnerabilidade: '' }
   }
 
+  const getCriancaById = (id) => {
+    return lista.value.find(c => c.id === id)
+  }
+
   return {
-    criancas,
+    lista,
     loading,
     filtros,
     criancasFiltradas,
     regioes,
     vulnerabilidades,
     fetchCriancas,
-    getCriancaById,
     setFiltros,
-    resetFiltros
+    resetFiltros,
+    getCriancaById
   }
 })

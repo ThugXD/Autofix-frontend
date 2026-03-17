@@ -2,7 +2,7 @@
   <div>
     <div class="card mb-6">
       <h2 class="page-title">Definições</h2>
-      <p class="page-subtitle">Configure as preferências da sua oficina</p>
+      <p class="page-subtitle">Configure as preferências</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -28,13 +28,13 @@
 
       <!-- Conteúdo -->
       <div class="lg:col-span-2">
-        <!-- Perfil da Oficina -->
-        <div v-if="activeTab === 'oficina'" class="card">
-          <h3 class="section-title">Perfil da Oficina</h3>
+        <!-- Perfil da Comunidade -->
+        <div v-if="activeTab === 'comunidade'" class="card">
+          <h3 class="section-title">Perfil da Comunidade</h3>
           <div class="space-y-4">
             <BaseInput
               v-model="settings.oficina.name"
-              label="Nome da Oficina"
+              label="Nome da Comunidade"
               placeholder="Ex: SACCO Maputo"
             />
             <div class="grid grid-cols-2 gap-4">
@@ -42,7 +42,7 @@
                 v-model="settings.oficina.email"
                 label="Email"
                 type="email"
-                placeholder="contato@oficina.com"
+                placeholder="contato@comunidade.com"
               />
               <BaseInput
                 v-model="settings.oficina.phone"
@@ -296,10 +296,10 @@
     const toast = useToast()
     const authStore = useAuthStore()
 
-    const activeTab = ref('oficina')
+    const activeTab = ref('comunidade')
 
     const tabs = [
-    { id: 'oficina', label: 'Oficina', icon: Building2 },
+    { id: 'comunidade', label: 'Comunidade', icon: Building2 },
     { id: 'horario', label: 'Horário', icon: Clock },
     { id: 'notificacoes', label: 'Notificações', icon: Bell },
     { id: 'seguranca', label: 'Segurança', icon: Shield },

@@ -224,12 +224,29 @@ const roleBadgeClass = computed(() => {
 })
 
 const isActive = (path) => {
-  // Exact match for root-level public pages
   if (path === '/') return route.path === '/'
-  // Exact match for /app (dashboard root)
-  if (path === '/app') return route.path === '/app'
-  // Prefix match for all sub-routes
-  return route.path.startsWith(path)
+  
+  // Exact match is always active
+  if (route.path === path) return true
+  
+  // Prefix match (ensure we match a full path segment with /)
+  if (route.path.startsWith(path + '/')) {
+    // Check if there's a more specific match in the menu
+    const allMenuPaths = []
+    menuSections.value.forEach(s => s.items.forEach(i => allMenuPaths.push(i.path)))
+    if (isAdmin.value) adminPanels.forEach(p => allMenuPaths.push(p.path))
+    
+    // If any other path in the menu is a better match for the current route, this one isn't the active one
+    const hasBetterMatch = allMenuPaths.some(p => 
+      p !== path && 
+      (route.path === p || route.path.startsWith(p + '/')) && 
+      p.length > path.length
+    )
+    
+    return !hasBetterMatch
+  }
+  
+  return false
 }
 </script>
 

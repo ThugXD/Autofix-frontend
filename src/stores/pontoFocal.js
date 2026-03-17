@@ -656,10 +656,11 @@ export const usePontoFocalStore = defineStore('pontoFocal', () => {
     }
   }
 
-  const definirOrcamento = async (cadastroId, orcamentoAnual) => {
+  const definirOrcamento = async (cadastroId, totalAnual, orcamentoDetalhado = []) => {
     const cadastro = cadastros.value.find(c => c.id === parseInt(cadastroId))
     if (cadastro) {
-      cadastro.orcamentoAnual = orcamentoAnual
+      cadastro.orcamentoAnual = totalAnual
+      cadastro.orcamentoDetalhado = orcamentoDetalhado
       cadastro.status = 'pronto'
     }
   }

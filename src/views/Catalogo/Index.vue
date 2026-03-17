@@ -13,7 +13,7 @@
       >
         <!-- Logo / Brand -->
         <div class="flex items-center gap-2 ml-1">
-          <img src="@/assets/sacco_logo.png" alt="SACCO" class="w-8 h-8 rounded-full object-cover" />
+          <img src="@/assets/sacco_circle.png" alt="SACCO" class="w-8 h-8 rounded-full object-cover" />
           <span class="text-sm font-bold text-white hidden sm:inline tracking-wide">SACCO</span>
         </div>
 
@@ -40,7 +40,7 @@
       <!-- Background Image with Overlay -->
       <div class="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1524503033411-c9566986fc8f?q=80&w=2070&auto=format&fit=crop"
+          src="/img/children/ana_dlamini.png"
           alt="Crianças sorrindo"
           class="w-full h-full object-cover opacity-50"
         />
@@ -49,15 +49,7 @@
 
       <!-- Hero Center Text -->
       <div class="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl">
-        <!-- Floating Pill com Avatares -->
-        <div class="flex items-center justify-center gap-2 bg-black/50 backdrop-blur-sm border border-white/10 rounded-full pl-2 pr-4 py-1.5 mb-6 shadow-xl">
-           <div class="flex -space-x-2">
-              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Avatar">
-              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop&crop=face" alt="Avatar">
-              <img class="w-6 h-6 rounded-full border border-gray-900" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face" alt="Avatar">
-           </div>
-           <span class="text-xs font-medium text-gray-300 ml-1">500+ padrinhos ativos</span>
-        </div>
+       
 
         <h1 class="text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight mb-2 drop-shadow-md text-gray-100">
           Porquê apenas observar?
@@ -107,8 +99,23 @@
 
     <!-- Main Content: Filters & Catalog (Light) -->
     <section id="catalogo" class="flex-grow py-16 px-4 sm:px-8 max-w-7xl mx-auto w-full bg-gray-50">
-      <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 pb-6">
-        <h2 class="text-2xl font-bold text-gray-900">Novas Crianças</h2>
+      <div class="flex justify-between items-end mb-8 gap-4 pb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">Novas Crianças</h2>
+          <p class="text-sm text-gray-500 mt-1">Conheça os pequenos que esperam por um padrinho.</p>
+        </div>
+        
+        <button 
+          @click="mostrarTodos = !mostrarTodos"
+          class="text-sm font-bold text-[#171717] hover:underline flex items-center gap-1 transition-all"
+        >
+          {{ mostrarTodos ? 'Ver Menos' : 'Ver Todas' }}
+          <ChevronRight v-if="!mostrarTodos" class="w-4 h-4" />
+          <ChevronUp v-else class="w-4 h-4" />
+        </button>
+      </div>
+
+      <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 border-b border-gray-200 pb-8">
 
         <!-- Filtros -->
         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
@@ -163,17 +170,24 @@
         <div class="w-10 h-10 border-4 border-gray-200 border-t-[#171717] rounded-full animate-spin" />
       </div>
 
-      <!-- Grid de Crianças -->
+      <!-- Grid / Scroll de Crianças -->
       <div v-else>
         <div
           v-if="criancasStore.criancasFiltradas.length > 0"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          :class="[
+            mostrarTodos 
+              ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6' 
+              : 'flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0'
+          ]"
         >
           <RouterLink
             v-for="crianca in criancasStore.criancasFiltradas"
             :key="crianca.id"
             :to="`/crianca/${crianca.id}`"
-            class="bg-white rounded-2xl overflow-hidden border border-gray-100 group cursor-pointer block hover:border-gray-300 transition-all duration-300 flex flex-col h-full hover:shadow-xl"
+            :class="[
+              'bg-white rounded-2xl overflow-hidden border border-gray-400 group cursor-pointer block hover:border-gray-300 transition-all duration-300 flex flex-col hover:shadow-xl snap-start shrink-0',
+              !mostrarTodos ? 'w-[280px] sm:w-[300px]' : 'h-full'
+            ]"
           >
             <div class="relative overflow-hidden aspect-[16/10] bg-gray-100">
               <img
@@ -255,6 +269,86 @@
       </div>
     </section>
 
+    <!-- ===================== PREMIUM FOOTER ===================== -->
+    <footer class="bg-[#050505] pt-20 pb-10 border-t border-white/5 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          <!-- Logo & Description -->
+          <div class="space-y-6">
+            <div class="flex items-center gap-3">
+              <img src="@/assets/sacco_circle.png" alt="SACCO" class="w-10 h-10 rounded-full object-cover border border-white/10" />
+              <span class="text-xl font-bold text-white tracking-wider">SACCO</span>
+            </div>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
+              Transformando o futuro de Moçambique, uma criança de cada vez. Através do apadrinhamento consciente, criamos laços que mudam vidas.
+            </p>
+            <div class="flex gap-4">
+              <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#a3e635] hover:text-green-950 transition-all border border-white/10">
+                <Facebook class="w-5 h-5" />
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#a3e635] hover:text-green-950 transition-all border border-white/10">
+                <Instagram class="w-5 h-5" />
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#a3e635] hover:text-green-950 transition-all border border-white/10">
+                <Linkedin class="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest">Navegação</h4>
+            <ul class="space-y-4">
+              <li><a href="#inicio" class="text-gray-400 hover:text-[#a3e635] transition-colors text-sm">Início</a></li>
+              <li><a href="#como-funciona" class="text-gray-400 hover:text-[#a3e635] transition-colors text-sm">Como Funciona</a></li>
+              <li><a href="#catalogo" class="text-gray-400 hover:text-[#a3e635] transition-colors text-sm">Catálogo de Crianças</a></li>
+              <li><RouterLink to="/login" class="text-gray-400 hover:text-[#a3e635] transition-colors text-sm">Área do Padrinho</RouterLink></li>
+            </ul>
+          </div>
+
+          <!-- Resources -->
+          <div>
+            <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest">Apoio</h4>
+            <ul class="space-y-4">
+              <li><a href="#" class="text-gray-400 hover:text-[#a3e635] transition-colors text-sm">Doações Diretas</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-[#a3e635] transition-colors text-sm">Relatórios de Impacto</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-[#a3e635] transition-colors text-sm">Perguntas Frequentes</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-[#a3e635] transition-colors text-sm">Políticas de Proteção</a></li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest">Contatos</h4>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3 text-sm text-gray-400">
+                <Mail class="w-5 h-5 text-[#a3e635] shrink-0" />
+                <span>suporte@sacco.org.mz</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm text-gray-400">
+                <Phone class="w-5 h-5 text-[#a3e635] shrink-0" />
+                <span>+258 84 000 0000 / +258 21 000 000</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm text-gray-400">
+                <MapPin class="w-5 h-5 text-[#a3e635] shrink-0" />
+                <span>Av. Julius Nyerere, Maputo, Moçambique</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p class="text-gray-500 text-xs">
+            © 2026 SACCO - Sistema de Apoio e Consulta à Criança Órfã. Todos os direitos reservados.
+          </p>
+          <div class="flex gap-8 text-xs text-gray-600 font-medium">
+            <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
+            <a href="#" class="hover:text-white transition-colors">Política de Privacidade</a>
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -262,9 +356,14 @@
   import { ref, computed, onMounted, onUnmounted } from 'vue'
   import { RouterLink } from 'vue-router'
   import { useCriancasStore } from '@/stores/criancas'
+  import { 
+    ChevronRight, ChevronUp, Facebook, Instagram, 
+    Linkedin, Mail, Phone, MapPin, Heart 
+  } from 'lucide-vue-next'
 
   const criancasStore = useCriancasStore()
   const filtros = ref({ regiao: '', vulnerabilidade: '' })
+  const mostrarTodos = ref(false)
 
   const temFiltros = computed(() => {
     return filtros.value.regiao || filtros.value.vulnerabilidade
@@ -312,3 +411,13 @@
     window.removeEventListener('scroll', handleScroll)
   })
 </script>
+
+<style scoped>
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

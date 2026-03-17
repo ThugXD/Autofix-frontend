@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Header -->
-    <div class="bg-white border-b border-gray-200 px-4 sm:px-8 py-4 sticky top-0 z-30">
+    <div class="bg-white border-b border-gray-200 px-4 sm:px-8 py-3 sticky top-0 z-30 shadow-sm">
       <div class="max-w-6xl mx-auto flex items-center justify-between">
         <RouterLink
           to="/"
@@ -10,8 +10,16 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m7-7l-7 7 7 7" />
           </svg>
-          Voltar
+          <span class="hidden sm:inline">Voltar ao Catálogo</span>
+          <span class="sm:hidden">Voltar</span>
         </RouterLink>
+
+        <button
+          @click="abrirFormulario"
+          class="btn btn-primary px-6 py-2.5 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all"
+        >
+          Expressar Interesse
+        </button>
       </div>
     </div>
 
@@ -85,11 +93,11 @@
 
         <!-- Coluna direita - Necessidades e Orçamento -->
         <div class="lg:col-span-2">
-          <div class="mb-8">
+          <!-- <div class="mb-8">
             <h2 class="section-title">Necessidades</h2>
-          </div>
+          </div> -->
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+          <!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
             <button
               v-for="necessidade in crianca.necessidades"
               :key="necessidade.id"
@@ -107,6 +115,91 @@
               <p class="text-gray-600 text-sm">{{ necessidade.descricao }}</p>
               <p class="text-xs text-blue-600 font-medium mt-2">Ver detalhes →</p>
             </button>
+          </div> -->
+          <!-- Orçamento Detalhado -->
+          <div class="card space-y-6">
+            <div class="flex items-center justify-between">
+              <h3 class="section-title mb-0">Orçamento Anual</h3>
+              <div class="text-right">
+                <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Total Necessário</p>
+                <p class="text-xl font-black text-green-400">{{ formatarMoeda(crianca.orcamentoAnual) }}</p>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <p class="text-sm font-medium text-gray-700">Progresso de cobertura</p>
+                <p class="text-sm font-bold text-gray-900">{{ getPercentualCoberto() }}% financiado</p>
+              </div>
+              <div class="h-2 bg-gray-100 rounded-full overflow-hidden border border-gray-50">
+                <div
+                  :style="{ width: getPercentualCoberto() + '%' }"
+                  class="h-full bg-green-300 transition-all duration-700 ease-out rounded-full shadow-inner"
+                />
+              </div>
+            </div>
+
+            <!-- Detailed Breakdown (Collapsible) -->
+            <div v-if="crianca.orcamentoDetalhado && crianca.orcamentoDetalhado.length > 0" class="space-y-3">
+              <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest pt-2">Detalhes por Rubrica</h4>
+              
+              <div 
+                v-for="area in crianca.orcamentoDetalhado" 
+                :key="area.areaId"
+                class="border border-gray-300 rounded-2xl overflow-hidden transition-all"
+              >
+                <!-- Area Header -->
+                <button 
+                  @click="toggleArea(area.areaId)"
+                  class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-200 transition-colors text-left"
+                >
+                  <div class="flex items-center gap-3">
+                    <div 
+                      class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors"
+                      :class="isAreaOpen(area.areaId) ? 'bg-blue-100 text-blue-600' : 'bg-gray-50 text-gray-500'"
+                    >
+                      <component :is="getAreaIcon(area.areaId)" class="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-900 text-sm">{{ getAreaName(area.areaId) }}</h5>
+                      <p class="text-[10px] text-gray-400 font-mono">{{ area.areaId.toUpperCase() }}</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <span class="font-bold text-gray-900 mr-2">{{ formatarMoeda(area.items.reduce((sum, i) => sum + (i.value || 0), 0)) }}</span>
+                    <ChevronDown 
+                      class="w-4 h-4 text-gray-400 transition-transform duration-300"
+                      :class="{ 'rotate-180 text-blue-500': isAreaOpen(area.areaId) }"
+                    />
+                  </div>
+                </button>
+
+                <!-- Area Items -->
+                <transition
+                  enter-active-class="transition duration-300 ease-out"
+                  enter-from-class="transform -translate-y-2 opacity-0"
+                  enter-to-class="transform translate-y-0 opacity-100"
+                >
+                  <div v-if="isAreaOpen(area.areaId)" class="px-5 pb-5 pt-0 border-t border-gray-50 bg-gray-50/30">
+                    <div class="space-y-3 pt-4">
+                      <div v-for="(item, idx) in area.items" :key="idx" class="flex justify-between items-center text-sm py-2 border-b border-dashed border-gray-100 last:border-0">
+                        <span class="text-gray-600">{{ item.description }}</span>
+                        <span class="font-bold text-gray-900">{{ formatarMoeda(item.value) }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- Legend/Helper -->
+            <div class="p-4 bg-blue-50/50 rounded-2xl border border-blue-100 flex gap-3">
+              <Info class="w-5 h-5 text-blue-500 shrink-0" />
+              <p class="text-xs text-blue-800 leading-relaxed">
+                Este plano detalhado garante a transparência total sobre como o seu apoio será investido para transformar a vida de <strong>{{ crianca.nome }}</strong>.
+              </p>
+            </div>
           </div>
 
           <!-- Orçamento -->
@@ -135,10 +228,10 @@
                 <p class="text-sm font-medium text-gray-700">Progresso de cobertura</p>
                 <p class="text-lg font-bold text-gray-900">{{ getPercentualCoberto() }}%</p>
               </div>
-              <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-1.5 bg-gray-200 rounded-full overflow-hidden">
                 <div
                   :style="{ width: getPercentualCoberto() + '%' }"
-                  class="h-full bg-blue-600 transition-all duration-300 rounded-full"
+                  class="h-full bg-green-400 transition-all duration-300 rounded-full"
                 />
               </div>
             </div>
@@ -158,158 +251,128 @@
     </div>
 
     <!-- Modal Necessidade -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div
-          v-if="modalNecessidade.aberto"
-          class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-          @click="fecharModalNecessidade"
-        >
-          <div
-            @click.stop
-            class="bg-white w-full max-w-md rounded-xl shadow-xl overflow-hidden"
-          >
-            <div class="bg-blue-600 px-6 py-4 flex justify-between items-center">
-              <h3 class="text-lg font-bold text-white">{{ modalNecessidade.dados?.nome }}</h3>
-              <button
-                @click="fecharModalNecessidade"
-                class="text-white hover:opacity-80 transition text-2xl leading-none"
-              >
-                ×
-              </button>
-            </div>
-
-            <div v-if="modalNecessidade.dados" class="p-6 space-y-5 max-h-96 overflow-y-auto">
-              <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Tipo de Serviço</p>
-                <span class="badge badge-info">{{ modalNecessidade.dados.tipo }}</span>
-              </div>
-              <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Descrição</p>
-                <p class="text-gray-900 font-medium">{{ modalNecessidade.dados.descricao }}</p>
-              </div>
-              <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Detalhes</p>
-                <p class="text-gray-700 text-sm">{{ modalNecessidade.dados.detalhes }}</p>
-              </div>
-              <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Prioridade</p>
-                <span
-                  :class="['badge', getPrioridadeBadge(modalNecessidade.dados.prioridade)]"
-                >
-                  {{ modalNecessidade.dados.prioridade }}
-                </span>
-              </div>
-              <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Impacto Esperado</p>
-                <p class="text-gray-900 font-medium">{{ modalNecessidade.dados.impacto }}</p>
-              </div>
-              <button
-                @click="fecharModalNecessidade"
-                class="w-full btn btn-secondary"
-              >
-                Fechar
-              </button>
-            </div>
+    <BaseModal
+      v-model="modalNecessidade.aberto"
+      :title="modalNecessidade.dados?.nome"
+      size="md"
+    >
+      <div v-if="modalNecessidade.dados" class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Tipo de Serviço</p>
+            <span class="badge badge-info">{{ modalNecessidade.dados.tipo }}</span>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Prioridade</p>
+            <span
+              :class="['badge', getPrioridadeBadge(modalNecessidade.dados.prioridade)]"
+            >
+              {{ modalNecessidade.dados.prioridade }}
+            </span>
           </div>
         </div>
-      </Transition>
-    </Teleport>
+
+        <div>
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Descrição</p>
+          <p class="text-gray-900 font-medium bg-gray-50 p-3 rounded-lg border border-gray-100">{{ modalNecessidade.dados.descricao }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Detalhes</p>
+          <p class="text-gray-700 text-sm leading-relaxed">{{ modalNecessidade.dados.detalhes }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Impacto Esperado</p>
+          <div class="p-3 bg-green-50 rounded-lg border border-green-100 flex gap-3">
+            <component :is="getAreaIcon(modalNecessidade.dados.tipo)" class="w-5 h-5 text-green-500 shrink-0" />
+            <p class="text-sm text-green-800 font-medium">{{ modalNecessidade.dados.impacto }}</p>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <BaseButton variant="secondary" @click="fecharModalNecessidade">
+          Fechar
+        </BaseButton>
+      </template>
+    </BaseModal>
 
     <!-- Modal Formulário -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div
-          v-if="modalFormulario.aberto"
-          class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-          @click="fecharFormulario"
-        >
-          <div
-            @click.stop
-            class="bg-white w-full max-w-md rounded-xl shadow-xl overflow-hidden"
-          >
-            <div class="bg-blue-600 px-6 py-4 flex justify-between items-center">
-              <h3 class="text-lg font-bold text-white">Expressar Interesse</h3>
-              <button
-                @click="fecharFormulario"
-                class="text-white hover:opacity-80 transition text-2xl leading-none"
-              >
-                ×
-              </button>
-            </div>
-
-            <form @submit.prevent="submeterFormulario" class="p-6 space-y-4 max-h-96 overflow-y-auto">
-              <div>
-                <label class="block text-sm font-medium text-gray-900 mb-1">Nome Completo</label>
-                <input
-                  v-model="formulario.nome"
-                  type="text"
-                  required
-                  class="input"
-                  placeholder="Seu nome"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-900 mb-1">Email</label>
-                <input
-                  v-model="formulario.email"
-                  type="email"
-                  required
-                  class="input"
-                  placeholder="seu@email.com"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-900 mb-1">Telefone</label>
-                <input
-                  v-model="formulario.telefone"
-                  type="tel"
-                  required
-                  class="input"
-                  placeholder="+258 XX XXX XXXX"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-900 mb-1">Região/País</label>
-                <input
-                  v-model="formulario.regiao"
-                  type="text"
-                  required
-                  class="input"
-                  placeholder="Sua região"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-900 mb-1">Por que quer ser padrinho?</label>
-                <textarea
-                  v-model="formulario.mensagem"
-                  required
-                  rows="3"
-                  class="input resize-none"
-                  placeholder="Conte-nos sua motivação..."
-                />
-              </div>
-              <label class="flex items-start gap-3 text-sm text-gray-700">
-                <input
-                  v-model="formulario.concordo"
-                  type="checkbox"
-                  required
-                  class="mt-1 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span>Concordo em ser padrinho/madrinha e manter uma relação de apoio consistente.</span>
-              </label>
-              <button
-                :disabled="carregando"
-                type="submit"
-                class="w-full btn btn-primary py-3 disabled:opacity-50"
-              >
-                {{ carregando ? 'A enviar...' : 'Submeter' }}
-              </button>
-            </form>
-          </div>
+    <BaseModal
+      v-model="modalFormulario.aberto"
+      title="Expressar Interesse"
+      size="md"
+    >
+      <form @submit.prevent="submeterFormulario" class="space-y-4">
+        <BaseInput
+          v-model="formulario.nome"
+          label="Nome Completo"
+          placeholder="Seu nome"
+          required
+        />
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <BaseInput
+            v-model="formulario.email"
+            label="Email"
+            type="email"
+            placeholder="seu@email.com"
+            required
+          />
+          <BaseInput
+            v-model="formulario.telefone"
+            label="Telefone"
+            type="tel"
+            placeholder="+258 XX XXX XXXX"
+            required
+          />
         </div>
-      </Transition>
-    </Teleport>
+
+        <BaseInput
+          v-model="formulario.regiao"
+          label="Região/País"
+          placeholder="Sua região"
+          required
+        />
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            Por que quer ser padrinho? <span class="text-red-500">*</span>
+          </label>
+          <textarea
+            v-model="formulario.mensagem"
+            required
+            rows="3"
+            class="input resize-none"
+            placeholder="Conte-nos sua motivação..."
+          />
+        </div>
+
+        <label class="flex items-start gap-3 text-sm text-gray-700 cursor-pointer">
+          <input
+            v-model="formulario.concordo"
+            type="checkbox"
+            required
+            class="mt-1 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <span>Concordo em ser padrinho/madrinha e manter uma relação de apoio consistente.</span>
+        </label>
+      </form>
+
+      <template #footer>
+        <BaseButton variant="secondary" @click="fecharFormulario" :disabled="carregando">
+          Cancelar
+        </BaseButton>
+        <BaseButton
+          variant="primary"
+          @click="submeterFormulario"
+          :loading="carregando"
+        >
+          Submeter
+        </BaseButton>
+      </template>
+    </BaseModal>
 
     <!-- Toast Sucesso -->
     <Transition name="fade">
@@ -329,6 +392,13 @@ import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useCriancasStore } from '@/stores/criancas'
 import { useApadrinhamentosStore } from '@/stores/apadrinhamentos'
+import BaseModal from '@/components/common/BaseModal.vue'
+import BaseInput from '@/components/common/BaseInput.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import { 
+  Heart, Stethoscope, UtensilsCrossed, GraduationCap, 
+  Shield, Brain, FileText, ChevronDown, Info 
+} from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
@@ -340,6 +410,7 @@ const crianca = ref(null)
 const loading = ref(true)
 const carregando = ref(false)
 const mostrarSucesso = ref(false)
+const openAreas = ref([])
 
 const modalNecessidade = ref({ aberto: false, dados: null })
 const modalFormulario = ref({ aberto: false })
@@ -400,41 +471,72 @@ const fecharFormulario = () => {
 }
 
 const submeterFormulario = async () => {
+  if (!formulario.value.concordo) {
+    toast.warning('É necessário concordar com os termos.')
+    return
+  }
+
   carregando.value = true
   try {
+    // Simula envio para o store de apadrinhamentos
     await apadrinhamentosStore.expressarInteresse({
       criancaId: crianca.value.id,
       criancaNome: crianca.value.nome,
       criancaFoto: crianca.value.foto,
       criancaRegiao: crianca.value.regiao,
-      tutorId: 6,
+      tutorId: 6, // Mock tutor
       tutorNome: 'Rosa Tutora',
-      padrinhoId: 9,
+      padrinhoId: 9, // Mock ID do padrinho logado
       padrinhoNome: formulario.value.nome,
       padrinhoEmail: formulario.value.email,
       padrinhoTelefone: formulario.value.telefone,
       padrinhoRegiao: formulario.value.regiao,
       mensagem: formulario.value.mensagem,
-      valorMensal: 2500,
       criancaIdade: crianca.value.idade,
       orcamentoAnual: crianca.value.orcamentoAnual,
       orcamentoCoberto: crianca.value.orcamentoCoberto
     })
 
+    toast.success('Solicitação enviada com sucesso!')
+    
+    // Feedback visual adicional
     mostrarSucesso.value = true
-
-    // Feedback e seguimento pós-submissão
-    toast.success('Seu interesse foi registrado! Acesse o painel para acompanhar seus afilhados.')
-    router.push({ name: 'padrinho-dashboard' })
-
-    fecharFormulario()
     setTimeout(() => {
       mostrarSucesso.value = false
-    }, 4000)
+    }, 3000)
+
+    fecharFormulario()
+  } catch (error) {
+    console.error('Erro ao submeter interesse:', error)
+    toast.error('Ocorreu um erro ao enviar a sua solicitação. Por favor tente novamente.')
   } finally {
     carregando.value = false
   }
 }
+
+const toggleArea = (areaId) => {
+  const index = openAreas.value.indexOf(areaId)
+  if (index === -1) {
+    openAreas.value.push(areaId)
+  } else {
+    openAreas.value.splice(index, 1)
+  }
+}
+
+const isAreaOpen = (areaId) => openAreas.value.includes(areaId)
+
+const specialistAreas = [
+  { id: 'sadd', nome: 'Direitos e Documentação', icon: FileText },
+  { id: 'sanc', nome: 'Nutrição e Crescimento', icon: UtensilsCrossed },
+  { id: 'sasbe', nome: 'Saúde e Bem-Estar', icon: Stethoscope },
+  { id: 'saad', nome: 'Alimentação Diária', icon: Heart },
+  { id: 'saeie', nome: 'Educação e Inclusão', icon: GraduationCap },
+  { id: 'saps', nome: 'Proteção e Segurança', icon: Shield },
+  { id: 'sape', nome: 'Apoio Psicosocial', icon: Brain }
+]
+
+const getAreaIcon = (id) => specialistAreas.find(a => a.id === id)?.icon || FileText
+const getAreaName = (id) => specialistAreas.find(a => a.id === id)?.nome || id
 
 onMounted(async () => {
   await criancasStore.fetchCriancas()
