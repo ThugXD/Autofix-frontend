@@ -11,6 +11,7 @@
     <div class="flex-1 flex flex-col overflow-hidden">
       <!-- Header -->
       <Header
+        :menuType="menuType"
         @toggleSidebar="toggleSidebar"
       />
 

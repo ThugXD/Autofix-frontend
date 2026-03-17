@@ -195,17 +195,19 @@ import { ref, computed } from 'vue'
 import { Heart, MessageCircle, TrendingUp, BookOpen } from 'lucide-vue-next'
 import BaseButton from '@/components/common/BaseButton.vue'
 import { useApadrinhamentosStore, STATUS, STATUS_LABELS, STATUS_CLASSES } from '@/stores/apadrinhamentos'
+import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 const apadrinhamentosStore = useApadrinhamentosStore()
+const authStore = useAuthStore()
 
-// Para demo, usamos um padrinho “fixo” (id 9) já presente nos dados mock
-const padrinhoId = 9
+// Padrinho ID dinâmico do authStore
+const padrinhoId = computed(() => authStore.user?.id || 0)
 
 const padrinhados = computed(() =>
-  apadrinhamentosStore.getApadrinhamentosAtivosDosPadrinho(padrinhoId).value.map(a => ({
+  apadrinhamentosStore.getApadrinhamentosAtivosDosPadrinho(padrinhoId.value).value.map(a => ({
     id: a.criancaId,
     nome: a.criancaNome,
     idade: a.criancaIdade ?? 9,
@@ -219,7 +221,7 @@ const padrinhados = computed(() =>
 )
 
 const pedidosPendentes = computed(() =>
-  apadrinhamentosStore.lista.filter(a => a.padrinhoId === padrinhoId && a.status === STATUS.PENDENTE_TUTOR)
+  apadrinhamentosStore.lista.filter(a => a.padrinhoId === padrinhoId.value && a.status === STATUS.PENDENTE_TUTOR)
 )
 
 const mensagens = ref([
@@ -246,11 +248,22 @@ const mensagens = ref([
   }
 ])
 
-const atualizacoes = ref([
-  { id: 1, titulo: 'Relatório de Educação recebido', data: '15/03/2026' },
-  { id: 2, titulo: 'Plano de nutrição atualizado', data: '12/03/2026' },
-  { id: 3, titulo: 'Visita agendada com o tutor', data: '08/03/2026' }
-])
+const atualizacoes = computed(() => {
+  const confirmedPayments = apadrinhamentosStore.pagamentos
+    .filter(p => p.padrinhoId === padrinhoId.value && p.status === 'confirmado')
+    .map(p => ({
+      id: `p-${p.id}`,
+      titulo: `Pagamento Confirmado (${formatarMoeda(p.valor)})`,
+      data: formatarData(p.dataConfirmacao)
+    }))
+
+  const baseUpdates = [
+    { id: 101, titulo: 'Relatório de Educação recebido', data: '15/03/2026' },
+    { id: 102, titulo: 'Plano de nutrição atualizado', data: '12/03/2026' },
+  ]
+
+  return [...confirmedPayments, ...baseUpdates].slice(0, 5)
+})
 
 const novasMensagens = computed(() => mensagens.value.filter(m => !m.lida).length)
 

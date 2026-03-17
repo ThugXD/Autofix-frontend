@@ -1,15 +1,29 @@
 <template>
-  <header class="bg-white border-b border-gray-200 px-6 py-4">
+  <header 
+    class="sticky top-0 z-40 w-full transition-all duration-300"
+    :class="[
+      menuType === 'bottom' 
+        ? 'bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm px-4 py-2' 
+        : 'bg-white border-b border-gray-200 px-6 py-4'
+    ]"
+  >
     <div class="flex items-center justify-between">
       <!-- Left Section -->
       <div class="flex items-center gap-4">
         <!-- Menu Toggle Button -->
         <button
+          v-if="menuType !== 'bottom'"
           @click="$emit('toggleSidebar')"
           class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <Menu class="w-5 h-5 text-gray-600" />
         </button>
+
+        <!-- Logo for Bottom Menu Mode -->
+        <div v-else class="flex items-center gap-2">
+          <img :src="logo_circle" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm" />
+          <h1 class="text-lg font-black tracking-tight text-gray-900 hidden sm:block">SACCO</h1>
+        </div>
 
         <!-- Page Title -->
         <div>
@@ -205,8 +219,10 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useApadrinhamentosStore } from '@/stores/apadrinhamentos'
 import { useToast } from 'vue-toastification'
 import { ROLES } from '@/config/roles'
+import logo_circle from '@/assets/sacco_circle.png'
 import {
   Menu,
   Bell,
@@ -226,43 +242,34 @@ import {
   Heart
 } from 'lucide-vue-next'
 
+defineProps({
+  menuType: {
+    type: String,
+    default: 'sidebar'
+  }
+})
+
 defineEmits(['toggleSidebar'])
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const apadrinhamentosStore = useApadrinhamentosStore()
 const toast = useToast()
 
 const showUserMenu = ref(false)
 const showNotifications = ref(false)
 
-// Mock notifications - substituir por dados reais do backend
-const notifications = ref([
-  {
-    id: 1,
-    type: 'success',
-    title: 'Novo Padrinho Registado',
-    message: 'Joao Silva completou o registo e apadrinhou uma crianca',
-    time: 'Ha 5 minutos',
-    read: false
-  },
-  {
-    id: 2,
-    type: 'warning',
-    title: 'Contribuicao Pendente',
-    message: 'A crianca Ana M. ainda nao tem padrinho atribuido este mes',
-    time: 'Ha 1 hora',
-    read: false
-  },
-  {
-    id: 3,
-    type: 'info',
-    title: 'Relatorio Disponivel',
-    message: 'O relatorio mensal de apadrinhamentos de Marco esta pronto',
-    time: 'Ha 2 horas',
-    read: false
+// Notificações dinâmicas do store
+const notifications = computed(() => {
+  if (userRole.value === ROLES.PADRINHO) {
+    return apadrinhamentosStore.notificacoes.filter(n => (!n.padrinhoId || n.padrinhoId === user.value?.id) && !n.tutorId)
   }
-])
+  if (userRole.value === ROLES.TUTOR) {
+    return apadrinhamentosStore.notificacoes.filter(n => !n.tutorId || n.tutorId === user.value?.id)
+  }
+  return apadrinhamentosStore.notificacoes
+})
 
 const notificationCount = computed(() => {
   return notifications.value.filter(n => !n.read).length
@@ -358,21 +365,18 @@ const goToSettings = () => {
 }
 
 const handleNotificationClick = (notification) => {
-  notification.read = true
+  apadrinhamentosStore.marcarComoLida(notification.id)
   toast.info(`Abrindo: ${notification.title}`)
   showNotifications.value = false
 }
 
 const removeNotification = (id) => {
-  const index = notifications.value.findIndex(n => n.id === id)
-  if (index !== -1) {
-    notifications.value.splice(index, 1)
-    toast.success('Notificacao removida')
-  }
+  apadrinhamentosStore.marcarComoLida(id) // Na verdade removemos da vista local ou marcamos como lida
+  toast.success('Notificacao marcada como lida')
 }
 
 const clearAllNotifications = () => {
-  notifications.value = []
+  apadrinhamentosStore.limparNotificacoes()
   toast.success('Todas as notificacoes foram limpas')
 }
 

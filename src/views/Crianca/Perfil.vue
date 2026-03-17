@@ -15,11 +15,17 @@
         </RouterLink>
 
         <button
+          v-if="!sponsorshipStatus"
           @click="abrirFormulario"
           class="btn btn-primary px-6 py-2.5 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all"
         >
           Expressar Interesse
         </button>
+        <div v-else class="flex items-center gap-2">
+           <span class="text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full" :class="statusClasses[sponsorshipStatus]">
+             {{ statusLabels[sponsorshipStatus] }}
+           </span>
+        </div>
       </div>
     </div>
 
@@ -80,11 +86,26 @@
           </div>
 
           <button
+            v-if="!sponsorshipStatus"
             @click="abrirFormulario"
             class="w-full btn btn-primary py-3 text-base"
           >
             Expressar Interesse
           </button>
+          
+          <!-- Mensagem de Status para Padrinho -->
+          <div v-else-if="sponsorshipStatus !== 'aprovado_gestor'" class="p-4 bg-amber-50 rounded-xl border border-amber-200">
+            <div class="flex gap-3">
+              <AlertCircle class="w-5 h-5 text-amber-500 shrink-0" />
+              <div>
+                <p class="text-sm font-bold text-amber-900">Processo em curso</p>
+                <p class="text-xs text-amber-700 mt-0.5">
+                  A sua solicitação está em <strong>{{ statusLabels[sponsorshipStatus] }}</strong>. 
+                  Poderá realizar pagamentos assim que for aprovada.
+                </p>
+              </div>
+            </div>
+          </div>
 
           <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 text-sm text-gray-700">
             A sua ajuda pode transformar a vida desta criança.
@@ -142,7 +163,16 @@
 
             <!-- Detailed Breakdown (Collapsible) -->
             <div v-if="crianca.orcamentoDetalhado && crianca.orcamentoDetalhado.length > 0" class="space-y-3">
-              <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest pt-2">Detalhes por Rubrica</h4>
+              <div class="flex items-center justify-between pt-2">
+                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Detalhes por Rubrica</h4>
+                <button 
+                  v-if="sponsorshipStatus === 'aprovado_gestor'"
+                  @click="selecionarTudo"
+                  class="text-[10px] font-bold text-blue-600 hover:text-blue-800 transition uppercase tracking-wider"
+                >
+                  {{ todosSelecionados ? 'Desmarcar Tudo' : 'Selecionar Tudo' }}
+                </button>
+              </div>
               
               <div 
                 v-for="area in crianca.orcamentoDetalhado" 
@@ -183,8 +213,18 @@
                 >
                   <div v-if="isAreaOpen(area.areaId)" class="px-5 pb-5 pt-0 border-t border-gray-50 bg-gray-50/30">
                     <div class="space-y-3 pt-4">
-                      <div v-for="(item, idx) in area.items" :key="idx" class="flex justify-between items-center text-sm py-2 border-b border-dashed border-gray-100 last:border-0">
-                        <span class="text-gray-600">{{ item.description }}</span>
+                      <div v-for="(item, idx) in area.items" :key="idx" class="flex justify-between items-center text-sm py-2 border-b border-dashed border-gray-100 last:border-0 hover:bg-gray-100/50 transition-colors group/item rounded px-2">
+                        <div class="flex items-center gap-3">
+                          <label v-if="sponsorshipStatus === 'aprovado_gestor'" class="relative flex items-center cursor-pointer">
+                            <input 
+                              type="checkbox" 
+                              :value="item"
+                              v-model="itensSelecionados"
+                              class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                          </label>
+                          <span class="text-gray-600">{{ item.description }}</span>
+                        </div>
                         <span class="font-bold text-gray-900">{{ formatarMoeda(item.value) }}</span>
                       </div>
                     </div>
@@ -238,6 +278,116 @@
           </div>
         </div>
       </div>
+
+      <!-- Sticky Payment Summary Bar -->
+      <Transition name="slide-up">
+        <div 
+          v-if="itensSelecionados.length > 0"
+          class="fixed bottom-0 left-0 right-0 z-40 p-4 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]"
+        >
+          <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                <ClipboardList class="w-6 h-6" />
+              </div>
+              <div>
+                <p class="text-sm font-bold text-gray-900">{{ itensSelecionados.length }} itens selecionados</p>
+                <p class="text-xl font-black text-green-600">{{ formatarMoeda(totalSelecionado) }}</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <button 
+                @click="itensSelecionados = []"
+                class="flex-1 sm:flex-none px-6 py-2.5 text-sm font-bold text-gray-500 hover:text-gray-700 transition"
+              >
+                Cancelar
+              </button>
+              <BaseButton 
+                variant="primary" 
+                class="flex-1 sm:flex-none px-8 py-3 rounded-full shadow-lg"
+                @click="abrirModalPagamento"
+              >
+                Pagar Agora
+              </BaseButton>
+            </div>
+          </div>
+        </div>
+      </Transition>
+
+      <!-- Modal Comprovativo -->
+      <BaseModal
+        v-model="modalPagamento.aberto"
+        title="Confirmar Pagamento"
+        size="md"
+      >
+        <div class="space-y-6">
+          <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+            <p class="text-xs text-blue-600 uppercase font-black tracking-widest mb-1">Total a Pagar</p>
+            <p class="text-2xl font-black text-blue-800">{{ formatarMoeda(totalSelecionado) }}</p>
+            <p class="text-xs text-blue-500 mt-2">
+              Referente a {{ itensSelecionados.length }} itens do orçamento de {{ crianca?.nome }}.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Comprovativo de Pagamento</label>
+              <div 
+                class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer group"
+                @click="$refs.fileInput.click()"
+              >
+                <input 
+                  type="file" 
+                  ref="fileInput" 
+                  class="hidden" 
+                  accept=".pdf,.png,.jpg,.jpeg"
+                  @change="handleFileUpload"
+                />
+                <div v-if="!arquivoComprovativo" class="flex flex-col items-center">
+                  <Upload class="w-10 h-10 text-gray-300 group-hover:text-blue-500 mb-3" />
+                  <p class="text-sm font-bold text-gray-600">Clique para carregar o comprovativo</p>
+                  <p class="text-xs text-gray-400 mt-1">PDF, PNG ou JPG (Máx. 5MB)</p>
+                </div>
+                <div v-else class="flex flex-col items-center">
+                  <FileText class="w-10 h-10 text-blue-600 mb-3" />
+                  <p class="text-sm font-bold text-blue-900">{{ arquivoComprovativo.name }}</p>
+                  <button @click.stop="arquivoComprovativo = null" class="text-xs text-red-500 font-bold mt-2 hover:underline">
+                    Remover ficheiro
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <BaseInput
+              v-model="notaPagamento"
+              label="Nota Adicional (Opcional)"
+              placeholder="Ex: Pagamento referente ao semestre..."
+            />
+          </div>
+
+          <div class="p-4 bg-amber-50 rounded-xl border border-amber-100 flex gap-3">
+            <AlertCircle class="w-5 h-5 text-amber-500 shrink-0" />
+            <p class="text-xs text-amber-800 leading-relaxed">
+              <strong>Atenção:</strong> O orçamento só será atualizado após a confirmação do Tutor. O processo pode levar até 48h.
+            </p>
+          </div>
+        </div>
+
+        <template #footer>
+          <BaseButton variant="secondary" @click="fecharModalPagamento" :disabled="carregandoPagamento">
+            Voltar
+          </BaseButton>
+          <BaseButton
+            variant="primary"
+            @click="submeterPagamento"
+            :loading="carregandoPagamento"
+            :disabled="!arquivoComprovativo"
+          >
+            Enviar Comprovativo
+          </BaseButton>
+        </template>
+      </BaseModal>
     </div>
 
     <!-- Criança não encontrada -->
@@ -392,12 +542,14 @@ import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useCriancasStore } from '@/stores/criancas'
 import { useApadrinhamentosStore } from '@/stores/apadrinhamentos'
+import { useAuthStore } from '@/stores/auth'
 import BaseModal from '@/components/common/BaseModal.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import { 
   Heart, Stethoscope, UtensilsCrossed, GraduationCap, 
-  Shield, Brain, FileText, ChevronDown, Info 
+  Shield, Brain, FileText, ChevronDown, Info,
+  Upload, AlertCircle, ClipboardList
 } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -405,15 +557,47 @@ const router = useRouter()
 const toast = useToast()
 const criancasStore = useCriancasStore()
 const apadrinhamentosStore = useApadrinhamentosStore()
+const authStore = useAuthStore()
 
 const crianca = ref(null)
 const loading = ref(true)
 const carregando = ref(false)
 const mostrarSucesso = ref(false)
 const openAreas = ref([])
+const itensSelecionados = ref([])
+const notaPagamento = ref('')
+const arquivoComprovativo = ref(null)
+const carregandoPagamento = ref(false)
 
 const modalNecessidade = ref({ aberto: false, dados: null })
 const modalFormulario = ref({ aberto: false })
+const modalPagamento = ref({ aberto: false })
+
+const totalSelecionado = computed(() => {
+  return itensSelecionados.value.reduce((sum, item) => sum + item.value, 0)
+})
+
+const todosSelecionados = computed(() => {
+  if (!crianca.value?.orcamentoDetalhado) return false
+  const todosItens = crianca.value.orcamentoDetalhado.flatMap(area => area.items)
+  return todosItens.length > 0 && itensSelecionados.value.length === todosItens.length
+})
+
+const selecionarTudo = () => {
+  if (todosSelecionados.value) {
+    itensSelecionados.value = []
+  } else {
+    itensSelecionados.value = crianca.value.orcamentoDetalhado.flatMap(area => area.items)
+  }
+}
+
+const sponsorshipStatus = computed(() => {
+  if (!authStore.user || !crianca.value) return null
+  return apadrinhamentosStore.getSponsorshipStatus(authStore.user.id, crianca.value.id)
+})
+
+const statusLabels = apadrinhamentosStore.STATUS_LABELS
+const statusClasses = apadrinhamentosStore.STATUS_CLASSES
 
 const formulario = ref({
   nome: '',
@@ -486,7 +670,7 @@ const submeterFormulario = async () => {
       criancaRegiao: crianca.value.regiao,
       tutorId: 6, // Mock tutor
       tutorNome: 'Rosa Tutora',
-      padrinhoId: 9, // Mock ID do padrinho logado
+      padrinhoId: authStore.user?.id, // ID do padrinho logado
       padrinhoNome: formulario.value.nome,
       padrinhoEmail: formulario.value.email,
       padrinhoTelefone: formulario.value.telefone,
@@ -538,6 +722,47 @@ const specialistAreas = [
 const getAreaIcon = (id) => specialistAreas.find(a => a.id === id)?.icon || FileText
 const getAreaName = (id) => specialistAreas.find(a => a.id === id)?.nome || id
 
+const abrirModalPagamento = () => {
+  modalPagamento.value.aberto = true
+}
+
+const fecharModalPagamento = () => {
+  modalPagamento.value.aberto = false
+  arquivoComprovativo.value = null
+  notaPagamento.value = ''
+}
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    arquivoComprovativo.value = file
+  }
+}
+
+const submeterPagamento = async () => {
+  if (!arquivoComprovativo.value) return
+
+  carregandoPagamento.value = true
+  try {
+    await apadrinhamentosStore.submeterPagamento({
+      padrinhoId: authStore.user?.id, // ID dinâmico
+      criancaId: crianca.value.id,
+      valor: totalSelecionado.value,
+      itens: itensSelecionados.value.map(i => i.description),
+      comprovativoUrl: URL.createObjectURL(arquivoComprovativo.value),
+      nota: notaPagamento.value
+    })
+
+    toast.success('Comprovativo enviado! Aguarde a confirmação do Tutor.')
+    fecharModalPagamento()
+    itensSelecionados.value = []
+  } catch (error) {
+    toast.error('Erro ao enviar comprovativo.')
+  } finally {
+    carregandoPagamento.value = false
+  }
+}
+
 onMounted(async () => {
   await criancasStore.fetchCriancas()
   crianca.value = criancasStore.getCriancaById(route.params.id)
@@ -552,6 +777,17 @@ onMounted(async () => {
 }
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translateY(100%);
   opacity: 0;
 }
 </style>

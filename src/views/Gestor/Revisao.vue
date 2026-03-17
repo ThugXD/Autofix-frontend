@@ -69,7 +69,7 @@
           :class="[
             'py-3 btn text-sm font-medium border-b-2 transition-colors',
             activeTab === tab.id
-              ? 'border-primary bg-gray-300 text-primary'
+              ? 'border-primary bg-green-600 text-primary'
               : 'border-transparent text-gray-500 hover:text-gray-700'
           ]"
         >

@@ -409,6 +409,20 @@ export const useCriancasStore = defineStore('criancas', () => {
     return lista.value.find(c => c.id === id)
   }
 
+  const atualizarOrcamentoCoberto = (criancaId, valorAdicional) => {
+    const crianca = lista.value.find(c => c.id === criancaId)
+    if (crianca) {
+      crianca.orcamentoCoberto += valorAdicional
+      
+      // Atualizar status baseado na nova cobertura
+      if (crianca.orcamentoCoberto >= crianca.orcamentoAnual) {
+        crianca.status = 'Totalmente Apoiada'
+      } else if (crianca.orcamentoCoberto > 0) {
+        crianca.status = 'Parcialmente Apoiada'
+      }
+    }
+  }
+
   return {
     lista,
     loading,
@@ -419,6 +433,7 @@ export const useCriancasStore = defineStore('criancas', () => {
     fetchCriancas,
     setFiltros,
     resetFiltros,
-    getCriancaById
+    getCriancaById,
+    atualizarOrcamentoCoberto
   }
 })
