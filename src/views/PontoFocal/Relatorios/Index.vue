@@ -108,7 +108,7 @@
     <!-- Report Templates -->
     <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
       <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-        <Template class="w-5 h-5 text-purple-600" />
+        <LayoutTemplate class="w-5 h-5 text-purple-600" />
         Modelos de Relatório
       </h3>
 
@@ -135,7 +135,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { FileText, MapPin, Users, TrendingUp, Template } from 'lucide-vue-next'
+import { FileText, MapPin, Users, TrendingUp, LayoutTemplate } from 'lucide-vue-next'
 
 const recentReports = ref([
   {
