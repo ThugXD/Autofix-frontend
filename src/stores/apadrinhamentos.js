@@ -253,6 +253,15 @@ export const useApadrinhamentosStore = defineStore('apadrinhamentos', () => {
     pag.status = STATUS_PAGAMENTO.CONFIRMADO
     pag.dataConfirmacao = new Date().toISOString()
     
+    // Atualizar o orçamento na lista de apadrinhamentos (para refletir no dashboard do padrinho)
+    const sponsorship = lista.value.find(s => 
+      String(s.criancaId) === String(pag.criancaId) && 
+      String(s.padrinhoId) === String(pag.padrinhoId)
+    )
+    if (sponsorship) {
+      sponsorship.orcamentoCoberto = (sponsorship.orcamentoCoberto || 0) + pag.valor
+    }
+
     // Adicionar notificação para o Padrinho
     adicionarNotificacao({
       padrinhoId: pag.padrinhoId,

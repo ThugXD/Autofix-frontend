@@ -390,10 +390,11 @@ export const useCriancasStore = defineStore('criancas', () => {
   // ACTIONS
   // =============================================
   const fetchCriancas = async () => {
+    if (lista.value.length > 0) return
     loading.value = true
     // Simulando delay de API
     await new Promise(resolve => setTimeout(resolve, 500))
-    lista.value = mockCriancas
+    lista.value = [...mockCriancas]
     loading.value = false
   }
 
