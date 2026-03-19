@@ -58,7 +58,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
             <h3 class="text-white font-bold mb-4">SACCO</h3>
-            <p class="text-sm">Sistema de Apoio às Crianças Carenciadas da Comunidade</p>
+            <p class="text-sm">Sistema de Assistência Contínua a Crinças Orfãs</p>
           </div>
           <div>
             <h4 class="text-white font-semibold mb-4">Links</h4>

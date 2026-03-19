@@ -512,7 +512,7 @@ router.beforeEach((to, from, next) => {
   // Atualizar titulo da pagina
   document.title = to.meta.title
     ? `${to.meta.title} - SACCO`
-    : 'SACCO - Sistema de Gestao'
+    : 'SACCO - Sistema de Assistência Contínua a Crianças Orfãs'
 
   // Rotas publicas - permitir acesso
   if (to.meta.public) {

@@ -14,7 +14,7 @@
           </div>
           <div>
             <h3 class="text-lg font-semibold text-gray-900">SACCO</h3>
-            <p class="text-sm text-gray-600">Sistema de Acolhelimente Crianças Orfãos</p>
+            <p class="text-sm text-gray-600">Sistema de appear-class="" Crianças Orfãos</p>
           </div>
         </div>
 

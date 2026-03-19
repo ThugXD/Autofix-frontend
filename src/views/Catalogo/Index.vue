@@ -340,7 +340,7 @@
         <!-- Bottom Bar -->
         <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <p class="text-gray-500 text-xs">
-            © 2026 SACCO - Sistema de Apoio e Consulta à Criança Órfã. Todos os direitos reservados.
+            © 2026 SACCO - Sistema de Assistência Contínua a Crinças Orfãs. Todos os direitos reservados.
           </p>
           <div class="flex gap-8 text-xs text-gray-600 font-medium">
             <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>

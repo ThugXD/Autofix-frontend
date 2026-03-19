@@ -13,7 +13,7 @@
             class="w-full h-full mx-auto mb-4 rounded-2xl object-cover"
           />
           <h1 class="text-xl font-bold text-gray-900">
-            Sistema de Avaliação de Continuada a Criancas Orfãos
+            Sistema de Assistência Contínua a Criancas Orfãs
           </h1>
         </div>
 
